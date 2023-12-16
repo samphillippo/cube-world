@@ -7,12 +7,12 @@
 
 // Constructor
 Image::Image(std::string filepath) : m_filepath(filepath){
-    
+
 }
 
 // Destructor
 Image::~Image (){
-    // Delete our pixel data.	
+    // Delete our pixel data.
     // Note: We could actually do this sooner
     // in our rendering process.
     if(m_pixelData!=NULL){
@@ -36,7 +36,7 @@ void Image::LoadPPM(bool flip){
       std::string line;
       // Our loop invariant is to continue reading input until
       // we reach the end of the file and it reads in a NULL character
-      std::cout << "Reading in ppm file: " << m_filepath << std::endl;
+      //std::cout << "Reading in ppm file: " << m_filepath << std::endl;
       unsigned int iteration = 0;
       unsigned int pos = 0;
       while ( getline (ppmFile,line) ){
@@ -47,20 +47,20 @@ void Image::LoadPPM(bool flip){
          if(line[0]=='P'){
             magicNumber = line;
          }else if(iteration==1){
-            // Returns first token 
-            char *token = strtok((char*)line.c_str(), " "); 
+            // Returns first token
+            char *token = strtok((char*)line.c_str(), " ");
             m_width = atoi(token);
             token = strtok(NULL, " ");
             m_height = atoi(token);
-            std::cout << "PPM width,height=" << m_width << "," << m_height << "\n";	
+            //std::cout << "PPM width,height=" << m_width << "," << m_height << "\n";
             if(m_width > 0 && m_height > 0){
                 m_pixelData = new uint8_t[m_width*m_height*3];
                 if(m_pixelData==NULL){
-                    std::cout << "Unable to allocate memory for ppm" << std::endl;
+                    std::cerr << "Unable to allocate memory for ppm" << std::endl;
                     exit(1);
                  }
              }else{
-                std::cout << "PPM not parsed correctly, width and/or height dimensions are 0" << std::endl;
+                std::cerr << "PPM not parsed correctly, width and/or height dimensions are 0" << std::endl;
                 exit(1);
              }
          }else if(iteration==2){
@@ -71,12 +71,12 @@ void Image::LoadPPM(bool flip){
             ++pos;
          }
           iteration++;
-    }             
+    }
     ppmFile.close();
   }
   else{
-      std::cout << "Unable to open ppm file:" << m_filepath << std::endl;
-  } 
+      std::cerr << "Unable to open ppm file: " << m_filepath << std::endl;
+  }
 
     // Flip all of the pixels
     if(flip){
@@ -99,15 +99,15 @@ void Image::LoadPPM(bool flip){
 
 /*  ===============================================
 Desc: Sets a pixel in our array a specific color
-Precondition: 
+Precondition:
 Post-condition:
-=============================================== */ 
+=============================================== */
 void Image::SetPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b){
   if(x > m_width || y > m_height){
     return;
   }
   else{
-    /*std::cout << "modifying pixel at " 
+    /*std::cout << "modifying pixel at "
               << x << "," << y << "from (" <<
               (int)color[x*y] << "," << (int)color[x*y+1] << "," <<
 (int)color[x*y+2] << ")";*/
@@ -120,10 +120,10 @@ void Image::SetPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b){
 }
 
 /*  ===============================================
-Desc: 
-Precondition: 
+Desc:
+Precondition:
 Post-condition:
-=============================================== */ 
+=============================================== */
 void Image::PrintPixels(){
     for(int x = 0; x <  m_width*m_height*3; ++x){
         std::cout << " " << (int)m_pixelData[x];
@@ -133,9 +133,9 @@ void Image::PrintPixels(){
 
 /*  ===============================================
 Desc: Returns pixel data for our image
-Precondition: 
+Precondition:
 Post-condition:
-=============================================== */ 
+=============================================== */
 uint8_t* Image::GetPixelDataPtr(){
     return m_pixelData;
 }

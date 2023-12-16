@@ -151,6 +151,7 @@ void World::LoadWorld(std::string filename) {
     }
 }
 
+//TODO: parse the world file
 void World::parseWorldFile(std::string filename) {
     std::ifstream file(filename);
     std::string line;

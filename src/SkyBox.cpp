@@ -14,7 +14,7 @@ SkyBox::~SkyBox() {
 }
 
 void SkyBox::LoadSkyBox(std::vector<std::string> faces) {
-    std::cout << "Loading skybox..." << std::endl;
+    //std::cout << "Loading skybox..." << std::endl;
     generateSkyBoxGeometry();
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureID);
@@ -30,7 +30,7 @@ void SkyBox::LoadSkyBox(std::vector<std::string> faces) {
         }
         else
         {
-            std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+            std::cerr << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
             stbi_image_free(data);
         }
     }
@@ -43,7 +43,7 @@ void SkyBox::LoadSkyBox(std::vector<std::string> faces) {
     std::string vertexShader = m_shader.LoadShader("./shaders/sky_vert.glsl");
 	std::string fragmentShader = m_shader.LoadShader("./shaders/sky_frag.glsl");
 	m_shader.CreateShader(vertexShader,fragmentShader);
-    std::cout << "Skybox loaded." << std::endl;
+    //std::cout << "Skybox loaded." << std::endl;
 }
 
 void SkyBox::generateSkyBoxGeometry() {
