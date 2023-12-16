@@ -19,6 +19,7 @@ void SkyBox::LoadSkyBox(std::vector<std::string> faces) {
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureID);
 
+    //Load in the textures
     int width, height, nrComponents;
     for (unsigned int i = 0; i < faces.size(); i++)
     {
