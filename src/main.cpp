@@ -10,10 +10,9 @@ int main(int argc, char** argv){
 	// Create an instance of an object for a SDLGraphicsProgram
 	World myWorld;
 	myWorld.LoadWorld(fileName);
-	// Run our program forever
+	// Run our program until exit
 	myWorld.Loop();
-	// When our program ends, it will exit scope, the
-	// destructor will then be called and clean up the program.
+	// saves world state to file
 	myWorld.SaveWorld(fileName);
 
 	return 0;
