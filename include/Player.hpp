@@ -1,5 +1,3 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
 /** @file Player.hpp
  *  @brief Player stores information about the player.
  *
@@ -9,6 +7,8 @@
  *  @author Sam
  *  @bug No known bugs.
  */
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 #include "Camera.hpp"
 #include "Cube.hpp"

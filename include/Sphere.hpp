@@ -7,6 +7,9 @@
  *  @author Mike
  *  @bug No known bugs.
  */
+#ifndef SPHERE_HPP
+#define SPHERE_HPP
+
 #include "VertexBufferLayout.hpp"
 #include "Geometry.hpp"
 #include <cmath>
@@ -82,12 +85,11 @@ void Sphere::Init(){
         // everything for our buffer to work with.
         m_geometry.Gen();
 
-        // std::cout << "#vertices:" << geometry.getSize() << "\n";
-        // std::cout << "#indices:" << geometry.getIndicesSize() << "\n";
-
         // Create a buffer and set the stride of information
         m_vertexBufferLayout.CreateNormalBufferLayout(m_geometry.GetBufferDataSize(),
                                         m_geometry.GetIndicesSize(),
                                         m_geometry.GetBufferDataPtr(),
                                         m_geometry.GetIndicesDataPtr());
 }
+
+#endif

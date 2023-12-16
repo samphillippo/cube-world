@@ -56,7 +56,4 @@ private:
     glm::vec3 m_upVector;
 };
 
-
-
-
 #endif

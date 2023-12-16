@@ -1,9 +1,9 @@
 /** @file Object.hpp
- *  @brief Sets up an OpenGL camera..
+ *  @brief Information associated with a single OpenGL Object
  *
  *  More...
  *
- *  @author Mike
+ *  @author Sam, Mike
  *  @bug No known bugs.
  */
 #ifndef OBJECT_HPP
@@ -52,6 +52,5 @@ protected: // Classes that inherit from Object are intended to be overridden.
     // Store the objects Geometry
 	Geometry m_geometry;
 };
-
 
 #endif

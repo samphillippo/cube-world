@@ -1,6 +1,6 @@
 /** @file Shader.hpp
  *  @brief Manages the loading, compiling, and linking of vertex and fragment shaders.
- *  
+ *
  *  Additionally has functions for setting various uniforms.
  *
  *  @author Mike
@@ -46,10 +46,7 @@ private:
     unsigned int CompileShader(unsigned int type, const std::string& source);
     // Makes sure shaders 'linked' successfully
     bool CheckLinkStatus(GLuint programID);
-    // Shader loading utility programs
-    void PrintProgramLog( GLuint program );
-    void PrintShaderLog( GLuint shader );
-    // Logs an error message 
+    // Logs an error message
     void Log(const char* system, const char* message);
     // The unique shaderID
     GLuint m_shaderID;

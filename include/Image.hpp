@@ -1,9 +1,9 @@
 /** @file Image.hpp
  *  @brief Sets up an OpenGL camera..
- *  
+ *
  *  More...
  *
- *  @author Mike
+ *  @author Sam, Mike
  *  @bug No known bugs.
  */
 #ifndef IMAGE_HPP
