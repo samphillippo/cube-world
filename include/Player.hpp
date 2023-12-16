@@ -26,7 +26,7 @@ public:
     // handles a player mouse movement
     void Look(float x, float y);
     // handles a player movement
-    void movePlayer(bool left, bool right, bool forward, bool backward, bool jump, std::vector<Cube*> intersections);
+    void movePlayer(bool left, bool right, bool forward, bool backward, bool jump, std::vector<Cube*> cubes);
     // swaps between flying and walking mode
     void swapPlayerMode();
     // get whatever object the player is looking at
@@ -36,15 +36,15 @@ public:
     // set the player's selected texture
     void SetSelectedCubeTexture(std::shared_ptr<Texture> texture);
     // update the player's selected object
-    void UpdatePlaceObject(glm::mat4 projectionMatrix);
+    void UpdateHeldObject(glm::mat4 projectionMatrix);
     // render the player's selected object
-    void RenderPlaceObject();
+    void RenderHeldObject();
 
 private:
     //gets the direction the player is looking in
     glm::vec3 GetRayDirection();
     // adjusts player position based on collisions
-    void handleIntersections(std::vector<Cube*> intersections, bool jump);
+    void handleCollisions(std::vector<Cube*> cubes, bool jump);
     // Position
     glm::vec3 m_position;
     // Size
@@ -62,11 +62,11 @@ private:
     // player selected cube texture
     std::shared_ptr<Texture> m_selectedCubeTexture;
     //the object the player holds in their hand
-    Object* m_placeObject;
+    Object* m_heldObject;
     //shader for the object the player holds in their hand
-    Shader m_placeShader;
+    Shader m_heldShader;
     // transform for the player's held object
-    Transform m_placeTransform;
+    Transform m_heldTransform;
 };
 
 #endif

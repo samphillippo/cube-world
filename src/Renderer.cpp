@@ -44,7 +44,7 @@ void Renderer::Update(Object* selected){
     }
     glm::vec3 orbitPos = glm::vec3(250 * sin(orbitTicks),250 * cos(orbitTicks), camera->GetEyeZPosition());
 
-    m_player->UpdatePlaceObject(m_projectionMatrix);
+    m_player->UpdateHeldObject(m_projectionMatrix);
 
     // Perform the update
     if(m_root!=nullptr){
@@ -69,7 +69,7 @@ void Renderer::Render(){
 
     m_orbit.Render();
 
-    m_player->RenderPlaceObject();
+    m_player->RenderHeldObject();
 
     // Nice way to debug your scene in wireframe!
     //glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
