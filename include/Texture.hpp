@@ -1,9 +1,9 @@
 /** @file Texture.hpp
  *  @brief Loads an image and creates an OpenGL texture on the GPU..
- *  
+ *
  *  More...
  *
- *  @author Mike
+ *  @author Sam, Mike
  *  @bug No known bugs.
  */
 #ifndef TEXTURE_HPP
@@ -36,7 +36,5 @@ private:
     // Store whatever image data inside of our texture class.
     Image* m_image;
 };
-
-
 
 #endif

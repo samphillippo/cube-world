@@ -5,7 +5,6 @@
 
 // The constructor
 SceneNode::SceneNode(Object* ob, std::string vertexShader, std::string fragmentShader){
-	std::cout << "(SceneNode.cpp) Constructor called\n";
 	m_object = ob;
 	// By default, we do not know the parent
 	// at the time of construction of this node.

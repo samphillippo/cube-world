@@ -6,9 +6,6 @@
 #include <sstream>
 #include <fstream>
 
-// Initialization function
-// Returns a true or false value based on successful completion of setup.
-// Takes in dimensions of window.
 World::World(){
 	// Initialization flag
 	bool success = true;
@@ -138,6 +135,7 @@ void World::LoadWorld(std::string filename) {
                 m_root->AddChild(new SceneNode(cube, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
             }
         }
+        //creates a wall
         for (int i = -6; i < 7; i++) {
             for (int j = 1; j < 3; j++) {
                 Cube* cube = new Cube(glm::vec3(i,j,7), 1.0f);
@@ -151,6 +149,7 @@ void World::LoadWorld(std::string filename) {
     }
 }
 
+//TODO: parse the world file
 void World::parseWorldFile(std::string filename) {
     std::ifstream file(filename);
     std::string line;

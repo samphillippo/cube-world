@@ -22,13 +22,7 @@ Renderer::~Renderer(){
 }
 
 //update sun color and skybox color based on position in the sky
-//might be able to pass uniform position to cubes as well for lighting
 void Renderer::Update(Object* selected){
-    // Here we apply the projection matrix which creates perspective.
-    // The first argument is 'field of view'
-    // Then perspective
-    // Then the near and far clipping plane.
-    // Note I cannot see anything closer than 0.1f units from the screen.
     m_projectionMatrix = glm::perspective(glm::radians(45.0f),((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
 
     Camera* camera = m_player->GetCamera();
@@ -44,7 +38,7 @@ void Renderer::Update(Object* selected){
     }
     glm::vec3 orbitPos = glm::vec3(250 * sin(orbitTicks),250 * cos(orbitTicks), camera->GetEyeZPosition());
 
-    m_player->UpdatePlaceObject(m_projectionMatrix);
+    m_player->UpdateHeldObject(m_projectionMatrix);
 
     // Perform the update
     if(m_root!=nullptr){
@@ -52,9 +46,6 @@ void Renderer::Update(Object* selected){
     }
 }
 
-// Initialize clear color
-// Setup our OpenGL State machine
-// Then render the scene
 void Renderer::Render(){
     glViewport(0, 0, m_screenWidth, m_screenHeight);
     glClearColor( 0.01f, 0.01f, 0.01f, 1.f );
@@ -69,7 +60,7 @@ void Renderer::Render(){
 
     m_orbit.Render();
 
-    m_player->RenderPlaceObject();
+    m_player->RenderHeldObject();
 
     // Nice way to debug your scene in wireframe!
     //glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);

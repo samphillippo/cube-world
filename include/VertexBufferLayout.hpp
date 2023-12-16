@@ -2,7 +2,7 @@
 #define VERTEX_BUFFER_LAYOUT_HPP
 /** @file VertexBufferLayout.hpp
  *  @brief Sets up a variety of Vertex Buffer Object (VBO) layouts.
- *  
+ *
  *  More...
  *
  *  @author Mike
@@ -13,7 +13,7 @@
 #include <glad/glad.h>
 
 
-class VertexBufferLayout{ 
+class VertexBufferLayout{
 public:
     // Generates a new buffer
     VertexBufferLayout();
@@ -33,7 +33,7 @@ public:
     // vdata: A pointer to an array of data for vertices
     // idata: A pointer to an array of data for indices
     // NOTE: Works only for floats--could support other formats.
-    //       
+    //
     void CreatePositionBufferLayout(unsigned int vcount,unsigned int icount, float* vdata, unsigned int* idata );
 
     // Creates a vertex and index buffer object

@@ -1,5 +1,3 @@
-#ifndef SCENENODE_HPP
-#define SCENENODE_HPP
 /** @file SceneNode.hpp
  *  @brief SceneNode helps organize a large 3D graphics scene.
  *
@@ -10,6 +8,8 @@
  *  @author Mike
  *  @bug No known bugs.
  */
+#ifndef SCENENODE_HPP
+#define SCENENODE_HPP
 
 #include <vector>
 
@@ -47,8 +47,6 @@ public:
     // For now we have one shader per Node.
     Shader m_shader;
 
-    // NOTE: Protected members are accessible by anything
-    // that we inherit from, as well as ?
 protected:
     // Parent
     SceneNode* m_parent;

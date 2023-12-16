@@ -51,7 +51,6 @@ std::string Shader::LoadShader(const std::string& fname){
 
 
 void Shader::CreateShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource){
-
     // Create a new program
     unsigned int program = glCreateProgram();
     // Compile our shaders
@@ -123,9 +122,9 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 }
 
 // Check to see if linking was successful
-bool Shader::CheckLinkStatus(GLuint programID){                                                                             
-    // Retrieve the result of our compilation                                                                                           
-    int result;                                                                                                                         
+bool Shader::CheckLinkStatus(GLuint programID){
+    // Retrieve the result of our compilation
+    int result;
     // This code is returning any Linker errors that may have occurred!
     glGetProgramiv(programID, GL_LINK_STATUS, &result);
     if(result == GL_FALSE){

@@ -1,5 +1,3 @@
-#ifndef RENDERER_HPP
-#define RENDERER_HPP
 /** @file Renderer.hpp
  *  @brief Renderer is responsible for drawing.
  *
@@ -13,6 +11,8 @@
  *  @author Mike
  *  @bug No known bugs.
  */
+#ifndef RENDERER_HPP
+#define RENDERER_HPP
 
 // The glad library helps setup OpenGL extensions.
 // This renderer is designed specifically for OpenGL.

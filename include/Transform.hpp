@@ -1,6 +1,6 @@
 /** @file Transform.hpp
  *  @brief Responsible for holding matrix operations in model, view, and projection space..
- *  
+ *
  *  More...
  *
  *  @author Mike
@@ -46,11 +46,11 @@ public:
 	// Transform =
 	Transform& operator=(const Transform& t);
     // Multiplication operator overload
-    // Returns a new copy of the result of 
+    // Returns a new copy of the result of
     // t3 = t1 * t2. (Returned value is stored in 't3' which is returned)
     friend Transform operator*(const Transform& lhs, const Transform& rhs);
     // Addition operator overload
-    // Returns a new copy of the result of 
+    // Returns a new copy of the result of
     // t3 = t1 + t2. (Returned value is stored in 't3' which is returned)
     friend Transform operator+(const Transform& lhs, const Transform& rhs);
 
@@ -58,6 +58,5 @@ private:
     // Stores the actual transformation matrix
     glm::mat4 m_modelTransformMatrix;
 };
-
 
 #endif

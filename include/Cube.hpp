@@ -1,5 +1,3 @@
-#ifndef CUBE_HPP
-#define CUBE_HPP
 /** @file Cube.hpp
  *  @brief Cube stores the information associated with a single cube in the environment.
  *
@@ -8,6 +6,8 @@
  *  @author Sam
  *  @bug No known bugs.
  */
+#ifndef CUBE_HPP
+#define CUBE_HPP
 
 #include "Geometry.hpp"
 #include "VertexBufferLayout.hpp"
@@ -21,11 +21,11 @@ public:
     ~Cube();
     // Initializes position and size of cube
     void Init();
-    // get the center of the cube
+    // Get the center of the cube
     glm::vec3 GetCenter();
-    // get the side length of the cube
+    // Get the side length of the cube
     float GetSideLength();
-    //checks a ray for intersection with a cube
+    // Checks a ray for intersection with a cube
     bool IntersectRayWithCube(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, int& hitSide, float &distance) const;
 private:
     // Store the objects position
