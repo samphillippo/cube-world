@@ -45,6 +45,10 @@ public:
     void SetSelected(bool selected) { m_selected = selected; }
     // Gets "selected" value
     bool GetSelected() { return m_selected; }
+    // Sets the color adjustment
+    void SetColorAdjustment(glm::vec3 colorAdjustment) { m_colorAdjustment = colorAdjustment; }
+    // Gets the color adjustment
+    glm::vec3 GetColorAdjustment() { return m_colorAdjustment; }
 protected: // Classes that inherit from Object are intended to be overridden.
 
 	// Helper method for when we are ready to draw or update our object
@@ -57,6 +61,8 @@ protected: // Classes that inherit from Object are intended to be overridden.
 	Geometry m_geometry;
     // Whether the object is selected
     bool m_selected;
+    // Vector value to be added to final color of rendered object
+    glm::vec3 m_colorAdjustment;
 };
 
 #endif

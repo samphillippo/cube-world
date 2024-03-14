@@ -212,6 +212,10 @@ void World::Loop(){
 
     // While application is running
     while(!quit){
+        for (int i = 0; i < m_sentientCubes.size(); i++) {
+            m_sentientCubes[i]->OnTick();
+        }
+
         //detects if a cube is being looked at
         int hitSide;
         Cube* selected = m_player->Raycast(m_cubes, hitSide);

@@ -71,7 +71,7 @@ void SceneNode::Draw(){
 // Update simply updates the current nodes
 // object. This is done by calling directly
 // the objects update method.
-// TODO: Consider not passting projection and camera here
+// TODO: Consider not passing projection and camera here
 void SceneNode::Update(glm::mat4 projectionMatrix, Camera* camera, glm::vec3 skyColor, glm::vec3 orbitPos){
     if(m_object!=nullptr){
 		if (m_parent != nullptr) {
@@ -88,6 +88,8 @@ void SceneNode::Update(glm::mat4 projectionMatrix, Camera* camera, glm::vec3 sky
 		} else {
 			m_shader.SetUniform1i("selected", 0);
 		}
+		glm::vec3 colorAdjustment = m_object->GetColorAdjustment();
+		m_shader.SetUniform3f("colorAdjustment", colorAdjustment.x, colorAdjustment.y, colorAdjustment.z);
 
         // For our object, we apply the texture in the following way
         // Note that we set the value to 0, because we have bound

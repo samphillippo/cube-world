@@ -20,11 +20,18 @@ public:
     // Updates the sentient cube's state each tick
     virtual void OnTick() = 0;
     // Called upon the sentient cube taking damage
-    virtual bool OnHit() = 0;
+    virtual bool OnHit();
 protected:
+    // Counts number of ticks since last action
     int m_tickCount;
+    // Health of the sentient cube
     int m_health;
+    // How many ticks of damage animation are left
     int m_damageTickCount;
+    // Color adjustment for damage animation
+    glm::vec3 m_damageColor;
+    // Number of ticks for damage animation
+    int m_damageMaxTicks;
 };
 
 #endif

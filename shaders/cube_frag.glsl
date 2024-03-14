@@ -12,6 +12,7 @@ uniform mat4 view;
 // If we have texture coordinates, they are stored in this sampler.
 uniform sampler2D u_DiffuseMap;
 uniform int selected;
+uniform vec3 colorAdjustment;
 
 // ======================= IN =========================
 in vec3 myNormal; // Import our normal data
@@ -31,6 +32,7 @@ void main()
     // Store our final texture color
     vec3 diffuseColor;
     diffuseColor = texture(u_DiffuseMap, v_texCoord).rgb;
+    diffuseColor += colorAdjustment;
 
     // (1) Compute ambient light
     vec3 ambient = ambientIntensity * lightColor;
