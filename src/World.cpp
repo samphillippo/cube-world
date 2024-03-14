@@ -81,15 +81,9 @@ World::~World(){
     if(m_renderer!=nullptr){
         delete m_renderer;
     }
-    for (int i = 0; i < m_cubes.size(); i++) {
-        if (m_cubes[i] != nullptr) {
-            delete m_cubes[i];
-        }
-    }
-    //handled in m_cube deletions
-    // for (int i = 0; i < m_sentientCubes.size(); i++) {
-    //     if (m_sentientCubes[i] != nullptr) {
-    //         delete m_sentientCubes[i];
+    // for (int i = 0; i < m_cubes.size(); i++) {
+    //     if (m_cubes[i] != nullptr) {
+    //         delete m_cubes[i];
     //     }
     // }
     if(m_root!=nullptr){
@@ -139,6 +133,7 @@ void World::LoadWorld(std::string filename) {
                 Cube* cube = new Cube(glm::vec3(i,0.0f,j), 1.0f);
                 cube->SetTexture(grassTexture);
                 m_cubes.push_back(cube);
+                m_cubeMap.AddCube(cube);
                 m_root->AddChild(new SceneNode(cube, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
             }
         }
@@ -148,6 +143,7 @@ void World::LoadWorld(std::string filename) {
                 Cube* cube = new Cube(glm::vec3(i,j,7), 1.0f);
                 cube->SetTexture(brickTexture);
                 m_cubes.push_back(cube);
+                m_cubeMap.AddCube(cube);
                 m_root->AddChild(new SceneNode(cube, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
             }
         }
@@ -156,6 +152,7 @@ void World::LoadWorld(std::string filename) {
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
         m_cubes.push_back(pathPlacer);
+        m_cubeMap.AddCube(pathPlacer);
         m_root->AddChild(new SceneNode(pathPlacer, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
     } else {
         parseWorldFile(filename);

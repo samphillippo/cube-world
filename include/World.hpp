@@ -29,6 +29,7 @@
 #include "Player.hpp"
 #include "Cube.hpp"
 #include "AI/SentientCube.hpp"
+#include "CubeMap.hpp"
 
 // Purpose:
 // This class sets up a full graphics program using SDL
@@ -82,6 +83,7 @@ private:
     std::vector<std::shared_ptr<Texture>> m_textures;
     // All cubes in the scene
     std::vector<Cube*> m_cubes;
+    CubeMap m_cubeMap;
     // All sentient cubes in the scene
     std::vector<SentientCube*> m_sentientCubes; //how can we store cubes and sentient cubes in the same list?
     // Our root node
