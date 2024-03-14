@@ -25,7 +25,7 @@
 
 // Include the 'Renderer.hpp' which deteremines what
 // the graphics API is going to be for OpenGL
-#include "Renderer.hpp"
+#include "Rendering/Renderer.hpp"
 #include "Player.hpp"
 #include "Cube.hpp"
 #include "AI/SentientCube.hpp"

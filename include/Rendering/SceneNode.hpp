@@ -16,7 +16,7 @@
 #include "Object.hpp"
 #include "Transform.hpp"
 #include "Camera.hpp"
-#include "Shader.hpp"
+#include "Rendering/Shader.hpp"
 
 #include "glm/vec3.hpp"
 #include "glm/gtc/matrix_transform.hpp"

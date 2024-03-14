@@ -10,8 +10,8 @@
 #ifndef SPHERE_HPP
 #define SPHERE_HPP
 
-#include "VertexBufferLayout.hpp"
-#include "Geometry.hpp"
+#include "Rendering/VertexBufferLayout.hpp"
+#include "Rendering/Geometry.hpp"
 #include <cmath>
 
 class Sphere : public Object{

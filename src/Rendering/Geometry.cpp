@@ -1,4 +1,4 @@
-#include "Geometry.hpp"
+#include "Rendering/Geometry.hpp"
 #include <assert.h>
 #include <iostream>
 #include "glm/vec3.hpp"

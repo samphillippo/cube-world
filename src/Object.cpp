@@ -1,6 +1,6 @@
 #include "Object.hpp"
 #include "Camera.hpp"
-#include "Error.hpp"
+#include "Util/Error.hpp"
 
 
 Object::Object(){

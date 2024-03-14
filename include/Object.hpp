@@ -14,11 +14,11 @@
 #include <vector>
 #include <string>
 
-#include "Shader.hpp"
-#include "VertexBufferLayout.hpp"
-#include "Texture.hpp"
+#include "Rendering/Shader.hpp"
+#include "Rendering/VertexBufferLayout.hpp"
+#include "Rendering/Texture.hpp"
 #include "Transform.hpp"
-#include "Geometry.hpp"
+#include "Rendering/Geometry.hpp"
 
 #include "glm/vec3.hpp"
 #include "glm/gtc/matrix_transform.hpp"

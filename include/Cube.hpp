@@ -9,8 +9,8 @@
 #ifndef CUBE_HPP
 #define CUBE_HPP
 
-#include "Geometry.hpp"
-#include "VertexBufferLayout.hpp"
+#include "Rendering/Geometry.hpp"
+#include "Rendering/VertexBufferLayout.hpp"
 #include "Object.hpp"
 
 class Cube: public Object {

@@ -20,9 +20,9 @@
 
 #include <vector>
 
-#include "SceneNode.hpp"
+#include "Rendering/SceneNode.hpp"
 #include "Camera.hpp"
-#include "SkyBox.hpp"
+#include "Rendering/SkyBox.hpp"
 #include "Orbit.hpp"
 #include "Player.hpp"
 

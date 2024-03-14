@@ -1,4 +1,4 @@
-#include "SceneNode.hpp"
+#include "Rendering/SceneNode.hpp"
 
 #include <string>
 #include <iostream>

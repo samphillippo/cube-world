@@ -11,7 +11,7 @@
 
 #include "Object.hpp"
 #include "Transform.hpp"
-#include "Shader.hpp"
+#include "Rendering/Shader.hpp"
 #include "Camera.hpp"
 
 class Orbit {

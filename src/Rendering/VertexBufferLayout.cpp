@@ -1,4 +1,4 @@
-#include "VertexBufferLayout.hpp"
+#include "Rendering/VertexBufferLayout.hpp"
 #include <iostream>
 
 
@@ -37,10 +37,10 @@ void VertexBufferLayout::Unbind(){
 void VertexBufferLayout::CreatePositionBufferLayout(unsigned int vcount,unsigned int icount, float* vdata, unsigned int* idata ){
         // Because this layout is only
         m_stride = 3;
-        
+
         static_assert(sizeof(GLfloat)==sizeof(float),
             "GLFloat and gloat are not the same size on this architecture");
-       
+
         // VertexArrays
         glGenVertexArrays(1, &m_VAOId);
 
@@ -51,9 +51,9 @@ void VertexBufferLayout::CreatePositionBufferLayout(unsigned int vcount,unsigned
         // TODO: Read this and understand what is going on
         glGenBuffers(1, &m_vertexPositionBuffer); // selecting the buffer is
                                                 // done by binding in OpenGL
-                                                // We tell OpenGL then how we want to 
+                                                // We tell OpenGL then how we want to
                                                 // use our selected(or binded)
-                                                //  buffer with the arguments passed 
+                                                //  buffer with the arguments passed
                                                 // into the function.
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexPositionBuffer);
         glBufferData(GL_ARRAY_BUFFER, vcount*sizeof(float), vdata, GL_STATIC_DRAW);
@@ -68,9 +68,9 @@ void VertexBufferLayout::CreatePositionBufferLayout(unsigned int vcount,unsigned
                                                 // If we only have vertex data, then
                                                 // this is sizeof(float)*3 (or as a
                                                 // shortcut 0).
-                                                // That means our vertices(or whatever data) 
+                                                // That means our vertices(or whatever data)
                                                 // is tightly packed, one after the other.
-                                                // If we add in vertex color information(3 more floats), 
+                                                // If we add in vertex color information(3 more floats),
                                                 // then this becomes 6, as we
                                                 // move 6*sizeof(float)
                                                 // to get to the next chunk of data.
@@ -78,15 +78,15 @@ void VertexBufferLayout::CreatePositionBufferLayout(unsigned int vcount,unsigned
                                                 // need to jump 3*sizeof(GL_FLOAT)
                                                 // bytes to get to our next vertex.
                                 0               // Pointer to the starting point of our
-                                                // data. If we are just grabbing vertices, 
+                                                // data. If we are just grabbing vertices,
                                                 // this is 0. But if we have
                                                 // some other attribute,
                                                 // (stored in the same data structure),
                                                 // this may vary if the very
                                                 // first element is some different attribute.
                                                 // If we had some data after
-                                                // (say normals), then we 
-                                                // would have an offset of 
+                                                // (say normals), then we
+                                                // would have an offset of
                                                 // 3*sizeof(GL_FLOAT) for example
         );
 
@@ -104,10 +104,10 @@ void VertexBufferLayout::CreatePositionBufferLayout(unsigned int vcount,unsigned
 void VertexBufferLayout::CreateTextureBufferLayout(unsigned int vcount,unsigned int icount, float* vdata, unsigned int* idata ){
         // This layout uses x,y,z, and s,t
         m_stride = 5;
-        
+
         static_assert(sizeof(GLfloat)==sizeof(float),
             "GLFloat and gloat are not the same size on this architecture");
-       
+
         // VertexArrays
         glGenVertexArrays(1, &m_VAOId);
 
@@ -118,9 +118,9 @@ void VertexBufferLayout::CreateTextureBufferLayout(unsigned int vcount,unsigned 
         // TODO: Read this and understand what is going on
         glGenBuffers(1, &m_vertexPositionBuffer); // selecting the buffer is
                                                 // done by binding in OpenGL
-                                                // We tell OpenGL then how we want to 
+                                                // We tell OpenGL then how we want to
                                                 // use our selected(or binded)
-                                                //  buffer with the arguments passed 
+                                                //  buffer with the arguments passed
                                                 // into the function.
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexPositionBuffer);
         glBufferData(GL_ARRAY_BUFFER, vcount*sizeof(float), vdata, GL_STATIC_DRAW);
@@ -135,9 +135,9 @@ void VertexBufferLayout::CreateTextureBufferLayout(unsigned int vcount,unsigned 
                                                 // If we only have vertex data, then
                                                 // this is sizeof(float)*3 (or as a
                                                 // shortcut 0).
-                                                // That means our vertices(or whatever data) 
+                                                // That means our vertices(or whatever data)
                                                 // is tightly packed, one after the other.
-                                                // If we add in vertex color information(3 more floats), 
+                                                // If we add in vertex color information(3 more floats),
                                                 // then this becomes 6, as we
                                                 // move 6*sizeof(float)
                                                 // to get to the next chunk of data.
@@ -145,15 +145,15 @@ void VertexBufferLayout::CreateTextureBufferLayout(unsigned int vcount,unsigned 
                                                 // need to jump 3*sizeof(GL_FLOAT)
                                                 // bytes to get to our next vertex.
                                 0               // Pointer to the starting point of our
-                                                // data. If we are just grabbing vertices, 
+                                                // data. If we are just grabbing vertices,
                                                 // this is 0. But if we have
                                                 // some other attribute,
                                                 // (stored in the same data structure),
                                                 // this may vary if the very
                                                 // first element is some different attribute.
                                                 // If we had some data after
-                                                // (say normals), then we 
-                                                // would have an offset of 
+                                                // (say normals), then we
+                                                // would have an offset of
                                                 // 3*sizeof(GL_FLOAT) for example
         );
 
@@ -186,10 +186,10 @@ void VertexBufferLayout::CreateTextureBufferLayout(unsigned int vcount,unsigned 
 // bitangent b_x,b_y,b_z
 void VertexBufferLayout::CreateNormalBufferLayout(unsigned int vcount,unsigned int icount, float* vdata, unsigned int* idata ){
 		m_stride = 14;
-        
-        
+
+
         static_assert(sizeof(GLfloat)==sizeof(float), "GLFloat and gloat are not the same size on this architecture");
-       
+
         // VertexArrays
         glGenVertexArrays(1, &m_VAOId);
 
@@ -200,9 +200,9 @@ void VertexBufferLayout::CreateNormalBufferLayout(unsigned int vcount,unsigned i
         // TODO: Read this and understand what is going on
         glGenBuffers(1, &m_vertexPositionBuffer); // selecting the buffer is
                                                 // done by binding in OpenGL
-                                                // We tell OpenGL then how we want to 
+                                                // We tell OpenGL then how we want to
                                                 // use our selected(or binded)
-                                                //  buffer with the arguments passed 
+                                                //  buffer with the arguments passed
                                                 // into the function.
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexPositionBuffer);
         glBufferData(GL_ARRAY_BUFFER, vcount*sizeof(float), vdata, GL_STATIC_DRAW);
@@ -217,9 +217,9 @@ void VertexBufferLayout::CreateNormalBufferLayout(unsigned int vcount,unsigned i
                                                 // If we only have vertex data, then
                                                 // this is sizeof(float)*3 (or as a
                                                 // shortcut 0).
-                                                // That means our vertices(or whatever data) 
+                                                // That means our vertices(or whatever data)
                                                 // is tightly packed, one after the other.
-                                                // If we add in vertex color information(3 more floats), 
+                                                // If we add in vertex color information(3 more floats),
                                                 // then this becomes 6, as we
                                                 // move 6*sizeof(float)
                                                 // to get to the next chunk of data.
@@ -227,15 +227,15 @@ void VertexBufferLayout::CreateNormalBufferLayout(unsigned int vcount,unsigned i
                                                 // need to jump 3*sizeof(GL_FLOAT)
                                                 // bytes to get to our next vertex.
                                 0               // Pointer to the starting point of our
-                                                // data. If we are just grabbing vertices, 
+                                                // data. If we are just grabbing vertices,
                                                 // this is 0. But if we have
                                                 // some other attribute,
                                                 // (stored in the same data structure),
                                                 // this may vary if the very
                                                 // first element is some different attribute.
                                                 // If we had some data after
-                                                // (say normals), then we 
-                                                // would have an offset of 
+                                                // (say normals), then we
+                                                // would have an offset of
                                                 // 3*sizeof(GL_FLOAT) for example
         );
 
@@ -254,7 +254,7 @@ void VertexBufferLayout::CreateNormalBufferLayout(unsigned int vcount,unsigned i
         // Add three floats for bi-tangent coordinates
         glEnableVertexAttribArray(4);
         glVertexAttribPointer(4,3,GL_FLOAT, GL_FALSE,sizeof(float)*m_stride,(char*)(sizeof(float)*11));
-        
+
 		// Another Vertex Buffer Object (VBO)
         // This time for your index buffer.
         // TODO: put these static_asserts somewhere
