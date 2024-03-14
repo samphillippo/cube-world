@@ -20,7 +20,7 @@ public:
     // Updates the sentient cube's state each tick
     void OnTick() override;
     // Called upon the sentient cube taking damage
-    void OnHit() override;
+    bool OnHit() override;
 private:
 };
 

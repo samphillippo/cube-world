@@ -58,6 +58,8 @@ public:
 private:
     // Helper function to handle input events
     bool handleInput(Cube* selected, int hitSide);
+    // Helper function to handle mouse left click
+    void handleLeftClick(Cube* selected);
     // Helper function to parse a world file
     void parseWorldFile(std::string filename);
     // add a new cube to the world based on the given information
@@ -81,7 +83,7 @@ private:
     // All cubes in the scene
     std::vector<Cube*> m_cubes;
     // All sentient cubes in the scene
-    std::vector<SentientCube*> m_sentientCubes;
+    std::vector<SentientCube*> m_sentientCubes; //how can we store cubes and sentient cubes in the same list?
     // Our root node
     SceneNode* m_root;
 };

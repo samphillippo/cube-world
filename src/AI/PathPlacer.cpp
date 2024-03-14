@@ -13,6 +13,6 @@ void PathPlacer::OnTick() {
     }
 }
 
-void PathPlacer::OnHit() {
-    m_tickCount = 0;
+bool PathPlacer::OnHit() {
+    return false;
 }

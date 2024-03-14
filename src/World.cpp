@@ -86,11 +86,12 @@ World::~World(){
             delete m_cubes[i];
         }
     }
-    for (int i = 0; i < m_sentientCubes.size(); i++) {
-        if (m_sentientCubes[i] != nullptr) {
-            delete m_sentientCubes[i];
-        }
-    }
+    //handled in m_cube deletions
+    // for (int i = 0; i < m_sentientCubes.size(); i++) {
+    //     if (m_sentientCubes[i] != nullptr) {
+    //         delete m_sentientCubes[i];
+    //     }
+    // }
     if(m_root!=nullptr){
         delete m_root;
     }
@@ -154,6 +155,7 @@ void World::LoadWorld(std::string filename) {
         SentientCube* pathPlacer = new PathPlacer(glm::vec3(1,1,1), 1.0f);
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
+        m_cubes.push_back(pathPlacer);
         m_root->AddChild(new SceneNode(pathPlacer, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
     } else {
         parseWorldFile(filename);
@@ -316,7 +318,7 @@ bool World::handleInput(Cube* selected, int hitSide) {
         if (e.type == SDL_MOUSEBUTTONDOWN) {
             if (selected != nullptr) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
-                    deleteCube(selected);
+                    handleLeftClick(selected);
                 } else if (e.button.button == SDL_BUTTON_RIGHT) {
                     addCube(selected, hitSide);
                 }
@@ -340,4 +342,20 @@ bool World::handleInput(Cube* selected, int hitSide) {
                             keyboardState[SDL_SCANCODE_SPACE], m_cubes);
 
     return false;
+}
+
+void World::handleLeftClick(Cube* selected) {
+    for (int i = 0; i < m_sentientCubes.size(); i++) {
+        if (m_sentientCubes[i] == selected) {
+            if (m_sentientCubes[i]->OnHit()) {
+                m_sentientCubes.erase(m_sentientCubes.begin() + i);
+                deleteCube(selected);
+            }
+            return;
+        }
+    }
+    //if the cube is not a sentient cube, delete it
+    if (selected != nullptr) {
+        deleteCube(selected);
+    }
 }

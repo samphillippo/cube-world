@@ -20,7 +20,7 @@ public:
     // Updates the sentient cube's state each tick
     virtual void OnTick() = 0;
     // Called upon the sentient cube taking damage
-    virtual void OnHit() = 0;
+    virtual bool OnHit() = 0;
 protected:
     int m_tickCount;
 };
