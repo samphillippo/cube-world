@@ -21,7 +21,15 @@ public:
     void OnTick() override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
+    // Plans a path for the sentient cube
+    void PlanPath() override;
+    // Moves the sentient cube along its path
+    void Move() override;
 private:
+    //max range of path placement
+    int m_maxPathRange;
+    //min range of path placement
+    int m_minPathRange;
 };
 
 #endif

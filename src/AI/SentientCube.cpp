@@ -10,6 +10,12 @@ SentientCube::SentientCube(glm::vec3 center, float sideLength) : Cube(center, si
 SentientCube::~SentientCube() {
 }
 
+void SentientCube::OnTick() {
+    m_tickCount++;
+    m_damageTickCount = std::max(0, m_damageTickCount - 1);
+    this->m_colorAdjustment = m_damageColor * (m_damageTickCount / (float)m_damageMaxTicks);
+}
+
 bool SentientCube::OnHit() {
     m_health--;
     m_damageTickCount = 10;
