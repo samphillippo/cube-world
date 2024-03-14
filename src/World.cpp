@@ -1,5 +1,6 @@
 #include "World.hpp"
 #include "Camera.hpp"
+#include "AI/PathPlacer.hpp"
 
 #include <iostream>
 #include <string>
@@ -85,6 +86,11 @@ World::~World(){
             delete m_cubes[i];
         }
     }
+    for (int i = 0; i < m_sentientCubes.size(); i++) {
+        if (m_sentientCubes[i] != nullptr) {
+            delete m_sentientCubes[i];
+        }
+    }
     if(m_root!=nullptr){
         delete m_root;
     }
@@ -144,6 +150,11 @@ void World::LoadWorld(std::string filename) {
                 m_root->AddChild(new SceneNode(cube, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
             }
         }
+        //adds sentient cubes to environment
+        SentientCube* pathPlacer = new PathPlacer(glm::vec3(1,1,1), 1.0f);
+        pathPlacer->SetTexture(rockTexture);
+        m_sentientCubes.push_back(pathPlacer);
+        m_root->AddChild(new SceneNode(pathPlacer, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
     } else {
         parseWorldFile(filename);
     }

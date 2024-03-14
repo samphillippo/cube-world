@@ -28,6 +28,7 @@
 #include "Renderer.hpp"
 #include "Player.hpp"
 #include "Cube.hpp"
+#include "AI/SentientCube.hpp"
 
 // Purpose:
 // This class sets up a full graphics program using SDL
@@ -79,6 +80,8 @@ private:
     std::vector<std::shared_ptr<Texture>> m_textures;
     // All cubes in the scene
     std::vector<Cube*> m_cubes;
+    // All sentient cubes in the scene
+    std::vector<SentientCube*> m_sentientCubes;
     // Our root node
     SceneNode* m_root;
 };

@@ -16,7 +16,7 @@ public:
     // Constructor
     PathPlacer(glm::vec3 center, float sideLength);
     // Destructor
-    ~PathPlacer();
+    ~PathPlacer() override;
     // Updates the sentient cube's state each tick
     void OnTick() override;
     // Called upon the sentient cube taking damage

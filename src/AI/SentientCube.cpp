@@ -5,5 +5,4 @@ SentientCube::SentientCube(glm::vec3 center, float sideLength) : Cube(center, si
 }
 
 SentientCube::~SentientCube() {
-    //TODO: remove this?
 }

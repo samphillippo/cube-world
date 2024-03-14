@@ -16,7 +16,7 @@ public:
     // Constructor
     SentientCube(glm::vec3 center, float sideLength);
     // Destructor
-    ~SentientCube();
+    virtual ~SentientCube();
     // Updates the sentient cube's state each tick
     virtual void OnTick() = 0;
     // Called upon the sentient cube taking damage
