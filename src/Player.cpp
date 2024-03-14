@@ -140,11 +140,15 @@ void Player::handleCollisions(std::vector<Cube*> cubes, bool jump) {
 // RAYCASTING
 ////////////////////////////////////////////////
 Cube* Player::Raycast(const std::vector<Cube*>& cubes, int& hitSide) {
+    if (m_selected != nullptr) {
+        m_selected->SetSelected(false);
+    }
+    m_selected = nullptr;
+
     // Get the ray direction from the center of the screen
     glm::vec3 rayDirection = GetRayDirection();
 
     float minIntersectionDistance = FLT_MAX;
-    Cube* selected = nullptr;
     int hitSideTemp;
     // Iterate over cubes and check for intersections
     for (int i = 0; i < cubes.size(); i++) {
@@ -154,13 +158,16 @@ Cube* Player::Raycast(const std::vector<Cube*>& cubes, int& hitSide) {
         if (cube->IntersectRayWithCube(m_position, rayDirection, hitSideTemp, intersectionDistance)) {
             if (intersectionDistance < minIntersectionDistance) {
                 minIntersectionDistance = intersectionDistance;
-                selected = cube;
+                m_selected = cube;
                 hitSide = hitSideTemp;
             }
         }
     }
 
-    return selected;
+    if (m_selected != nullptr) {
+        m_selected->SetSelected(true);
+    }
+    return m_selected;
 }
 
 glm::vec3 Player::GetRayDirection() {
@@ -171,8 +178,8 @@ glm::vec3 Player::GetRayDirection() {
 ////////////////////////////////////////////////
 // HELD OBJECT
 ////////////////////////////////////////////////
-void Player::SetSelectedCubeTexture(std::shared_ptr<Texture> texture) {
-    m_selectedCubeTexture = texture;
+void Player::SetHeldObjectTexture(std::shared_ptr<Texture> texture) {
+    m_heldObjectTexture = texture;
     m_heldObject->SetTexture(texture);
 }
 

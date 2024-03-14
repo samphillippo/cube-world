@@ -31,10 +31,10 @@ public:
     void swapPlayerMode();
     // get whatever object the player is looking at
     Cube* Raycast(const std::vector<Cube*>& cubes, int& hitSide);
-    // get the player's selected texture
-    std::shared_ptr<Texture> GetSelectedCubeTexture() { return m_selectedCubeTexture; }
+    // get the player's held texture
+    std::shared_ptr<Texture> GetHeldObjectTexture() { return m_heldObjectTexture; }
     // set the player's selected texture
-    void SetSelectedCubeTexture(std::shared_ptr<Texture> texture);
+    void SetHeldObjectTexture(std::shared_ptr<Texture> texture);
     // update the player's selected object
     void UpdateHeldObject(glm::mat4 projectionMatrix);
     // render the player's selected object
@@ -59,8 +59,10 @@ private:
     bool m_flyingMode;
     // Camera
     Camera* m_camera;
+    // The object the player is looking at
+    Cube* m_selected;
     // player selected cube texture
-    std::shared_ptr<Texture> m_selectedCubeTexture;
+    std::shared_ptr<Texture> m_heldObjectTexture;
     //the object the player holds in their hand
     Object* m_heldObject;
     //shader for the object the player holds in their hand

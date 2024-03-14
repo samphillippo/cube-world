@@ -130,7 +130,7 @@ void World::LoadWorld(std::string filename) {
         //creates our player
         m_player = std::make_shared<Player>();
         m_player->initialize(0.0f,3.0f,0.0f,1.8f,0.8f);
-        m_player->SetSelectedCubeTexture(m_textures[1]);
+        m_player->SetHeldObjectTexture(m_textures[1]);
 
         //creates the floor for our cube world
         m_root = new SceneNode(nullptr, "", "");
@@ -220,7 +220,7 @@ void World::Loop(){
         quit = handleInput(selected, hitSide);
 
         // Update our scene through our renderer
-        m_renderer->Update(selected);
+        m_renderer->Update();
         // Render our scene using our selected renderer
         m_renderer->Render();
         // Delay to slow things down just a bit!
@@ -271,7 +271,7 @@ void World::addCube(Cube* cube, int face) {
             break;
     }
     Cube* newCube = new Cube(pos, sideLength);
-    newCube->SetTexture(m_player->GetSelectedCubeTexture());
+    newCube->SetTexture(m_player->GetHeldObjectTexture());
     m_cubes.push_back(newCube);
     m_root->AddChild(new SceneNode(newCube, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
 }
@@ -326,15 +326,15 @@ bool World::handleInput(Cube* selected, int hitSide) {
         }
     }
     if (keyboardState[SDL_SCANCODE_0]) {
-        m_player->SetSelectedCubeTexture(m_textures[0]);
+        m_player->SetHeldObjectTexture(m_textures[0]);
     } else if (keyboardState[SDL_SCANCODE_1]) {
-        m_player->SetSelectedCubeTexture(m_textures[1]);
+        m_player->SetHeldObjectTexture(m_textures[1]);
     } else if (keyboardState[SDL_SCANCODE_2]) {
-        m_player->SetSelectedCubeTexture(m_textures[2]);
+        m_player->SetHeldObjectTexture(m_textures[2]);
     } else if (keyboardState[SDL_SCANCODE_3]) {
-        m_player->SetSelectedCubeTexture(m_textures[3]);
+        m_player->SetHeldObjectTexture(m_textures[3]);
     } else if (keyboardState[SDL_SCANCODE_4]) {
-        m_player->SetSelectedCubeTexture(m_textures[4]);
+        m_player->SetHeldObjectTexture(m_textures[4]);
     }
 
     m_player->movePlayer(keyboardState[SDL_SCANCODE_A], keyboardState[SDL_SCANCODE_D],

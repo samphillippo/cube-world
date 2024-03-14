@@ -41,6 +41,10 @@ public:
     void MakeTexturedQuad(std::string fileName);
     // How to draw the object
     virtual void Render();
+    // Sets "selected" value
+    void SetSelected(bool selected) { m_selected = selected; }
+    // Gets "selected" value
+    bool GetSelected() { return m_selected; }
 protected: // Classes that inherit from Object are intended to be overridden.
 
 	// Helper method for when we are ready to draw or update our object
@@ -51,6 +55,8 @@ protected: // Classes that inherit from Object are intended to be overridden.
     std::shared_ptr<Texture> m_textureDiffuse;
     // Store the objects Geometry
 	Geometry m_geometry;
+    // Whether the object is selected
+    bool m_selected;
 };
 
 #endif

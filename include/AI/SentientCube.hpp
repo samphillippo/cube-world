@@ -23,6 +23,8 @@ public:
     virtual bool OnHit() = 0;
 protected:
     int m_tickCount;
+    int m_health;
+    int m_damageTickCount;
 };
 
 #endif

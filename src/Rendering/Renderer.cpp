@@ -22,7 +22,7 @@ Renderer::~Renderer(){
 }
 
 //update sun color and skybox color based on position in the sky
-void Renderer::Update(Object* selected){
+void Renderer::Update(){
     m_projectionMatrix = glm::perspective(glm::radians(45.0f),((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
 
     Camera* camera = m_player->GetCamera();
@@ -42,7 +42,7 @@ void Renderer::Update(Object* selected){
 
     // Perform the update
     if(m_root!=nullptr){
-        m_root->Update(m_projectionMatrix, camera, skyColor, orbitPos, selected);
+        m_root->Update(m_projectionMatrix, camera, skyColor, orbitPos);
     }
 }
 
