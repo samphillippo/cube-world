@@ -11,7 +11,7 @@
 #define PLAYER_HPP
 
 #include "Camera.hpp"
-#include "Cube.hpp"
+#include "CubeMap.hpp"
 #include <memory>
 
 class Player {
@@ -26,11 +26,11 @@ public:
     // handles a player mouse movement
     void Look(float x, float y);
     // handles a player movement
-    void movePlayer(bool left, bool right, bool forward, bool backward, bool jump, std::vector<Cube*> cubes);
+    void movePlayer(bool left, bool right, bool forward, bool backward, bool jump, CubeMap& cubeMap);
     // swaps between flying and walking mode
     void swapPlayerMode();
     // get whatever object the player is looking at
-    Cube* Raycast(const std::vector<Cube*>& cubes, int& hitSide);
+    Cube* Raycast(CubeMap& cubeMap, int& hitSide);
     // get the player's held texture
     std::shared_ptr<Texture> GetHeldObjectTexture() { return m_heldObjectTexture; }
     // set the player's selected texture
@@ -44,7 +44,7 @@ private:
     //gets the direction the player is looking in
     glm::vec3 GetRayDirection();
     // adjusts player position based on collisions
-    void handleCollisions(std::vector<Cube*> cubes, bool jump);
+    void handleCollisions(CubeMap& cubeMap, bool jump);
     // Position
     glm::vec3 m_position;
     // Size

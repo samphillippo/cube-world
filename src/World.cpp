@@ -81,14 +81,6 @@ World::~World(){
     if(m_renderer!=nullptr){
         delete m_renderer;
     }
-    // for (int i = 0; i < m_cubes.size(); i++) {
-    //     if (m_cubes[i] != nullptr) {
-    //         delete m_cubes[i];
-    //     }
-    // }
-    if(m_root!=nullptr){
-        delete m_root;
-    }
 
     //Destroy window
 	SDL_DestroyWindow( m_window );
@@ -127,14 +119,13 @@ void World::LoadWorld(std::string filename) {
         m_player->SetHeldObjectTexture(m_textures[1]);
 
         //creates the floor for our cube world
-        m_root = new SceneNode(nullptr, "", "");
+        m_root = std::make_shared<SceneNode>(nullptr, "", "");
+        m_cubeMap.setRoot(m_root);
         for (int i = -6; i < 7; i++) {
             for (int j = -6; j < 7; j++) {
                 Cube* cube = new Cube(glm::vec3(i,0.0f,j), 1.0f);
                 cube->SetTexture(grassTexture);
-                m_cubes.push_back(cube);
                 m_cubeMap.AddCube(cube);
-                m_root->AddChild(new SceneNode(cube, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
             }
         }
         //creates a wall
@@ -142,18 +133,14 @@ void World::LoadWorld(std::string filename) {
             for (int j = 1; j < 3; j++) {
                 Cube* cube = new Cube(glm::vec3(i,j,7), 1.0f);
                 cube->SetTexture(brickTexture);
-                m_cubes.push_back(cube);
                 m_cubeMap.AddCube(cube);
-                m_root->AddChild(new SceneNode(cube, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
             }
         }
         //adds sentient cubes to environment
         SentientCube* pathPlacer = new PathPlacer(glm::vec3(1,1,1), 1.0f);
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
-        m_cubes.push_back(pathPlacer);
         m_cubeMap.AddCube(pathPlacer);
-        m_root->AddChild(new SceneNode(pathPlacer, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
     } else {
         parseWorldFile(filename);
     }
@@ -215,7 +202,7 @@ void World::Loop(){
 
         //detects if a cube is being looked at
         int hitSide;
-        Cube* selected = m_player->Raycast(m_cubes, hitSide);
+        Cube* selected = m_player->Raycast(m_cubeMap, hitSide);
 
         // handle player input
         quit = handleInput(selected, hitSide);
@@ -248,10 +235,81 @@ void World::GetOpenGLVersionInfo(){
 	SDL_Log("Shading language: %s",(const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
-void World::addCube(Cube* cube, int face) {
-    glm::vec3 pos = cube->GetCenter();
-    float sideLength = cube->GetSideLength();
-    switch (face) {
+bool World::handleInput(Cube* selected, int hitSide) {
+    SDL_Event e;
+    const Uint8* keyboardState = SDL_GetKeyboardState(NULL);
+    static int mouseX=m_windowWidth/2;
+    static int mouseY=m_windowHeight/2;
+    //Handle events on queue
+    while(SDL_PollEvent( &e ) != 0) {
+        // User posts an event to quit
+        // An example is hitting the "x" in the corner of the window.
+        if(e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)){
+            return true;
+        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_f) {
+            m_player->swapPlayerMode();
+        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_p) {
+            handleRightClick(selected, hitSide);
+        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_r) {
+            m_renderer->resetOrbit();
+        }
+        // Handle keyboard input for the camera class
+        if(e.type==SDL_MOUSEMOTION){
+            // Handle mouse movements
+            mouseX+=e.motion.xrel;
+            mouseY+=e.motion.yrel;
+            m_player->Look(mouseX, mouseY);
+        }
+        //if the player clicks the left mouse button, delete the cube they are looking at
+        if (e.type == SDL_MOUSEBUTTONDOWN) {
+            if (selected != nullptr) {
+                if (e.button.button == SDL_BUTTON_LEFT) {
+                    handleLeftClick(selected);
+                } else if (e.button.button == SDL_BUTTON_RIGHT) {
+                    handleRightClick(selected, hitSide);
+                }
+            }
+        }
+    }
+    if (keyboardState[SDL_SCANCODE_0]) {
+        m_player->SetHeldObjectTexture(m_textures[0]);
+    } else if (keyboardState[SDL_SCANCODE_1]) {
+        m_player->SetHeldObjectTexture(m_textures[1]);
+    } else if (keyboardState[SDL_SCANCODE_2]) {
+        m_player->SetHeldObjectTexture(m_textures[2]);
+    } else if (keyboardState[SDL_SCANCODE_3]) {
+        m_player->SetHeldObjectTexture(m_textures[3]);
+    } else if (keyboardState[SDL_SCANCODE_4]) {
+        m_player->SetHeldObjectTexture(m_textures[4]);
+    }
+
+    m_player->movePlayer(keyboardState[SDL_SCANCODE_A], keyboardState[SDL_SCANCODE_D],
+                            keyboardState[SDL_SCANCODE_W], keyboardState[SDL_SCANCODE_S],
+                            keyboardState[SDL_SCANCODE_SPACE], m_cubeMap);
+
+    return false;
+}
+
+void World::handleLeftClick(Cube* selected) {
+    for (int i = 0; i < m_sentientCubes.size(); i++) {
+        if (m_sentientCubes[i] == selected) {
+            if (m_sentientCubes[i]->OnHit()) {
+                m_sentientCubes.erase(m_sentientCubes.begin() + i);
+                m_cubeMap.RemoveCube(selected);
+            }
+            return;
+        }
+    }
+    //if the cube is not a sentient cube, delete it
+    if (selected != nullptr) {
+        m_cubeMap.RemoveCube(selected);
+    }
+}
+
+void World::handleRightClick(Cube* selected, int hitSide) {
+    glm::vec3 pos = selected->GetCenter();
+    float sideLength = selected->GetSideLength();
+    switch (hitSide) {
         case 0:
             pos.x -= sideLength;
             break;
@@ -272,91 +330,7 @@ void World::addCube(Cube* cube, int face) {
             break;
     }
     Cube* newCube = new Cube(pos, sideLength);
-    newCube->SetTexture(m_player->GetHeldObjectTexture());
-    m_cubes.push_back(newCube);
-    m_root->AddChild(new SceneNode(newCube, "./shaders/cube_vert.glsl", "./shaders/cube_frag.glsl"));
-}
-
-void World::deleteCube(Cube* cube) {
-    //delete the cube from the scene graph
-    m_root->RemoveChild(cube);
-    //delete the cube from the world
-    for (int i = 0; i < m_cubes.size(); i++) {
-        if (m_cubes[i] == cube) {
-            m_cubes.erase(m_cubes.begin() + i);
-            break;
-        }
-    }
-    delete cube;
-}
-
-bool World::handleInput(Cube* selected, int hitSide) {
-    SDL_Event e;
-    const Uint8* keyboardState = SDL_GetKeyboardState(NULL);
-    static int mouseX=m_windowWidth/2;
-    static int mouseY=m_windowHeight/2;
-    //Handle events on queue
-    while(SDL_PollEvent( &e ) != 0) {
-        // User posts an event to quit
-        // An example is hitting the "x" in the corner of the window.
-        if(e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)){
-            return true;
-        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_f) {
-            m_player->swapPlayerMode();
-        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_p) {
-            addCube(selected, hitSide);
-        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_r) {
-            m_renderer->resetOrbit();
-        }
-        // Handle keyboard input for the camera class
-        if(e.type==SDL_MOUSEMOTION){
-            // Handle mouse movements
-            mouseX+=e.motion.xrel;
-            mouseY+=e.motion.yrel;
-            m_player->Look(mouseX, mouseY);
-        }
-        //if the player clicks the left mouse button, delete the cube they are looking at
-        if (e.type == SDL_MOUSEBUTTONDOWN) {
-            if (selected != nullptr) {
-                if (e.button.button == SDL_BUTTON_LEFT) {
-                    handleLeftClick(selected);
-                } else if (e.button.button == SDL_BUTTON_RIGHT) {
-                    addCube(selected, hitSide);
-                }
-            }
-        }
-    }
-    if (keyboardState[SDL_SCANCODE_0]) {
-        m_player->SetHeldObjectTexture(m_textures[0]);
-    } else if (keyboardState[SDL_SCANCODE_1]) {
-        m_player->SetHeldObjectTexture(m_textures[1]);
-    } else if (keyboardState[SDL_SCANCODE_2]) {
-        m_player->SetHeldObjectTexture(m_textures[2]);
-    } else if (keyboardState[SDL_SCANCODE_3]) {
-        m_player->SetHeldObjectTexture(m_textures[3]);
-    } else if (keyboardState[SDL_SCANCODE_4]) {
-        m_player->SetHeldObjectTexture(m_textures[4]);
-    }
-
-    m_player->movePlayer(keyboardState[SDL_SCANCODE_A], keyboardState[SDL_SCANCODE_D],
-                            keyboardState[SDL_SCANCODE_W], keyboardState[SDL_SCANCODE_S],
-                            keyboardState[SDL_SCANCODE_SPACE], m_cubes);
-
-    return false;
-}
-
-void World::handleLeftClick(Cube* selected) {
-    for (int i = 0; i < m_sentientCubes.size(); i++) {
-        if (m_sentientCubes[i] == selected) {
-            if (m_sentientCubes[i]->OnHit()) {
-                m_sentientCubes.erase(m_sentientCubes.begin() + i);
-                deleteCube(selected);
-            }
-            return;
-        }
-    }
-    //if the cube is not a sentient cube, delete it
-    if (selected != nullptr) {
-        deleteCube(selected);
-    }
+    std::shared_ptr<Texture> heldTexture = m_player->GetHeldObjectTexture();
+    newCube->SetTexture(heldTexture);
+    m_cubeMap.AddCube(newCube);
 }

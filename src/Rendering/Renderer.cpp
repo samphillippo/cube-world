@@ -70,9 +70,3 @@ void Renderer::Render(){
     }
     m_skybox.Render();
 }
-
-// Determines what the root is of the renderer, so the
-// scene can be drawn.
-void Renderer::setRoot(SceneNode* startingNode){
-    m_root = startingNode;
-}

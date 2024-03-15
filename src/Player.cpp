@@ -38,7 +38,7 @@ void Player::initialize(float x, float y, float z, float height, float sideLengt
     m_heldTransform.Scale(0.2f,0.2f,0.2f);
 }
 
-void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool jump, std::vector<Cube*> cubes) {
+void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool jump, CubeMap& cubeMap) {
     glm::vec3 direction = GetRayDirection();
     if (!m_flyingMode) {
         direction.y = 0.0f;
@@ -58,7 +58,7 @@ void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool
         m_position -= direction * m_movementSpeed;
     }
     if (!m_flyingMode) {
-        handleCollisions(cubes, jump);
+        handleCollisions(cubeMap, jump);
     }
     m_camera->SetCameraEyePosition(m_position.x, m_position.y, m_position.z);
 }
@@ -72,7 +72,8 @@ void Player::swapPlayerMode() {
     m_verticalVelocity = 0.0f;
 }
 
-void Player::handleCollisions(std::vector<Cube*> cubes, bool jump) {
+//TODO: CubeMap improvements
+void Player::handleCollisions(CubeMap& cubeMap, bool jump) {
     float maxX = m_position.x + m_sideLength / 2;
     float minX = m_position.x - m_sideLength / 2;
     float maxZ = m_position.z + m_sideLength / 2;
@@ -80,9 +81,10 @@ void Player::handleCollisions(std::vector<Cube*> cubes, bool jump) {
     float maxY = m_position.y;
     float minY = m_position.y - m_height;
     bool standingOnGround = false;
-    for (int i = 0; i < cubes.size(); i++) {
-        glm::vec3 cubeCenter = cubes[i]->GetCenter();
-        float cubeSideLength = cubes[i]->GetSideLength();
+    for (auto it = cubeMap.getMap().begin(); it != cubeMap.getMap().end(); it++) {
+        Cube* cube = it->second;
+        glm::vec3 cubeCenter = cube->GetCenter();
+        float cubeSideLength = cube->GetSideLength();
         float cubeMaxX = cubeCenter.x + cubeSideLength / 2;
         float cubeMinX = cubeCenter.x - cubeSideLength / 2;
         float cubeMaxZ = cubeCenter.z + cubeSideLength / 2;
@@ -139,7 +141,9 @@ void Player::handleCollisions(std::vector<Cube*> cubes, bool jump) {
 ////////////////////////////////////////////////
 // RAYCASTING
 ////////////////////////////////////////////////
-Cube* Player::Raycast(const std::vector<Cube*>& cubes, int& hitSide) {
+
+//TODO: CubeMap improvements
+Cube* Player::Raycast(CubeMap& cubeMap, int& hitSide) {
     if (m_selected != nullptr) {
         m_selected->SetSelected(false);
     }
@@ -151,10 +155,10 @@ Cube* Player::Raycast(const std::vector<Cube*>& cubes, int& hitSide) {
     float minIntersectionDistance = FLT_MAX;
     int hitSideTemp;
     // Iterate over cubes and check for intersections
-    for (int i = 0; i < cubes.size(); i++) {
+    for (auto it = cubeMap.getMap().begin(); it != cubeMap.getMap().end(); it++) {
         // Perform intersection test
         float intersectionDistance;
-        Cube* cube = cubes[i];
+        Cube* cube = it->second;
         if (cube->IntersectRayWithCube(m_position, rayDirection, hitSideTemp, intersectionDistance)) {
             if (intersectionDistance < minIntersectionDistance) {
                 minIntersectionDistance = intersectionDistance;

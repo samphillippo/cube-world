@@ -10,6 +10,7 @@
 #define CUBEMAP_HPP
 
 #include "Cube.hpp"
+#include "Rendering/SceneNode.hpp"
 #include <map>
 
 struct Coordinates {
@@ -35,8 +36,13 @@ public:
     void RemoveCube(Cube* cube);
     // Returns the cube at the given coordinates
     Cube* GetCube(int x, int y, int z);
+    // Sets the root value for this CubeMap
+    void setRoot(std::shared_ptr<SceneNode> root) { m_root = root; }
+    // Returns the map of cubes
+    const std::map<Coordinates, Cube*>& getMap() const { return coordinateMap; }
 private:
     std::map<Coordinates, Cube*> coordinateMap;
+    std::shared_ptr<SceneNode> m_root;
 };
 
 #endif
