@@ -13,18 +13,27 @@ PathPlacer::~PathPlacer() {
 }
 
 void PathPlacer::PlanPath() {
+    std::cout << "PathPlacer PlanPath" << std::endl;
     //TODO
-
+    m_path.clear();
+    m_path.push_back(glm::vec3(2, 2, 2));
     //forces next tick to be a move tick
     m_tickCount = m_movementTicks - 1;
 }
 
 void PathPlacer::Move(CubeMap& cubeMap) {
+    std::cout << "PathPlacer Move" << std::endl;
     //path is complete, stop moving restart cycle
     if (m_path.size() == 0) {
         m_isMoving = false;
         return;
     }
+    // glm::vec3 nextCoords = m_path[0];
+    // std::cout << "Next coords: " << nextCoords.x << " " << nextCoords.y << " " << nextCoords.z << std::endl;
+    // Cube* nextCube = cubeMap.GetCube(nextCoords.x, nextCoords.y, nextCoords.z);
+    // std::cout << "Next cube: " << nextCube << std::endl;
+    // return;
+
     //if the next block is occupied
     if (cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z) != nullptr) {
         //if we're still planning, keep planning
@@ -37,10 +46,14 @@ void PathPlacer::Move(CubeMap& cubeMap) {
             return;
         }
     } else {
+        glm::vec3 nextCoords = m_path[0];
+        std::cout << "Next coords: " << nextCoords.x << " " << nextCoords.y << " " << nextCoords.z << std::endl;
+        std::cout << "Current coords: " << m_center.x << " " << m_center.y << " " << m_center.z << std::endl;
         //if the next block is open, move there
         m_isPlanning = false;
         cubeMap.RemoveCube(this);
-        m_center = m_path[0];
+        m_center = nextCoords;
+        this->Update();
         cubeMap.AddCube(this);
         m_path.erase(m_path.begin());
     }
@@ -59,6 +72,7 @@ void PathPlacer::OnTick(CubeMap& cubeMap) {
         if (rand() % m_avgActionTicks == 0) {
             m_isPlanning = true;
             m_isMoving = true;
+            PlanPath();
             m_tickCount = 0;
         }
     }

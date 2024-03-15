@@ -83,6 +83,9 @@ void Player::handleCollisions(CubeMap& cubeMap, bool jump) {
     bool standingOnGround = false;
     for (auto it = cubeMap.getMap().begin(); it != cubeMap.getMap().end(); it++) {
         Cube* cube = it->second;
+        if (cube == nullptr) {
+            continue;
+        }
         glm::vec3 cubeCenter = cube->GetCenter();
         float cubeSideLength = cube->GetSideLength();
         float cubeMaxX = cubeCenter.x + cubeSideLength / 2;
@@ -159,6 +162,9 @@ Cube* Player::Raycast(CubeMap& cubeMap, int& hitSide) {
         // Perform intersection test
         float intersectionDistance;
         Cube* cube = it->second;
+        if (cube == nullptr) {
+            continue;
+        }
         if (cube->IntersectRayWithCube(m_position, rayDirection, hitSideTemp, intersectionDistance)) {
             if (intersectionDistance < minIntersectionDistance) {
                 minIntersectionDistance = intersectionDistance;

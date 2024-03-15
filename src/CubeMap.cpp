@@ -24,7 +24,6 @@ void CubeMap::RemoveCube(Cube* cube) {
     glm::vec3 center = cube->GetCenter();
     Coordinates coords = {(int)center.x, (int)center.y, (int)center.z};
     coordinateMap.erase(coords);
-    delete cube;
 }
 
 Cube* CubeMap::GetCube(int x, int y, int z) {

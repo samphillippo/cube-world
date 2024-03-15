@@ -296,6 +296,7 @@ void World::handleLeftClick(Cube* selected) {
             if (m_sentientCubes[i]->OnHit()) {
                 m_sentientCubes.erase(m_sentientCubes.begin() + i);
                 m_cubeMap.RemoveCube(selected);
+                delete selected;
             }
             return;
         }
@@ -303,6 +304,7 @@ void World::handleLeftClick(Cube* selected) {
     //if the cube is not a sentient cube, delete it
     if (selected != nullptr) {
         m_cubeMap.RemoveCube(selected);
+        delete selected;
     }
 }
 
