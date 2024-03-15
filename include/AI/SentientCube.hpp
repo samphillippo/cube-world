@@ -9,7 +9,7 @@
 #ifndef SENTIENTCUBE_HPP
 #define SENTIENTCUBE_HPP
 
-#include "Cube.hpp"
+#include "CubeMap.hpp"
 
 class SentientCube: public Cube {
 public:
@@ -18,13 +18,13 @@ public:
     // Destructor
     virtual ~SentientCube();
     // Updates the sentient cube's state each tick
-    virtual void OnTick();
+    virtual void OnTick(CubeMap& cubeMap);
     // Called upon the sentient cube taking damage
     virtual bool OnHit();
     // Plans a path for the sentient cube
     virtual void PlanPath() = 0;
     // Moves the sentient cube along its path
-    virtual void Move() = 0;
+    virtual void Move(CubeMap& cubeMap) = 0;
 protected:
     // Counts number of ticks since last action
     int m_tickCount;

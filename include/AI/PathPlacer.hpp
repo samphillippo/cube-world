@@ -18,13 +18,13 @@ public:
     // Destructor
     ~PathPlacer() override;
     // Updates the sentient cube's state each tick
-    void OnTick() override;
+    void OnTick(CubeMap& cubeMap) override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
     // Plans a path for the sentient cube
     void PlanPath() override;
     // Moves the sentient cube along its path
-    void Move() override;
+    void Move(CubeMap& cubeMap) override;
 private:
     //max range of path placement
     int m_maxPathRange;

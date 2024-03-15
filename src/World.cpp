@@ -197,7 +197,7 @@ void World::Loop(){
     // While application is running
     while(!quit){
         for (int i = 0; i < m_sentientCubes.size(); i++) {
-            m_sentientCubes[i]->OnTick();
+            m_sentientCubes[i]->OnTick(m_cubeMap);
         }
 
         //detects if a cube is being looked at

@@ -14,19 +14,48 @@ PathPlacer::~PathPlacer() {
 
 void PathPlacer::PlanPath() {
     //TODO
+
+    //forces next tick to be a move tick
+    m_tickCount = m_movementTicks - 1;
 }
 
-void PathPlacer::Move() {
-    //if next block is not open, plan instead
-
-}
-
-void PathPlacer::OnTick() {
-    SentientCube::OnTick();
-    if (m_isMoving) {
-        Move();
+void PathPlacer::Move(CubeMap& cubeMap) {
+    //path is complete, stop moving restart cycle
+    if (m_path.size() == 0) {
+        m_isMoving = false;
+        return;
     }
-    if (m_tickCount >= m_minActionTicks) {
+    //if the next block is occupied
+    if (cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z) != nullptr) {
+        //if we're still planning, keep planning
+        if (m_isPlanning) {
+            PlanPath();
+            return;
+        } else {
+            //if we're not planning, stop moving, restart cycle
+            m_isMoving = false;
+            return;
+        }
+    } else {
+        //if the next block is open, move there
+        m_isPlanning = false;
+        cubeMap.RemoveCube(this);
+        m_center = m_path[0];
+        cubeMap.AddCube(this);
+        m_path.erase(m_path.begin());
+    }
+
+}
+
+void PathPlacer::OnTick(CubeMap& cubeMap) {
+    SentientCube::OnTick(cubeMap);
+    if (m_isMoving) { //only move on move ticks
+        if (m_tickCount % m_movementTicks == 0) {
+            m_tickCount = 0;
+            Move(cubeMap);
+        }
+    }
+    else if (m_tickCount >= m_minActionTicks) {
         if (rand() % m_avgActionTicks == 0) {
             m_isPlanning = true;
             m_isMoving = true;

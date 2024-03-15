@@ -27,9 +27,10 @@ public:
     float GetSideLength();
     // Checks a ray for intersection with a cube
     bool IntersectRayWithCube(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, int& hitSide, float &distance) const;
-private:
+protected:
     // Store the objects position
     glm::vec3 m_center;
+private:
     // Store the objects side length
     float m_sideLength;
 };

@@ -5,7 +5,9 @@ CubeMap::CubeMap() {
 
 CubeMap::~CubeMap() {
     for (auto it = coordinateMap.begin(); it != coordinateMap.end(); it++) {
-        delete it->second;
+        if (it->second != nullptr) {
+            delete it->second;
+        }
     }
     coordinateMap.clear();
 }
