@@ -7,14 +7,23 @@ PathPlacer::PathPlacer(glm::vec3 center, float sideLength) : SentientCube(center
     m_movementTicks = 30;
     m_minActionTicks = 40;
     m_avgActionTicks = 40;
+    m_maxPathRange = 10;
+    m_minPathRange = 5;
 }
 
 PathPlacer::~PathPlacer() {
 }
 
+glm::vec3 PathPlacer::GetRandomVector() {
+    int x = (m_minPathRange + (rand() % (m_maxPathRange - m_minPathRange))) * (rand() % 2 ? 1 : -1);
+    int y = (m_minPathRange + (rand() % (m_maxPathRange - m_minPathRange))) * (rand() % 2 ? 1 : -1) / 2;
+    int z = (m_minPathRange + (rand() % (m_maxPathRange - m_minPathRange))) * (rand() % 2 ? 1 : -1);
+    return glm::vec3(x, y, z);
+}
+
 void PathPlacer::PlanPath() {
-    std::cout << "PathPlacer PlanPath" << std::endl;
-    //TODO
+    glm::vec3 randomVector = GetRandomVector();
+    std::cout << "randomVector: " << randomVector.x << " " << randomVector.y << " " << randomVector.z << std::endl;
     m_path.clear();
     m_path.push_back(glm::vec3(2, 2, 2));
     m_path.push_back(glm::vec3(3, 3, 3));
@@ -23,7 +32,6 @@ void PathPlacer::PlanPath() {
 }
 
 void PathPlacer::Move(CubeMap& cubeMap) {
-    std::cout << "PathPlacer Move" << std::endl;
     //path is complete, stop moving restart cycle
     if (m_path.size() == 0) {
         m_isMoving = false;

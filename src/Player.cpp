@@ -198,6 +198,8 @@ void Player::UpdateHeldObject(glm::mat4 projectionMatrix) {
     m_heldShader.SetUniform1i("selected", 0);
     m_heldShader.SetUniform1i("u_DiffuseMap",0);
 
+    m_heldShader.SetUniform3f("colorAdjustment", 0.0f, 0.0f, 0.0f);
+
     //Sets MVP matrices
     glm::mat4 view;
     m_heldShader.SetUniformMatrix4fv("model", &m_heldTransform.GetInternalMatrix()[0][0]);

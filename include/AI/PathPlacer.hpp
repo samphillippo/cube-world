@@ -26,6 +26,8 @@ public:
     // Moves the sentient cube along its path
     void Move(CubeMap& cubeMap) override;
 private:
+    // Gets a random vector in range
+    glm::vec3 GetRandomVector();
     //max range of path placement
     int m_maxPathRange;
     //min range of path placement
