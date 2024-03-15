@@ -12,12 +12,16 @@ Cube::~Cube() {
     // Empty
 }
 
+//NEED CLEAR
+
+void Cube::Clear() {
+    m_geometry = Geometry();
+    m_vertexBufferLayout = VertexBufferLayout();
+}
+
 //TODO: make texture programmatic
 //TODO: cleanup hardcodes
 void Cube::Update() {
-    m_geometry = Geometry();
-    m_vertexBufferLayout = VertexBufferLayout();
-
     //0: 1/3
     m_geometry.AddVertex(m_center.x + m_sideLength / 2, m_center.y + m_sideLength / 2, m_center.z + m_sideLength / 2, 0.499217f, 0.749885f); //4+++
     //1: 2/9

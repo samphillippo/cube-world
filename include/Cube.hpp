@@ -19,6 +19,8 @@ public:
     Cube(glm::vec3 center, float sideLength);
     // Destructor
     ~Cube();
+    // Clears the cube data
+    void Clear();
     // Updates position and size of cube
     void Update();
     // Get the center of the cube

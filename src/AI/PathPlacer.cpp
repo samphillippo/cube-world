@@ -54,6 +54,7 @@ void PathPlacer::Move(CubeMap& cubeMap) {
         m_isPlanning = false;
         cubeMap.RemoveCube(this);
         m_center = m_path[0];
+        this->Clear();
         this->Update();
         cubeMap.AddCube(this);
         m_path.erase(m_path.begin());
