@@ -4,8 +4,8 @@
 
 PathPlacer::PathPlacer(glm::vec3 center, float sideLength) : SentientCube(center, sideLength) {
     m_health = 5;
-    m_movementTicks = 10;
-    m_minActionTicks = 20;
+    m_movementTicks = 30;
+    m_minActionTicks = 40;
     m_avgActionTicks = 40;
 }
 
@@ -17,6 +17,7 @@ void PathPlacer::PlanPath() {
     //TODO
     m_path.clear();
     m_path.push_back(glm::vec3(2, 2, 2));
+    m_path.push_back(glm::vec3(3, 3, 3));
     //forces next tick to be a move tick
     m_tickCount = m_movementTicks - 1;
 }
@@ -28,11 +29,6 @@ void PathPlacer::Move(CubeMap& cubeMap) {
         m_isMoving = false;
         return;
     }
-    // glm::vec3 nextCoords = m_path[0];
-    // std::cout << "Next coords: " << nextCoords.x << " " << nextCoords.y << " " << nextCoords.z << std::endl;
-    // Cube* nextCube = cubeMap.GetCube(nextCoords.x, nextCoords.y, nextCoords.z);
-    // std::cout << "Next cube: " << nextCube << std::endl;
-    // return;
 
     //if the next block is occupied
     if (cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z) != nullptr) {
@@ -46,13 +42,10 @@ void PathPlacer::Move(CubeMap& cubeMap) {
             return;
         }
     } else {
-        glm::vec3 nextCoords = m_path[0];
-        std::cout << "Next coords: " << nextCoords.x << " " << nextCoords.y << " " << nextCoords.z << std::endl;
-        std::cout << "Current coords: " << m_center.x << " " << m_center.y << " " << m_center.z << std::endl;
         //if the next block is open, move there
         m_isPlanning = false;
         cubeMap.RemoveCube(this);
-        m_center = nextCoords;
+        m_center = m_path[0];
         this->Update();
         cubeMap.AddCube(this);
         m_path.erase(m_path.begin());
