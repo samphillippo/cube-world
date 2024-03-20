@@ -5,6 +5,7 @@ SentientCube::SentientCube(glm::vec3 center, float sideLength) : Cube(center, si
     m_damageTickCount = 0;
     m_damageMaxTicks = 10;
     m_damageColor = glm::vec3(0.8f, 0.0f, 0.0f);
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 }
 
 SentientCube::~SentientCube() {

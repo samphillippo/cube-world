@@ -141,6 +141,11 @@ void World::LoadWorld(std::string filename) {
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
         m_cubeMap.AddCube(pathPlacer);
+
+        SentientCube* pathPlacer2 = new PathPlacer(glm::vec3(4,1,1), 1.0f);
+        pathPlacer2->SetTexture(rockTexture);
+        m_sentientCubes.push_back(pathPlacer2);
+        m_cubeMap.AddCube(pathPlacer2);
     } else {
         parseWorldFile(filename);
     }

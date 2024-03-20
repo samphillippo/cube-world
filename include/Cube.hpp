@@ -32,9 +32,9 @@ public:
 protected:
     // Store the objects position
     glm::vec3 m_center;
-private:
     // Store the objects side length
     float m_sideLength;
+private:
 };
 
 #endif

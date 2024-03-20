@@ -10,6 +10,8 @@
 #define SENTIENTCUBE_HPP
 
 #include "CubeMap.hpp"
+#include <cstdlib>
+#include <ctime>
 
 class SentientCube: public Cube {
 public:
