@@ -75,21 +75,6 @@ void PathPlacer::OnTick(CubeMap& cubeMap) {
 
 }
 
-
-//how do we decide when we want to move?
-
-//Random amount of time (x-y) to decide to move
-//When we've decided, try to generate a path every movement tick
-    //when its stopped on first move, immediately generate a new path
-    //when its stopped on later moves, reset decision to move
-
-//When we DO want to move:
-//1. choose random vector
-//2. check first block along path
-//3. if block is open, move there, continue following path until completion
-
-//might need to take in player as input
-//or should all sentient cubs store player?
 bool PathPlacer::OnHit() {
     if (SentientCube::OnHit()) {
         return true;
