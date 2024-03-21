@@ -152,7 +152,7 @@ void World::LoadWorld(std::string filename) {
         m_sentientCubes.push_back(pathPlacer2);
         m_cubeMap.AddCube(pathPlacer2);
 
-        SentientCube* blockBreaker = new BlockBreaker(glm::vec3(1,1,4), 1.0f);
+        SentientCube* blockBreaker = new BlockBreaker(glm::vec3(4,4,4), 1.0f);
         blockBreaker->SetTexture(breakerTexture);
         m_sentientCubes.push_back(blockBreaker);
         m_cubeMap.AddCube(blockBreaker);

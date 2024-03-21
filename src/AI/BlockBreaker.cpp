@@ -2,6 +2,7 @@
 #include <iostream>
 #include <queue>
 #include <set>
+#include <random>
 
 BlockBreaker::BlockBreaker(glm::vec3 center, float sideLength) : SentientCube(center, sideLength) {
     m_health = 5;
@@ -14,10 +15,7 @@ BlockBreaker::~BlockBreaker() {
 
 }
 
-//Pathfinds, BFSing to nearest cube(s)
-
-//this needs access to the cube map
-
+//gets all neighbors to given coordinates
 std::vector<Coordinates> GetNeighbors(Coordinates coords) {
     std::vector<Coordinates> neighbors;
     neighbors.push_back({coords.x + 1, coords.y, coords.z});
@@ -26,20 +24,24 @@ std::vector<Coordinates> GetNeighbors(Coordinates coords) {
     neighbors.push_back({coords.x, coords.y - 1, coords.z});
     neighbors.push_back({coords.x, coords.y, coords.z + 1});
     neighbors.push_back({coords.x, coords.y, coords.z - 1});
+    std::shuffle(neighbors.begin(), neighbors.end(), std::default_random_engine(std::rand()));
     return neighbors;
 
 }
 
+//Pathfinds, BFSing to nearest cube(s)
 void BlockBreaker::PlanPath(CubeMap& cubeMap) {
     m_path.clear();
 
     std::queue<Coordinates> q;
     std::set<Coordinates> visited;
     Coordinates startCoords = {(int)m_center.x, (int)m_center.y, (int)m_center.z};
-    for (Coordinates neighbor : GetNeighbors(startCoords)) {
-        q.push(neighbor);
-    }
     visited.insert(startCoords);
+    for (Coordinates neighbor : GetNeighbors(startCoords)) {
+        if (visited.find(neighbor) == visited.end()) {
+            q.push(neighbor);
+        }
+    }
 
     int count = 0;
     while (!q.empty()) {
@@ -52,12 +54,12 @@ void BlockBreaker::PlanPath(CubeMap& cubeMap) {
             break;
         }
         for (Coordinates neighbor : GetNeighbors(currentCube)) {
-            if (visited.find(neighbor) != visited.end()) {
+            if (visited.find(neighbor) == visited.end()) {
                 q.push(neighbor);
             }
         }
         count ++;
-        if (count > 200) { //if no cube has been found within the first 200 checks give up
+        if (count > 5000) { //if no cube has been found within the first 5000 checks give up
             break;
         }
     }
