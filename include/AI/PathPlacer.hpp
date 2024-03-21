@@ -23,8 +23,6 @@ public:
     bool OnHit() override;
     // Plans a path for the sentient cube
     void PlanPath() override;
-    // Moves the sentient cube along its path
-    void Move(CubeMap& cubeMap) override;
 private:
     // Gets a random vector in range
     glm::vec3 GetRandomVector();

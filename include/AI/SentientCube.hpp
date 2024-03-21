@@ -26,7 +26,7 @@ public:
     // Plans a path for the sentient cube
     virtual void PlanPath() = 0;
     // Moves the sentient cube along its path
-    virtual void Move(CubeMap& cubeMap) = 0;
+    virtual void Move(CubeMap& cubeMap);
 protected:
     // Counts number of ticks since last action
     int m_tickCount;

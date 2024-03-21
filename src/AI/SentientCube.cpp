@@ -25,3 +25,34 @@ bool SentientCube::OnHit() {
     }
     return false;
 }
+
+void SentientCube::Move(CubeMap& cubeMap) {
+    //path is complete, stop moving restart cycle
+    if (m_path.size() == 0) {
+        m_isMoving = false;
+        return;
+    }
+
+    //if the next block is occupied
+    if (cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z) != nullptr) { //if we're still planning, keep planning
+        if (m_isPlanning) {
+            PlanPath();
+            return;
+        } else { //if we're not planning, stop moving, restart cycle
+            m_isMoving = false;
+            return;
+        }
+    } else { //if the next block is open, move there
+        m_isPlanning = false;
+        //creates new cube at previous location
+        Cube* newCube = new Cube(m_center, m_sideLength);
+        newCube->SetTexture(m_textureDiffuse);
+        cubeMap.RemoveCube(this);
+        m_center = m_path[0];
+        this->Clear();
+        this->Update();
+        cubeMap.AddCube(this);
+        cubeMap.AddCube(newCube);
+        m_path.erase(m_path.begin());
+    }
+}
