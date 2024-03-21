@@ -5,9 +5,9 @@
 
 BlockBreaker::BlockBreaker(glm::vec3 center, float sideLength) : SentientCube(center, sideLength) {
     m_health = 5;
-    m_movementTicks = 30;
+    m_movementTicks = 20;
     m_minActionTicks = 40;
-    m_avgActionTicks = 40;
+    m_avgActionTicks = 1;
 }
 
 BlockBreaker::~BlockBreaker() {
@@ -36,17 +36,19 @@ void BlockBreaker::PlanPath(CubeMap& cubeMap) {
     std::queue<Coordinates> q;
     std::set<Coordinates> visited;
     Coordinates startCoords = {(int)m_center.x, (int)m_center.y, (int)m_center.z};
-    q.push(startCoords);
+    for (Coordinates neighbor : GetNeighbors(startCoords)) {
+        q.push(neighbor);
+    }
     visited.insert(startCoords);
 
+    int count = 0;
     while (!q.empty()) {
         Coordinates currentCube = q.front();
         q.pop();
 
         visited.insert(currentCube);
         if (cubeMap.GetCube(currentCube.x, currentCube.y, currentCube.z) != nullptr) {
-            //reconstruct path
-            //use code from PathPlacer!!!!
+            m_path = PathToTarget(glm::vec3(currentCube.x - m_center.x, currentCube.y - m_center.y, currentCube.z - m_center.z));
             break;
         }
         for (Coordinates neighbor : GetNeighbors(currentCube)) {
@@ -54,14 +56,12 @@ void BlockBreaker::PlanPath(CubeMap& cubeMap) {
                 q.push(neighbor);
             }
         }
+        count ++;
+        if (count > 200) { //if no cube has been found within the first 200 checks give up
+            break;
+        }
     }
 
-    //if no path found, don't move
-    //need to use counter to prevent infinite loop
-
-
-    m_path.push_back(glm::vec3(1, 0, 1));
-    m_path.push_back(glm::vec3(0, 0, 1));
     m_tickCount = m_movementTicks - 1;
 }
 
