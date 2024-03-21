@@ -2,6 +2,7 @@
 #include "Camera.hpp"
 #include "AI/PathPlacer.hpp"
 #include "AI/BlockBreaker.hpp"
+#include "AI/BrickBuilder.hpp"
 
 #include <iostream>
 #include <string>
@@ -156,6 +157,11 @@ void World::LoadWorld(std::string filename) {
         blockBreaker->SetTexture(breakerTexture);
         m_sentientCubes.push_back(blockBreaker);
         m_cubeMap.AddCube(blockBreaker);
+
+        SentientCube* brickBuilder = new BrickBuilder(glm::vec3(4,1,4), 1.0f);
+        brickBuilder->SetTexture(brickTexture);
+        m_sentientCubes.push_back(brickBuilder);
+        m_cubeMap.AddCube(brickBuilder);
     } else {
         parseWorldFile(filename);
     }
