@@ -23,11 +23,11 @@ public:
     virtual void OnTick(CubeMap& cubeMap);
     // Called upon the sentient cube taking damage
     virtual bool OnHit();
+protected:
     // Plans a path for the sentient cube
     virtual void PlanPath(CubeMap& cubeMap) = 0;
     // Moves the sentient cube along its path
     virtual void Move(CubeMap& cubeMap);
-protected:
     // Counts number of ticks since last action
     int m_tickCount;
     // Health of the sentient cube

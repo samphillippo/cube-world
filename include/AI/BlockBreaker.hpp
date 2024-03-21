@@ -21,11 +21,11 @@ public:
     void OnTick(CubeMap& cubeMap) override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
+private:
     // Plans a path for the sentient cube
     void PlanPath(CubeMap& cubeMap) override;
     // overrides the super function to delete instead of add blocks
     virtual void Move(CubeMap& cubeMap) override;
-private:
 };
 
 #endif

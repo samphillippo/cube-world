@@ -21,9 +21,9 @@ public:
     void OnTick(CubeMap& cubeMap) override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
+private:
     // Plans a path for the sentient cube
     void PlanPath(CubeMap& cubeMap) override;
-private:
     // Gets a random vector in range
     glm::vec3 GetRandomVector();
     //max range of path placement
