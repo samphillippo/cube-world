@@ -22,7 +22,7 @@ public:
     // Called upon the sentient cube taking damage
     bool OnHit() override;
     // Plans a path for the sentient cube
-    void PlanPath() override;
+    void PlanPath(CubeMap& cubeMap) override;
 private:
     // Gets a random vector in range
     glm::vec3 GetRandomVector();

@@ -1,5 +1,7 @@
 #include "AI/BlockBreaker.hpp"
 #include <iostream>
+#include <queue>
+#include <set>
 
 BlockBreaker::BlockBreaker(glm::vec3 center, float sideLength) : SentientCube(center, sideLength) {
     m_health = 5;
@@ -12,9 +14,52 @@ BlockBreaker::~BlockBreaker() {
 
 }
 
-//Pathfinds, following optimal route along randomly chosen vector
-void BlockBreaker::PlanPath() {
+//Pathfinds, BFSing to nearest cube(s)
+
+//this needs access to the cube map
+
+std::vector<Coordinates> GetNeighbors(Coordinates coords) {
+    std::vector<Coordinates> neighbors;
+    neighbors.push_back({coords.x + 1, coords.y, coords.z});
+    neighbors.push_back({coords.x - 1, coords.y, coords.z});
+    neighbors.push_back({coords.x, coords.y + 1, coords.z});
+    neighbors.push_back({coords.x, coords.y - 1, coords.z});
+    neighbors.push_back({coords.x, coords.y, coords.z + 1});
+    neighbors.push_back({coords.x, coords.y, coords.z - 1});
+    return neighbors;
+
+}
+
+void BlockBreaker::PlanPath(CubeMap& cubeMap) {
     m_path.clear();
+
+    std::queue<Coordinates> q;
+    std::set<Coordinates> visited;
+    Coordinates startCoords = {(int)m_center.x, (int)m_center.y, (int)m_center.z};
+    q.push(startCoords);
+    visited.insert(startCoords);
+
+    while (!q.empty()) {
+        Coordinates currentCube = q.front();
+        q.pop();
+
+        visited.insert(currentCube);
+        if (cubeMap.GetCube(currentCube.x, currentCube.y, currentCube.z) != nullptr) {
+            //reconstruct path
+            //use code from PathPlacer!!!!
+            break;
+        }
+        for (Coordinates neighbor : GetNeighbors(currentCube)) {
+            if (visited.find(neighbor) != visited.end()) {
+                q.push(neighbor);
+            }
+        }
+    }
+
+    //if no path found, don't move
+    //need to use counter to prevent infinite loop
+
+
     m_path.push_back(glm::vec3(1, 0, 1));
     m_path.push_back(glm::vec3(0, 0, 1));
     m_tickCount = m_movementTicks - 1;
@@ -52,7 +97,7 @@ void BlockBreaker::OnTick(CubeMap& cubeMap) {
         if (rand() % m_avgActionTicks == 0) {
             m_isPlanning = true;
             m_isMoving = true;
-            PlanPath();
+            PlanPath(cubeMap);
             m_tickCount = 0;
         }
     }

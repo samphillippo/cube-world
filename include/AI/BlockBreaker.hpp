@@ -22,16 +22,10 @@ public:
     // Called upon the sentient cube taking damage
     bool OnHit() override;
     // Plans a path for the sentient cube
-    void PlanPath() override;
+    void PlanPath(CubeMap& cubeMap) override;
     // overrides the super function to delete instead of add blocks
     virtual void Move(CubeMap& cubeMap) override;
 private:
-    // // Gets a random vector in range
-    // glm::vec3 GetRandomVector();
-    // //max range of path placement
-    // int m_maxPathRange;
-    // //min range of path placement
-    // int m_minPathRange;
 };
 
 #endif

@@ -22,6 +22,9 @@ struct Coordinates {
         if (y != other.y) return y < other.y;
         return z < other.z;
     }
+    bool operator==(const Coordinates& other) const {
+        return x == other.x && y == other.y && z == other.z;
+    }
 };
 
 class CubeMap {

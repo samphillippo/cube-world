@@ -21,7 +21,7 @@ glm::vec3 PathPlacer::GetRandomVector() {
 }
 
 //Pathfinds, following optimal route along randomly chosen vector
-void PathPlacer::PlanPath() {
+void PathPlacer::PlanPath(CubeMap& cubeMap) {
     glm::vec3 randomVector = GetRandomVector();
     m_path.clear();
 
@@ -68,7 +68,7 @@ void PathPlacer::OnTick(CubeMap& cubeMap) {
         if (rand() % m_avgActionTicks == 0) {
             m_isPlanning = true;
             m_isMoving = true;
-            PlanPath();
+            PlanPath(cubeMap);
             m_tickCount = 0;
         }
     }
