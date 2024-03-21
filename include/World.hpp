@@ -58,7 +58,7 @@ public:
 
 private:
     // Helper function to handle input events
-    bool handleInput(Cube* selected, int hitSide);
+    bool handleInput(Cube* selected, int hitSide, bool& paused);
     // Helper function to handle mouse left click (destroy/attack)
     void handleLeftClick(Cube* selected);
     // Helper function to handle mouse right click (place)

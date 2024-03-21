@@ -199,6 +199,8 @@ void World::Loop(){
     // Main loop flag
     // If this is quit = 'true' then the program terminates.
     bool quit = false;
+    // if this is true, sentient blocks + orbits do not tick
+    bool paused = false;
     // Enable text input
     SDL_StartTextInput();
     // Center our mouse
@@ -211,8 +213,10 @@ void World::Loop(){
 
     // While application is running
     while(!quit){
-        for (int i = 0; i < m_sentientCubes.size(); i++) {
-            m_sentientCubes[i]->OnTick(m_cubeMap);
+        if (!paused) {
+            for (int i = 0; i < m_sentientCubes.size(); i++) {
+                m_sentientCubes[i]->OnTick(m_cubeMap);
+            }
         }
 
         //detects if a cube is being looked at
@@ -220,10 +224,10 @@ void World::Loop(){
         Cube* selected = m_player->Raycast(m_cubeMap, hitSide);
 
         // handle player input
-        quit = handleInput(selected, hitSide);
+        quit = handleInput(selected, hitSide, paused);
 
         // Update our scene through our renderer
-        m_renderer->Update();
+        m_renderer->Update(paused);
         // Render our scene using our selected renderer
         m_renderer->Render();
         // Delay to slow things down just a bit!
@@ -250,7 +254,7 @@ void World::GetOpenGLVersionInfo(){
 	SDL_Log("Shading language: %s",(const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
-bool World::handleInput(Cube* selected, int hitSide) {
+bool World::handleInput(Cube* selected, int hitSide, bool& paused) {
     SDL_Event e;
     const Uint8* keyboardState = SDL_GetKeyboardState(NULL);
     static int mouseX=m_windowWidth/2;
@@ -263,10 +267,12 @@ bool World::handleInput(Cube* selected, int hitSide) {
             return true;
         } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_f) {
             m_player->swapPlayerMode();
-        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_p) {
+        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_i) {
             handleRightClick(selected, hitSide);
         } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_r) {
             m_renderer->resetOrbit();
+        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_p) {
+            paused = !paused;
         }
         // Handle keyboard input for the camera class
         if(e.type==SDL_MOUSEMOTION){

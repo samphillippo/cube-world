@@ -21,7 +21,7 @@ public:
     // Destructor
     ~Orbit();
     // Update the sun and moon
-    void Update(glm::mat4 projectionMatrix, Camera* camera);
+    void Update(glm::mat4 projectionMatrix, Camera* camera, bool paused);
     // Render the sun or moon
     void Render();
     // get current tick value

@@ -26,7 +26,7 @@ Orbit::~Orbit() {
     }
 }
 
-void Orbit::Update(glm::mat4 projectionMatrix, Camera* camera) {
+void Orbit::Update(glm::mat4 projectionMatrix, Camera* camera, bool paused) {
     glm::mat4 view = glm::mat4(glm::mat3(camera->GetWorldToViewmatrix()));
     if (m_ticks < M_PI / 2 || m_ticks > M_PI * 3 / 2) { //day
         m_sunTransform.LoadIdentity();
@@ -41,7 +41,9 @@ void Orbit::Update(glm::mat4 projectionMatrix, Camera* camera) {
 
         glm::vec3 skyColor = GetSkyColor();
         m_sunShader.SetUniform3f("orbitColor", skyColor.x, skyColor.y, skyColor.z);
-        m_ticks += m_orbitSpeed;
+        if (!paused) {
+            m_ticks += m_orbitSpeed;
+        }
     } else { //night
         //updates the position of the moon
         m_moonTransform.LoadIdentity();
@@ -55,7 +57,9 @@ void Orbit::Update(glm::mat4 projectionMatrix, Camera* camera) {
         m_moonShader.SetUniformMatrix4fv("projection", &projectionMatrix[0][0]);
 
         m_moonShader.SetUniform3f("orbitColor", 0.0f, 0.0f, 0.0f);
-        m_ticks += m_orbitSpeed * 2; //night moves twice as fast
+        if (!paused) {
+            m_ticks += m_orbitSpeed * 2; //night moves twice as fast
+        }
     }
     if (m_ticks > 2.0f * M_PI) {
         m_ticks = 0.0f;

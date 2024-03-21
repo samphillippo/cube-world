@@ -22,14 +22,14 @@ Renderer::~Renderer(){
 }
 
 //update sun color and skybox color based on position in the sky
-void Renderer::Update(){
+void Renderer::Update(bool paused){
     m_projectionMatrix = glm::perspective(glm::radians(45.0f),((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
 
     Camera* camera = m_player->GetCamera();
 
     glm::vec3 skyColor = m_orbit.GetSkyColor();
     m_skybox.Update(m_projectionMatrix, camera, skyColor);
-    m_orbit.Update(m_projectionMatrix, camera);
+    m_orbit.Update(m_projectionMatrix, camera, paused);
 
     //determines the position of the current lighting object
     float orbitTicks = m_orbit.GetTicks();

@@ -34,7 +34,7 @@ public:
     // Destructor
     ~Renderer();
     // Update the scene
-    void Update();
+    void Update(bool paused);
     // Render the scene
     void Render();
     // Sets the root of our renderer to some node to
