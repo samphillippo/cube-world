@@ -28,6 +28,8 @@ protected:
     virtual void PlanPath(CubeMap& cubeMap) = 0;
     // Moves the sentient cube along its path
     virtual void Move(CubeMap& cubeMap);
+    // Function that takes in a vector and produces a path that follows it
+    std::vector<glm::vec3> PathToTarget(glm::vec3 target);
     // Counts number of ticks since last action
     int m_tickCount;
     // Health of the sentient cube

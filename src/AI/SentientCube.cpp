@@ -56,3 +56,35 @@ void SentientCube::Move(CubeMap& cubeMap) {
         m_path.erase(m_path.begin());
     }
 }
+
+std::vector<glm::vec3> SentientCube::PathToTarget(glm::vec3 target) {
+    std::vector<glm::vec3> path;
+    glm::vec3 delta = abs(target);
+    int sx = (0 <= target.x) ? 1 : -1;
+    int sy = (0 <= target.y) ? 1 : -1;
+    int sz = (0 <= target.z) ? 1 : -1;
+
+    int numSteps = delta.x + delta.y + delta.z;
+    glm::vec3 slope = glm::vec3(delta.x/ numSteps, delta.y/ numSteps, delta.z/ numSteps);
+    glm::vec3 stepTracker = slope;
+
+    glm::vec3 currentLocation = m_center;
+    glm::vec3 finalLocation = m_center + target;
+
+    for (int i = 0; i < numSteps; i++) {
+        if (stepTracker.x >= stepTracker.y && stepTracker.x >= stepTracker.z) {
+            currentLocation.x += sx;
+            stepTracker.x -= 1;
+        } else if (stepTracker.y >= stepTracker.z) {
+            currentLocation.y += sy;
+            stepTracker.y -= 1;
+        } else {
+            currentLocation.z += sz;
+            stepTracker.z -= 1;
+        }
+        stepTracker += slope;
+
+        path.push_back(currentLocation);
+    }
+    return path;
+}

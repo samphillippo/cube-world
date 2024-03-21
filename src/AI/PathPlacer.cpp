@@ -22,37 +22,7 @@ glm::vec3 PathPlacer::GetRandomVector() {
 
 //Pathfinds, following optimal route along randomly chosen vector
 void PathPlacer::PlanPath(CubeMap& cubeMap) {
-    glm::vec3 randomVector = GetRandomVector();
-    m_path.clear();
-
-    //Total distance needed to travel in each direction
-    glm::vec3 delta = abs(randomVector);
-    int sx = (0 <= randomVector.x) ? 1 : -1;
-    int sy = (0 <= randomVector.y) ? 1 : -1;
-    int sz = (0 <= randomVector.z) ? 1 : -1;
-
-    int numSteps = delta.x + delta.y + delta.z;
-    glm::vec3 slope = glm::vec3(delta.x/ numSteps, delta.y/ numSteps, delta.z/ numSteps);
-    glm::vec3 stepTracker = slope;
-
-    glm::vec3 currentLocation = m_center;
-    glm::vec3 finalLocation = m_center + randomVector;
-
-    for (int i = 0; i < numSteps; i++) {
-        if (stepTracker.x >= stepTracker.y && stepTracker.x >= stepTracker.z) {
-            currentLocation.x += sx;
-            stepTracker.x -= 1;
-        } else if (stepTracker.y >= stepTracker.z) {
-            currentLocation.y += sy;
-            stepTracker.y -= 1;
-        } else {
-            currentLocation.z += sz;
-            stepTracker.z -= 1;
-        }
-        stepTracker += slope;
-
-        m_path.push_back(currentLocation);
-    }
+    m_path = PathToTarget(GetRandomVector());
     m_tickCount = m_movementTicks - 1;
 }
 
