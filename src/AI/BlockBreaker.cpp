@@ -15,7 +15,29 @@ BlockBreaker::~BlockBreaker() {
 //Pathfinds, following optimal route along randomly chosen vector
 void BlockBreaker::PlanPath() {
     m_path.clear();
+    m_path.push_back(glm::vec3(1, 0, 1));
+    m_path.push_back(glm::vec3(0, 0, 1));
     m_tickCount = m_movementTicks - 1;
+}
+
+void BlockBreaker::Move(CubeMap& cubeMap) {
+    if (m_path.size() == 0) {
+        m_isMoving = false;
+        return;
+    }
+
+    //if the next block is occupied
+    if (cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z) != nullptr) {
+        //remove the block at the next location
+        cubeMap.RemoveCube(cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z));
+    }
+    m_isPlanning = false;
+    cubeMap.RemoveCube(this);
+    m_center = m_path[0];
+    this->Clear();
+    this->Update();
+    cubeMap.AddCube(this);
+    m_path.erase(m_path.begin());
 }
 
 void BlockBreaker::OnTick(CubeMap& cubeMap) {

@@ -1,6 +1,7 @@
 #include "World.hpp"
 #include "Camera.hpp"
 #include "AI/PathPlacer.hpp"
+#include "AI/BlockBreaker.hpp"
 
 #include <iostream>
 #include <string>
@@ -113,6 +114,10 @@ void World::LoadWorld(std::string filename) {
         rockTexture->LoadTexture("./common/textures/rock.ppm");
         m_textures.push_back(rockTexture);
 
+        std::shared_ptr<Texture> breakerTexture = std::make_shared<Texture>();
+        breakerTexture->LoadTexture("./common/textures/terrain.ppm");
+        m_textures.push_back(breakerTexture);
+
         //creates our player
         m_player = std::make_shared<Player>();
         m_player->initialize(0.0f,3.0f,0.0f,1.8f,0.8f);
@@ -146,6 +151,11 @@ void World::LoadWorld(std::string filename) {
         pathPlacer2->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer2);
         m_cubeMap.AddCube(pathPlacer2);
+
+        SentientCube* blockBreaker = new BlockBreaker(glm::vec3(1,1,4), 1.0f);
+        blockBreaker->SetTexture(breakerTexture);
+        m_sentientCubes.push_back(blockBreaker);
+        m_cubeMap.AddCube(blockBreaker);
     } else {
         parseWorldFile(filename);
     }
