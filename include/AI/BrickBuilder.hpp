@@ -24,12 +24,16 @@ public:
 private:
     // Plans a path for the sentient cube
     void PlanPath(CubeMap& cubeMap) override;
-    // Gets a random vector in range
-    glm::vec3 GetRandomVector();
     //max range of path placement
     int m_maxPathRange;
     //min range of path placement
     int m_minPathRange;
+    //vector pointing opposite to the previous direction of travel
+    glm::vec3 m_prevOppositeDirection;
+    //max number of layers to build
+    int m_maxLayers;
+    //should the brickbuilder build its walls from bottom or top
+    bool m_buildUpwards;
 };
 
 #endif

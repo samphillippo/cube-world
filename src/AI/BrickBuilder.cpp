@@ -7,22 +7,53 @@ BrickBuilder::BrickBuilder(glm::vec3 center, float sideLength) : SentientCube(ce
     m_minActionTicks = 40;
     m_avgActionTicks = 40;
     m_maxPathRange = 8;
-    m_minPathRange = 0;
+    m_minPathRange = 1;
+    m_prevOppositeDirection = glm::vec3(0, 0, 0);
+    m_maxLayers = 2;
+    m_buildUpwards = true;
 }
 
 BrickBuilder::~BrickBuilder() {
 }
 
-glm::vec3 BrickBuilder::GetRandomVector() {
-    int x = (m_minPathRange + (rand() % (m_maxPathRange - m_minPathRange))) * (rand() % 2 ? 1 : -1);
-    int y = (m_minPathRange + (rand() % (m_maxPathRange - m_minPathRange))) * (rand() % 2 ? 1 : -1) / 2;
-    int z = (m_minPathRange + (rand() % (m_maxPathRange - m_minPathRange))) * (rand() % 2 ? 1 : -1);
-    return glm::vec3(x, y, z);
-}
-
-//Pathfinds, following optimal route along randomly chosen vector
+//pick one of 3 directions, number of layers, and a random distance
+//TODO: needs a sort of buffer, move once before starting calcs
 void BrickBuilder::PlanPath(CubeMap& cubeMap) {
-    m_path = PathToTarget(GetRandomVector());
+    m_path.clear();
+    std::vector<glm::vec3> directions = { glm::vec3(1, 0, 0), glm::vec3(-1, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, -1) };
+    for (int i = 0; i < 4; i++) {
+        if (m_prevOppositeDirection == directions[i]) {
+            directions.erase(directions.begin() + i);
+            break;
+        }
+    }
+    glm::vec3 direction = directions[rand() % directions.size()];
+    m_prevOppositeDirection = direction * glm::vec3(-1, -1, -1);
+    int distance = m_minPathRange + rand() % (m_maxPathRange - m_minPathRange);
+
+    int layers = (rand() % m_maxLayers) + 1;
+    //makes initial move
+    glm::vec3 currentPosition = m_center;
+    for (int i = 0; i < distance; i++) {
+        currentPosition += direction;
+        m_path.push_back(currentPosition);
+    }
+    currentPosition.y += m_buildUpwards ? 1 : -1;
+    m_path.push_back(currentPosition);
+    //repeats movements for each layer
+    for (int i = 0; i < layers; i++) {
+        for (int i = 0; i < distance; i++) {
+            currentPosition -= direction;
+            m_path.push_back(currentPosition);
+        }
+        currentPosition.y += m_buildUpwards ? 1 : -1;
+        m_path.push_back(currentPosition);
+        for (int i = 0; i < distance; i++) {
+            currentPosition += direction;
+            m_path.push_back(currentPosition);
+        }
+    }
+    m_buildUpwards = !m_buildUpwards;
     m_tickCount = m_movementTicks - 1;
 }
 

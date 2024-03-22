@@ -135,13 +135,13 @@ void World::LoadWorld(std::string filename) {
             }
         }
         //creates a wall
-        for (int i = -6; i < 7; i++) {
-            for (int j = 1; j < 3; j++) {
-                Cube* cube = new Cube(glm::vec3(i,j,7), 1.0f);
-                cube->SetTexture(brickTexture);
-                m_cubeMap.AddCube(cube);
-            }
-        }
+        // for (int i = -6; i < 7; i++) {
+        //     for (int j = 1; j < 3; j++) {
+        //         Cube* cube = new Cube(glm::vec3(i,j,7), 1.0f);
+        //         cube->SetTexture(brickTexture);
+        //         m_cubeMap.AddCube(cube);
+        //     }
+        // }
         //adds sentient cubes to environment
         SentientCube* pathPlacer = new PathPlacer(glm::vec3(1,1,1), 1.0f);
         pathPlacer->SetTexture(rockTexture);
@@ -153,7 +153,7 @@ void World::LoadWorld(std::string filename) {
         m_sentientCubes.push_back(pathPlacer2);
         m_cubeMap.AddCube(pathPlacer2);
 
-        SentientCube* blockBreaker = new BlockBreaker(glm::vec3(4,4,4), 1.0f);
+        SentientCube* blockBreaker = new BlockBreaker(glm::vec3(-4,4,-4), 1.0f);
         blockBreaker->SetTexture(breakerTexture);
         m_sentientCubes.push_back(blockBreaker);
         m_cubeMap.AddCube(blockBreaker);
