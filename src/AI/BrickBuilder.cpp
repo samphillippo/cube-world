@@ -3,13 +3,13 @@
 
 BrickBuilder::BrickBuilder(glm::vec3 center, float sideLength) : SentientCube(center, sideLength) {
     m_health = 5;
-    m_movementTicks = 30;
+    m_movementTicks = 10;
     m_minActionTicks = 40;
     m_avgActionTicks = 40;
     m_maxPathRange = 8;
     m_minPathRange = 1;
     m_prevOppositeDirection = glm::vec3(0, 0, 0);
-    m_maxLayers = 2;
+    m_maxLayers = 1;
     m_buildUpwards = true;
 }
 
@@ -34,21 +34,25 @@ void BrickBuilder::PlanPath(CubeMap& cubeMap) {
     int layers = (rand() % m_maxLayers) + 1;
     //makes initial move
     glm::vec3 currentPosition = m_center;
+    currentPosition += direction;
+    m_path.push_back(currentPosition);
+    //moves first layer
     for (int i = 0; i < distance; i++) {
         currentPosition += direction;
         m_path.push_back(currentPosition);
     }
-    currentPosition.y += m_buildUpwards ? 1 : -1;
-    m_path.push_back(currentPosition);
-    //repeats movements for each layer
+
+    //repeats movements for each additional layer
     for (int i = 0; i < layers; i++) {
-        for (int i = 0; i < distance; i++) {
+        currentPosition.y += m_buildUpwards ? 1 : -1;
+        m_path.push_back(currentPosition);
+        for (int j = 0; j < distance; j++) {
             currentPosition -= direction;
             m_path.push_back(currentPosition);
         }
         currentPosition.y += m_buildUpwards ? 1 : -1;
         m_path.push_back(currentPosition);
-        for (int i = 0; i < distance; i++) {
+        for (int j = 0; j < distance; j++) {
             currentPosition += direction;
             m_path.push_back(currentPosition);
         }
