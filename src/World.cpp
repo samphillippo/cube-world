@@ -3,6 +3,7 @@
 #include "AI/PathPlacer.hpp"
 #include "AI/BlockBreaker.hpp"
 #include "AI/BrickBuilder.hpp"
+#include "AI/GroundGrower.hpp"
 
 #include <iostream>
 #include <string>
@@ -162,6 +163,11 @@ void World::LoadWorld(std::string filename) {
         brickBuilder->SetTexture(brickTexture);
         m_sentientCubes.push_back(brickBuilder);
         m_cubeMap.AddCube(brickBuilder);
+
+        SentientCube* groundGrower = new GroundGrower(glm::vec3(1,1,-4), 1.0f);
+        groundGrower->SetTexture(grassTexture);
+        m_sentientCubes.push_back(groundGrower);
+        m_cubeMap.AddCube(groundGrower);
     } else {
         parseWorldFile(filename);
     }

@@ -17,7 +17,6 @@ BrickBuilder::~BrickBuilder() {
 }
 
 //pick one of 3 directions, number of layers, and a random distance
-//TODO: needs a sort of buffer, move once before starting calcs
 void BrickBuilder::PlanPath(CubeMap& cubeMap) {
     m_path.clear();
     std::vector<glm::vec3> directions = { glm::vec3(1, 0, 0), glm::vec3(-1, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, -1) };
