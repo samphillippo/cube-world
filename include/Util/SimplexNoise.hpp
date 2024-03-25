@@ -7,18 +7,34 @@
  *  @bug No known bugs.
  */
 #include <cstdint>
+#include <stdlib.h>
 #ifndef SIMPLEXNOISE_HPP
 #define SIMPLEXNOISE_HPP
 
 class SimplexNoise {
 public:
     // Constructor
-    SimplexNoise();
-    // Destructor
-    ~SimplexNoise();
-    // Generates a noise value given x,y coordinates
-    float GetNoiseAt(float x, float y);
+    explicit SimplexNoise(float frequency = 1.0f,
+                          float amplitude = 1.0f,
+                          float lacunarity = 2.0f,
+                          float persistence = 0.5f) :
+        m_frequency(frequency),
+        m_amplitude(amplitude),
+        m_lacunarity(lacunarity),
+        m_persistence(persistence) {
+    };
+    //Fractal/Fractional Brownian Motion (fBm) noise summation
+    float fractal(size_t octaves, float x, float y) const;
 private:
+    // Helper function to hash an integer using the permutation table
+    inline uint8_t hash(int32_t i) const {
+        return m_perm[static_cast<uint8_t>(i)];
+    }
+    // Helper function to compute gradients-dot-residual vectors
+    float Grad(int32_t hash, float x, float y) const;
+    //Noise value in the range[-1; 1], value of 0 on all integer coordinates.
+    float GetNoiseAt(float x, float y) const;
+    //Permutation table. This is just a random jumble of all numbers 0-255.
     const uint8_t m_perm[256] = {
     151, 160, 137, 91, 90, 15,
     131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
@@ -33,7 +49,11 @@ private:
     251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14, 239, 107,
     49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
     138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
-};
+    };
+    float m_frequency;   ///< Frequency ("width") of the first octave of noise (default to 1.0)
+    float m_amplitude;   ///< Amplitude ("height") of the first octave of noise (default to 1.0)
+    float m_lacunarity;  ///< Lacunarity specifies the frequency multiplier between successive octaves (default to 2.0).
+    float m_persistence; ///< Persistence is the loss of amplitude between successive octaves (usually 1/lacunarity)
 };
 
 #endif

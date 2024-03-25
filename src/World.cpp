@@ -225,6 +225,14 @@ void World::Loop(){
 
     // While application is running
     while(!quit){
+        //print noise
+        // for (float i = 0.0f; i < 10.0f; i += 1.0f) {
+        //     for (float j = 0.0f; j < 10.0f; j += 1.0f) {
+        //         std::cout << noise.fractal(1, i,j) << " ";
+        //         // std::cout << 10 * noise.fractal(1, i,j) << " ";
+        //     }
+        //     std::cout << std::endl;
+        // }
         if (!paused) {
             for (int i = 0; i < m_sentientCubes.size(); i++) {
                 m_sentientCubes[i]->OnTick(m_cubeMap);
