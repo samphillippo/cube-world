@@ -6,8 +6,7 @@
  *  @author Sam
  *  @bug No known bugs.
  */
-#include <cstdint>
-#include <stdlib.h>
+#include <string>
 #ifndef PERLINNOISE_HPP
 #define PERLINNOISE_HPP
 
@@ -18,6 +17,8 @@ public:
     // Destructor
     ~PerlinNoise();
 private:
+    // Load jpg image to sample from
+    void LoadImage(std::string filepath);
 };
 
 #endif

@@ -19,6 +19,8 @@ public:
     ~Image();
     // Loads a PPM from memory.
     void LoadPPM(bool flip);
+    // Loads a JPG from memory
+    void LoadJPG();
     // Return the width
     inline int GetWidth(){
         return m_width;
