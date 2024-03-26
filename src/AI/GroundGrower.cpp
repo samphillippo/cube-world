@@ -25,15 +25,13 @@ void GroundGrower::PlanPath(CubeMap& cubeMap) {
     for (int i = 0; i < m_pathLength; i++) {
         currentPos += m_buildDir;
         float goalY = m_noiseMap->GetNoiseValue(currentPos.x, currentPos.z);
-        //if we want to go up, move over then go up
-        //if we want to go down, go down then move over
-        if (currentPos.y < goalY) {
+        if (currentPos.y < goalY) { //if we want to go up, move over then go up
             m_path.push_back(currentPos);
             while (currentPos.y < goalY) {
                 currentPos.y += 1;
                 m_path.push_back(currentPos);
             }
-        } else if (currentPos.y > goalY) {
+        } else if (currentPos.y > goalY) { //if we want to go down, go down then move over
             currentPos -= m_buildDir;
             while (currentPos.y > goalY) {
                 currentPos.y -= 1;
@@ -41,7 +39,7 @@ void GroundGrower::PlanPath(CubeMap& cubeMap) {
             }
             currentPos += m_buildDir;
             m_path.push_back(currentPos);
-        } else {
+        } else { //if we want to stay the same, just move over
             m_path.push_back(currentPos);
         }
 
@@ -71,7 +69,7 @@ void GroundGrower::OnTick(CubeMap& cubeMap) {
             m_tickCount = 0;
         }
     }
-    else if (m_numPathingGrowers != 0) {
+    else if (m_numPathingGrowers != 0) { //wait for all groundgrowers to finish pathing
         m_tickCount = 0;
     }
 }

@@ -128,7 +128,8 @@ void World::LoadWorld(std::string filename) {
         //creates the floor for our cube world
         m_root = std::make_shared<SceneNode>(nullptr, "", "");
         m_cubeMap.setRoot(m_root);
-        //adds sentient cubes to environment
+
+        //--------------------ADDS SENTIENT CUBES--------------------
         SentientCube* pathPlacer = new PathPlacer(glm::vec3(1,10,1), 1.0f);
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
@@ -144,12 +145,7 @@ void World::LoadWorld(std::string filename) {
         m_sentientCubes.push_back(blockBreaker);
         m_cubeMap.AddCube(blockBreaker);
 
-        SentientCube* brickBuilder = new BrickBuilder(glm::vec3(4,10,4), 1.0f);
-        brickBuilder->SetTexture(brickTexture);
-        m_sentientCubes.push_back(brickBuilder);
-        m_cubeMap.AddCube(brickBuilder);
-
-        //Ground generation
+        //GroundGrower initialization
         int initialGroundSize = 12;
         m_noiseMap = std::make_shared<PerlinNoise>();
         std::vector<glm::vec3> groundGrowerDirs = { glm::vec3(1,0,0), glm::vec3(-1,0,0), glm::vec3(0,0,1), glm::vec3(0,0,-1) };
@@ -166,6 +162,12 @@ void World::LoadWorld(std::string filename) {
             m_sentientCubes.push_back(groundGrower);
             m_cubeMap.AddCube(groundGrower);
         }
+
+        SentientCube* brickBuilder = new BrickBuilder(glm::vec3(4,10,4), 1.0f);
+        brickBuilder->SetTexture(brickTexture);
+        m_sentientCubes.push_back(brickBuilder);
+        m_cubeMap.AddCube(brickBuilder);
+        //-------------------------------------------------------------
 
         //creates initial area for player to stand on
         std::vector<glm::vec3> initialGroundCubes = m_noiseMap->GetInitialGroundCubes(12);
