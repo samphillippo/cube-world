@@ -7,6 +7,7 @@
  *  @bug No known bugs.
  */
 #include <string>
+#include <glm/glm.hpp>
 #ifndef PERLINNOISE_HPP
 #define PERLINNOISE_HPP
 
@@ -22,6 +23,8 @@ public:
     inline unsigned int GetWidth() { return m_imageWidth; }
     // Get the height of the noise map
     inline unsigned int GetHeight() { return m_imageHeight; }
+    // Returns the positions of the initial cubes to exist upon world creation
+    std::vector<glm::vec3> GetInitialGroundCubes(int initialAreaSize);
 private:
     // Load jpg image to sample from
     void LoadImage(std::string filepath);

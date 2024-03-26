@@ -15,24 +15,22 @@
 class GroundGrower: public SentientCube {
 public:
     // Constructor
-    GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, int initialAreaX, int initialAreaZ);
+    GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir);
     // Destructor
     ~GroundGrower() override;
     // Updates the sentient cube's state each tick
     void OnTick(CubeMap& cubeMap) override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
-    // Returns the initial cubes to exist upon world creation
-    std::vector<glm::vec3> GetInitialGroundCubes();
 private:
     // Plans a path for the sentient cube
     void PlanPath(CubeMap& cubeMap) override;
     // The noise map used to generate the ground
     std::shared_ptr<PerlinNoise> m_noiseMap;
-    // initial X width of the area to generate ground
-    int m_initialAreaX;
-    // initial Z width of the area to generate ground
-    int m_initialAreaZ;
+    // The direction to build a strip of ground
+    glm::vec3 m_buildDir;
+    // The direction to move after building a strip
+    glm::vec3 m_expandDir;
 };
 
 #endif

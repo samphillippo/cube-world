@@ -1,14 +1,14 @@
 #include "AI/GroundGrower.hpp"
 #include <iostream>
 
-GroundGrower::GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, int initialAreaX, int initialAreaZ) : SentientCube(center, sideLength) {
+GroundGrower::GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir) : SentientCube(center, sideLength) {
     m_health = 5;
     m_movementTicks = 10;
     m_minActionTicks = 40;
     m_avgActionTicks = 40;
     m_noiseMap = noiseMap;
-    m_initialAreaX = initialAreaX;
-    m_initialAreaZ = initialAreaZ;
+    m_buildDir = buildDir;
+    m_expandDir = glm::vec3(-buildDir.z, 0, buildDir.x);
 }
 
 GroundGrower::~GroundGrower() {
@@ -51,18 +51,4 @@ bool GroundGrower::OnHit() {
     }
     //some behavior
     return false;
-}
-
-std::vector<glm::vec3> GroundGrower::GetInitialGroundCubes() {
-    std::vector<glm::vec3> groundCubes;
-    int startX = m_initialAreaX / 2 - m_initialAreaX;
-    int endX = m_initialAreaX / 2;
-    int startZ = m_initialAreaZ / 2 - m_initialAreaZ;
-    int endZ = m_initialAreaZ / 2;
-    for (int i = startX; i < endX; i++) {
-        for (int j = startZ; j < endZ; j++) {
-            groundCubes.push_back(glm::vec3(i, m_noiseMap->GetNoiseValue(i, j), j));
-        }
-    }
-    return groundCubes;
 }

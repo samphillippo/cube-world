@@ -150,14 +150,19 @@ void World::LoadWorld(std::string filename) {
         m_cubeMap.AddCube(brickBuilder);
 
         //Ground generation
+        int initialGroundSize = 12;
         m_noiseMap = std::make_shared<PerlinNoise>();
-        SentientCube* groundGrower = new GroundGrower(glm::vec3(1,10,-4), 1.0f, m_noiseMap, 12, 12);
-        groundGrower->SetTexture(grassTexture);
-        m_sentientCubes.push_back(groundGrower);
-        m_cubeMap.AddCube(groundGrower);
+        // std::vector<glm::vec3> groundGrowerDirs = { glm::vec3(1,0,0), glm::vec3(-1,0,0), glm::vec3(0,0,1), glm::vec3(0,0,-1) };
+        // for (int i = 0; i < groundGrowerDirs.size(); i++) {
+        //     glm::vec3 startPos = glm::vec3(0,10,0);//SAMPLE FROM NOISEMAP
+        //     SentientCube* groundGrower = new GroundGrower(glm::vec3(1,10,1), 1.0f, m_noiseMap, groundGrowerDirs[i]);
+        //     groundGrower->SetTexture(grassTexture);
+        //     m_sentientCubes.push_back(groundGrower);
+        //     m_cubeMap.AddCube(groundGrower);
+        // }
 
         //creates initial area for player to stand on
-        std::vector<glm::vec3> initialGroundCubes = ((GroundGrower*)groundGrower)->GetInitialGroundCubes();
+        std::vector<glm::vec3> initialGroundCubes = m_noiseMap->GetInitialGroundCubes(12);
         for (int i = 0; i < initialGroundCubes.size(); i++) {
             Cube* groundCube = new Cube(initialGroundCubes[i], 1.0f);
             groundCube->SetTexture(grassTexture);

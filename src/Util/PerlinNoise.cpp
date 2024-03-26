@@ -1,6 +1,7 @@
 #include "Util/PerlinNoise.hpp"
 #include "Util/Image.hpp"
 #include <iostream>
+#include <vector>
 
 PerlinNoise::PerlinNoise() {
     LoadImage("common/textures/perlin_noise.jpg");
@@ -39,4 +40,16 @@ int PerlinNoise::GetNoiseValue(int x, int y) {
     y = (y + m_imageCenterY) % m_imageHeight;
     unsigned int rawNoiseValue = m_noiseMapPtr[x][y];
     return (int)(rawNoiseValue / 256.0f * (m_maxHeight - m_minHeight) + m_minHeight);
+}
+
+std::vector<glm::vec3> PerlinNoise::GetInitialGroundCubes(int initialAreaSize) {
+    std::vector<glm::vec3> groundCubes;
+    int startPos = initialAreaSize / 2 - initialAreaSize;
+    int endPos = initialAreaSize / 2;
+    for (int i = startPos; i < endPos; i++) {
+        for (int j = startPos; j < endPos; j++) {
+            groundCubes.push_back(glm::vec3(i, GetNoiseValue(i, j), j));
+        }
+    }
+    return groundCubes;
 }
