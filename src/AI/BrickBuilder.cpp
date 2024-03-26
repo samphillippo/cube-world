@@ -36,6 +36,22 @@ void BrickBuilder::PlanPath(CubeMap& cubeMap) {
     glm::vec3 currentPosition = m_center;
     currentPosition += direction;
     m_path.push_back(currentPosition);
+
+    //adjust height based on noise map
+    //TODO: need to do this for every movement!!!!
+    int targetY = m_noiseMap->GetNoiseValue(currentPosition.x, currentPosition.z) + 1;
+    if (!m_buildUpwards) {
+        targetY += 2;
+    }
+    while (currentPosition.y < targetY) {
+        currentPosition.y += 1;
+        m_path.push_back(currentPosition);
+    }
+    while (currentPosition.y > targetY) {
+        currentPosition.y -= 1;
+        m_path.push_back(currentPosition);
+    }
+
     //moves first layer
     for (int i = 0; i < distance; i++) {
         currentPosition += direction;
