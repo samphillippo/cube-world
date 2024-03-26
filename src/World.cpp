@@ -152,14 +152,20 @@ void World::LoadWorld(std::string filename) {
         //Ground generation
         int initialGroundSize = 12;
         m_noiseMap = std::make_shared<PerlinNoise>();
-        // std::vector<glm::vec3> groundGrowerDirs = { glm::vec3(1,0,0), glm::vec3(-1,0,0), glm::vec3(0,0,1), glm::vec3(0,0,-1) };
-        // for (int i = 0; i < groundGrowerDirs.size(); i++) {
-        //     glm::vec3 startPos = glm::vec3(0,10,0);//SAMPLE FROM NOISEMAP
-        //     SentientCube* groundGrower = new GroundGrower(glm::vec3(1,10,1), 1.0f, m_noiseMap, groundGrowerDirs[i]);
-        //     groundGrower->SetTexture(grassTexture);
-        //     m_sentientCubes.push_back(groundGrower);
-        //     m_cubeMap.AddCube(groundGrower);
-        // }
+        std::vector<glm::vec3> groundGrowerDirs = { glm::vec3(1,0,0), glm::vec3(-1,0,0), glm::vec3(0,0,1), glm::vec3(0,0,-1) };
+        for (int i = 0; i < groundGrowerDirs.size(); i++) {
+            //determines the starting position of the ground grower
+            glm::vec3 expandDir = glm::vec3(-groundGrowerDirs[i].z, 0, groundGrowerDirs[i].x);
+            glm::vec3 startPos = glm::vec3(-groundGrowerDirs[i].x + expandDir.x, 0, -groundGrowerDirs[i].z + expandDir.z);
+            startPos *= initialGroundSize / 2;
+            startPos += expandDir;
+            startPos.y = m_noiseMap->GetNoiseValue(startPos.x, startPos.z);
+
+            SentientCube* groundGrower = new GroundGrower(startPos, 1.0f, m_noiseMap, groundGrowerDirs[i]);
+            groundGrower->SetTexture(grassTexture);
+            m_sentientCubes.push_back(groundGrower);
+            m_cubeMap.AddCube(groundGrower);
+        }
 
         //creates initial area for player to stand on
         std::vector<glm::vec3> initialGroundCubes = m_noiseMap->GetInitialGroundCubes(12);

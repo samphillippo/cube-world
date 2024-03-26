@@ -46,8 +46,8 @@ std::vector<glm::vec3> PerlinNoise::GetInitialGroundCubes(int initialAreaSize) {
     std::vector<glm::vec3> groundCubes;
     int startPos = initialAreaSize / 2 - initialAreaSize;
     int endPos = initialAreaSize / 2;
-    for (int i = startPos; i < endPos; i++) {
-        for (int j = startPos; j < endPos; j++) {
+    for (int i = startPos; i <= endPos; i++) {
+        for (int j = startPos; j <= endPos; j++) {
             groundCubes.push_back(glm::vec3(i, GetNoiseValue(i, j), j));
         }
     }
