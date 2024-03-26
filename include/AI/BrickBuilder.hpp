@@ -10,11 +10,12 @@
 #define BRICKBUILDER_HPP
 
 #include "AI/SentientCube.hpp"
+#include "Util/PerlinNoise.hpp"
 
 class BrickBuilder: public SentientCube {
 public:
     // Constructor
-    BrickBuilder(glm::vec3 center, float sideLength);
+    BrickBuilder(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap);
     // Destructor
     ~BrickBuilder() override;
     // Updates the sentient cube's state each tick
@@ -34,6 +35,8 @@ private:
     int m_maxLayers;
     //should the brickbuilder build its walls from bottom or top
     bool m_buildUpwards;
+    // The noise map used to know where wall base should be
+    std::shared_ptr<PerlinNoise> m_noiseMap;
 };
 
 #endif

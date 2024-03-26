@@ -36,7 +36,13 @@ void SentientCube::Move(CubeMap& cubeMap) {
     Cube* newCube = new Cube(m_center, m_sideLength);
     newCube->SetTexture(m_textureDiffuse);
     cubeMap.RemoveCube(this);
-    RelaceCubeAt(cubeMap, m_center, newCube);
+    cubeMap.AddCube(newCube);
+    //if there is a cube at the next location, remove it
+    Cube* nextCube = cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
+    if (nextCube != nullptr) {
+        cubeMap.RemoveCube(nextCube);
+        delete nextCube;
+    }
     m_center = m_path[0];
     this->Clear();
     this->Update();
@@ -74,12 +80,4 @@ std::vector<glm::vec3> SentientCube::PathToTarget(glm::vec3 target) {
         path.push_back(currentLocation);
     }
     return path;
-}
-
-void SentientCube::RelaceCubeAt(CubeMap& cubeMap, glm::vec3 position, Cube* newCube) {
-    Cube* oldCube = cubeMap.GetCube(position.x, position.y, position.z);
-    if (oldCube != nullptr) {
-        cubeMap.RemoveCube(oldCube);
-    }
-    cubeMap.AddCube(newCube);
 }

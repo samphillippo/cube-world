@@ -1,7 +1,7 @@
 #include "AI/BrickBuilder.hpp"
 #include <iostream>
 
-BrickBuilder::BrickBuilder(glm::vec3 center, float sideLength) : SentientCube(center, sideLength) {
+BrickBuilder::BrickBuilder(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap) : SentientCube(center, sideLength) {
     m_health = 5;
     m_movementTicks = 10;
     m_minActionTicks = 40;
@@ -11,6 +11,7 @@ BrickBuilder::BrickBuilder(glm::vec3 center, float sideLength) : SentientCube(ce
     m_prevOppositeDirection = glm::vec3(0, 0, 0);
     m_maxLayers = 1;
     m_buildUpwards = true;
+    m_noiseMap = noiseMap;
 }
 
 BrickBuilder::~BrickBuilder() {

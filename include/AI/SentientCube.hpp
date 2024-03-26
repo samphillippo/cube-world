@@ -30,8 +30,6 @@ protected:
     virtual void Move(CubeMap& cubeMap);
     // Function that takes in a vector and produces a path that follows it
     std::vector<glm::vec3> PathToTarget(glm::vec3 target);
-    // Replaces the black at the given position if it exists, and adds the new one
-    void RelaceCubeAt(CubeMap& cubeMap, glm::vec3 position, Cube* newCube);
     // Counts number of ticks since last action
     int m_tickCount;
     // Health of the sentient cube

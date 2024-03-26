@@ -128,26 +128,32 @@ void World::LoadWorld(std::string filename) {
         //creates the floor for our cube world
         m_root = std::make_shared<SceneNode>(nullptr, "", "");
         m_cubeMap.setRoot(m_root);
+        m_noiseMap = std::make_shared<PerlinNoise>();
 
         //--------------------ADDS SENTIENT CUBES--------------------
-        SentientCube* pathPlacer = new PathPlacer(glm::vec3(1,10,1), 1.0f);
+        glm::vec3 pathPlacerPos = glm::vec3(4,0,4);
+        pathPlacerPos.y = m_noiseMap->GetNoiseValue(pathPlacerPos.x, pathPlacerPos.z) + 1;
+        SentientCube* pathPlacer = new PathPlacer(pathPlacerPos, 1.0f);
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
         m_cubeMap.AddCube(pathPlacer);
 
-        SentientCube* pathPlacer2 = new PathPlacer(glm::vec3(4,10,1), 1.0f);
+        glm::vec3 pathPlacer2Pos = glm::vec3(4,0,0);
+        pathPlacer2Pos.y = m_noiseMap->GetNoiseValue(pathPlacer2Pos.x, pathPlacer2Pos.z) + 1;
+        SentientCube* pathPlacer2 = new PathPlacer(pathPlacer2Pos, 1.0f);
         pathPlacer2->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer2);
         m_cubeMap.AddCube(pathPlacer2);
 
-        SentientCube* blockBreaker = new BlockBreaker(glm::vec3(-4,10,-4), 1.0f);
+        glm::vec3 blockBreakerPos = glm::vec3(-4,0,-4);
+        blockBreakerPos.y = m_noiseMap->GetNoiseValue(blockBreakerPos.x, blockBreakerPos.z) + 1;
+        SentientCube* blockBreaker = new BlockBreaker(blockBreakerPos, 1.0f);
         blockBreaker->SetTexture(breakerTexture);
         m_sentientCubes.push_back(blockBreaker);
         m_cubeMap.AddCube(blockBreaker);
 
         //GroundGrower initialization
         int initialGroundSize = 12;
-        m_noiseMap = std::make_shared<PerlinNoise>();
         std::vector<glm::vec3> groundGrowerDirs = { glm::vec3(1,0,0), glm::vec3(-1,0,0), glm::vec3(0,0,1), glm::vec3(0,0,-1) };
         for (int i = 0; i < groundGrowerDirs.size(); i++) {
             //determines the starting position of the ground grower
@@ -163,7 +169,9 @@ void World::LoadWorld(std::string filename) {
             m_cubeMap.AddCube(groundGrower);
         }
 
-        SentientCube* brickBuilder = new BrickBuilder(glm::vec3(4,10,4), 1.0f);
+        glm::vec3 brickBuilderPos = glm::vec3(-4,0,4);
+        brickBuilderPos.y = m_noiseMap->GetNoiseValue(brickBuilderPos.x, brickBuilderPos.z) + 1;
+        SentientCube* brickBuilder = new BrickBuilder(brickBuilderPos, 1.0f, m_noiseMap);
         brickBuilder->SetTexture(brickTexture);
         m_sentientCubes.push_back(brickBuilder);
         m_cubeMap.AddCube(brickBuilder);
