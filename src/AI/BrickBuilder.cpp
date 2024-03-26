@@ -70,7 +70,6 @@ void BrickBuilder::OnTick(CubeMap& cubeMap) {
     }
     else if (m_tickCount >= m_minActionTicks) {
         if (rand() % m_avgActionTicks == 0) {
-            m_isPlanning = true;
             m_isMoving = true;
             PlanPath(cubeMap);
             m_tickCount = 0;

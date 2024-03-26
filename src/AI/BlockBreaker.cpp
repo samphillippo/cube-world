@@ -78,7 +78,6 @@ void BlockBreaker::Move(CubeMap& cubeMap) {
         //remove the block at the next location
         cubeMap.RemoveCube(cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z));
     }
-    m_isPlanning = false;
     cubeMap.RemoveCube(this);
     m_center = m_path[0];
     this->Clear();
@@ -97,7 +96,6 @@ void BlockBreaker::OnTick(CubeMap& cubeMap) {
     }
     else if (m_tickCount >= m_minActionTicks) {
         if (rand() % m_avgActionTicks == 0) {
-            m_isPlanning = true;
             m_isMoving = true;
             PlanPath(cubeMap);
             m_tickCount = 0;

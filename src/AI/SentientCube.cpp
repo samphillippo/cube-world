@@ -32,29 +32,16 @@ void SentientCube::Move(CubeMap& cubeMap) {
         m_isMoving = false;
         return;
     }
-
-    //if the next block is occupied
-    if (cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z) != nullptr) { //if we're still planning, keep planning
-        if (m_isPlanning) {
-            PlanPath(cubeMap);
-            return;
-        } else { //if we're not planning, stop moving, restart cycle
-            m_isMoving = false;
-            return;
-        }
-    } else { //if the next block is open, move there
-        m_isPlanning = false;
-        //creates new cube at previous location
-        Cube* newCube = new Cube(m_center, m_sideLength);
-        newCube->SetTexture(m_textureDiffuse);
-        cubeMap.RemoveCube(this);
-        RelaceCubeAt(cubeMap, m_center, newCube);
-        m_center = m_path[0];
-        this->Clear();
-        this->Update();
-        cubeMap.AddCube(this);
-        m_path.erase(m_path.begin());
-    }
+    //creates new cube at previous location
+    Cube* newCube = new Cube(m_center, m_sideLength);
+    newCube->SetTexture(m_textureDiffuse);
+    cubeMap.RemoveCube(this);
+    RelaceCubeAt(cubeMap, m_center, newCube);
+    m_center = m_path[0];
+    this->Clear();
+    this->Update();
+    cubeMap.AddCube(this);
+    m_path.erase(m_path.begin());
 }
 
 std::vector<glm::vec3> SentientCube::PathToTarget(glm::vec3 target) {

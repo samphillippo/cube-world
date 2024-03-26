@@ -42,8 +42,6 @@ protected:
     int m_minActionTicks;
     // Average number of ticks to wait between actions, after min
     int m_avgActionTicks;
-    // Whether the sentient cube is looking for a path
-    bool m_isPlanning;
     // Whether the sentient cube is moving
     bool m_isMoving;
     // Current planned path

@@ -5,7 +5,7 @@ int GroundGrower::m_numPathingGrowers = 0;
 
 GroundGrower::GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength) : SentientCube(center, sideLength) {
     m_health = 5;
-    m_movementTicks = 10;
+    m_movementTicks = 5;
     m_minActionTicks = 40;
     m_avgActionTicks = 1;
     m_noiseMap = noiseMap;
@@ -24,7 +24,27 @@ void GroundGrower::PlanPath(CubeMap& cubeMap) {
     glm::vec3 currentPos = m_center;
     for (int i = 0; i < m_pathLength; i++) {
         currentPos += m_buildDir;
-        m_path.push_back(currentPos);
+        float goalY = m_noiseMap->GetNoiseValue(currentPos.x, currentPos.z);
+        //if we want to go up, move over then go up
+        //if we want to go down, go down then move over
+        if (currentPos.y < goalY) {
+            m_path.push_back(currentPos);
+            while (currentPos.y < goalY) {
+                currentPos.y += 1;
+                m_path.push_back(currentPos);
+            }
+        } else if (currentPos.y > goalY) {
+            currentPos -= m_buildDir;
+            while (currentPos.y > goalY) {
+                currentPos.y -= 1;
+                m_path.push_back(currentPos);
+            }
+            currentPos += m_buildDir;
+            m_path.push_back(currentPos);
+        } else {
+            m_path.push_back(currentPos);
+        }
+
     }
     m_path.push_back(currentPos + m_expandDir);
     m_buildDir *= -1;
@@ -32,6 +52,7 @@ void GroundGrower::PlanPath(CubeMap& cubeMap) {
     m_tickCount = m_movementTicks - 1;
 }
 
+//its somehow getting stuck in the pathing state
 void GroundGrower::OnTick(CubeMap& cubeMap) {
     SentientCube::OnTick(cubeMap);
     if (m_isMoving) { //only move on move ticks
@@ -45,7 +66,6 @@ void GroundGrower::OnTick(CubeMap& cubeMap) {
     }
     else if (m_tickCount >= m_minActionTicks) {
         if (rand() % m_avgActionTicks == 0) {
-            m_isPlanning = true;
             m_isMoving = true;
             PlanPath(cubeMap);
             m_tickCount = 0;
