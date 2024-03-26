@@ -204,6 +204,12 @@ bool World::InitGL(){
 //Loops forever!
 void World::Loop(){
     PerlinNoise noise;
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 20; j++) {
+            std::cout << noise.GetNoiseValue(i, j) << " ";
+        }
+        std::cout << std::endl;
+    }
     if (m_player != nullptr) {
         m_renderer = new Renderer(m_windowWidth, m_windowHeight, m_player);
     }

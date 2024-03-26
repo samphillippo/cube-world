@@ -102,7 +102,6 @@ void Image::LoadPPM(bool flip){
 void Image::LoadJPG() {
     int nrComponents;
     unsigned char *data = stbi_load(m_filepath.c_str(), &m_width , &m_height, &nrComponents, 0);
-    std::cout << "Width: " << m_width << " Height: " << m_height << " Components: " << nrComponents << std::endl;
     if (data)
     {
         m_pixelData = new uint8_t[m_width * m_height * nrComponents];

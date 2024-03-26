@@ -1,27 +1,28 @@
 #include "Util/PerlinNoise.hpp"
-// #include "Util/stb_image.h"
+#include "Util/Image.hpp"
 #include <iostream>
 
 PerlinNoise::PerlinNoise() {
-    LoadImage("common/perlin_noise.jpg");
+    LoadImage("common/textures/perlin_noise.jpg");
 }
 
 PerlinNoise::~PerlinNoise() {
-    // Destructor
+    for (int i = 0; i < m_width; ++i) {
+        delete[] m_noiseMapPtr[i];
+    }
+    delete[] m_noiseMapPtr;
 }
 
 void PerlinNoise::LoadImage(std::string filepath) {
-    // Load in the image
-    //std::cout << "Loading image..." << std::endl;
-    // int width, height, nrChannels;
-    // unsigned char *data = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
-    // if (data)
-    // {
-    //     std::cout << "Image loaded." << std::endl;
-    // }
-    // else
-    // {
-    //     std::cerr << "Failed to load image." << std::endl;
-    // }
-    // stbi_image_free(data);
+    Image image(filepath);
+    image.LoadJPG();
+    m_width = image.GetWidth();
+    m_height = image.GetHeight();
+    m_noiseMapPtr = new unsigned int*[m_width];
+    for (int i = 0; i < m_width; i++) {
+        m_noiseMapPtr[i] = new unsigned int[m_height];
+        for (int j = 0; j < m_height; j++) {
+            m_noiseMapPtr[i][j] = image.GetPixelR(i, j);
+        }
+    }
 }
