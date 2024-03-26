@@ -30,6 +30,7 @@
 #include "Cube.hpp"
 #include "AI/SentientCube.hpp"
 #include "CubeMap.hpp"
+#include "Util/PerlinNoise.hpp"
 
 // Purpose:
 // This class sets up a full graphics program using SDL
@@ -85,6 +86,8 @@ private:
     std::vector<SentientCube*> m_sentientCubes; //how can we store cubes and sentient cubes in the same list?
     // Our root node
     std::shared_ptr<SceneNode> m_root;
+    // Noise map for ground generation
+    std::shared_ptr<PerlinNoise> m_noiseMap;
 };
 
 #endif

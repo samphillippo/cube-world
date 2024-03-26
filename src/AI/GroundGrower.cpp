@@ -1,11 +1,12 @@
 #include "AI/GroundGrower.hpp"
 #include <iostream>
 
-GroundGrower::GroundGrower(glm::vec3 center, float sideLength, int initialAreaX, int initialAreaZ) : SentientCube(center, sideLength) {
+GroundGrower::GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, int initialAreaX, int initialAreaZ) : SentientCube(center, sideLength) {
     m_health = 5;
     m_movementTicks = 10;
     m_minActionTicks = 40;
     m_avgActionTicks = 40;
+    m_noiseMap = noiseMap;
     m_initialAreaX = initialAreaX;
     m_initialAreaZ = initialAreaZ;
 }
@@ -60,7 +61,7 @@ std::vector<glm::vec3> GroundGrower::GetInitialGroundCubes() {
     int endZ = m_initialAreaZ / 2;
     for (int i = startX; i < endX; i++) {
         for (int j = startZ; j < endZ; j++) {
-            groundCubes.push_back(glm::vec3(i, m_noiseMap.GetNoiseValue(i, j), j));
+            groundCubes.push_back(glm::vec3(i, m_noiseMap->GetNoiseValue(i, j), j));
         }
     }
     return groundCubes;

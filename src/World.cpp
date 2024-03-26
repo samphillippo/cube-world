@@ -149,7 +149,9 @@ void World::LoadWorld(std::string filename) {
         m_sentientCubes.push_back(brickBuilder);
         m_cubeMap.AddCube(brickBuilder);
 
-        SentientCube* groundGrower = new GroundGrower(glm::vec3(1,10,-4), 1.0f, 12, 12);
+        //Ground generation
+        m_noiseMap = std::make_shared<PerlinNoise>();
+        SentientCube* groundGrower = new GroundGrower(glm::vec3(1,10,-4), 1.0f, m_noiseMap, 12, 12);
         groundGrower->SetTexture(grassTexture);
         m_sentientCubes.push_back(groundGrower);
         m_cubeMap.AddCube(groundGrower);
