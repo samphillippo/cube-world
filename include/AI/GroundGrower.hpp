@@ -22,6 +22,10 @@ public:
     void OnTick(CubeMap& cubeMap) override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
+    // Increments the number of pathing ground growers
+    static void IncrementPathingGrowers() { m_numPathingGrowers++; }
+    // Decrements the number of pathing ground growers
+    static void DecrementPathingGrowers() { m_numPathingGrowers--; }
 private:
     // Plans a path for the sentient cube
     void PlanPath(CubeMap& cubeMap) override;
@@ -33,6 +37,8 @@ private:
     glm::vec3 m_expandDir;
     // The length of path to build
     int m_pathLength;
+    // Tracks the number of ground growers that have completed their path
+    static int m_numPathingGrowers;
 };
 
 #endif

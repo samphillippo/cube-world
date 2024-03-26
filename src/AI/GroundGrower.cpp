@@ -1,6 +1,8 @@
 #include "AI/GroundGrower.hpp"
 #include <iostream>
 
+int GroundGrower::m_numPathingGrowers = 0;
+
 GroundGrower::GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength) : SentientCube(center, sideLength) {
     m_health = 5;
     m_movementTicks = 10;
@@ -17,6 +19,7 @@ GroundGrower::~GroundGrower() {
 
 //start from center, do loops around...
 void GroundGrower::PlanPath(CubeMap& cubeMap) {
+    IncrementPathingGrowers();
     m_path.clear();
     glm::vec3 currentPos = m_center;
     for (int i = 0; i < m_pathLength; i++) {
@@ -34,6 +37,9 @@ void GroundGrower::OnTick(CubeMap& cubeMap) {
     if (m_isMoving) { //only move on move ticks
         if (m_tickCount % m_movementTicks == 0) {
             m_tickCount = 0;
+            if (m_path.size() == 0) {
+                DecrementPathingGrowers();
+            }
             Move(cubeMap);
         }
     }
@@ -45,11 +51,16 @@ void GroundGrower::OnTick(CubeMap& cubeMap) {
             m_tickCount = 0;
         }
     }
-
+    else if (m_numPathingGrowers != 0) {
+        m_tickCount = 0;
+    }
 }
 
 bool GroundGrower::OnHit() {
     if (SentientCube::OnHit()) {
+        if (m_path.size() != 0) {
+            DecrementPathingGrowers();
+        }
         return true;
     }
     //some behavior
