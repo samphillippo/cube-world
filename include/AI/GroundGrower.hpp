@@ -15,7 +15,7 @@
 class GroundGrower: public SentientCube {
 public:
     // Constructor
-    GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir);
+    GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength);
     // Destructor
     ~GroundGrower() override;
     // Updates the sentient cube's state each tick
@@ -31,6 +31,8 @@ private:
     glm::vec3 m_buildDir;
     // The direction to move after building a strip
     glm::vec3 m_expandDir;
+    // The length of path to build
+    int m_pathLength;
 };
 
 #endif

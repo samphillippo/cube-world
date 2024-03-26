@@ -161,7 +161,7 @@ void World::LoadWorld(std::string filename) {
             startPos += expandDir;
             startPos.y = m_noiseMap->GetNoiseValue(startPos.x, startPos.z);
 
-            SentientCube* groundGrower = new GroundGrower(startPos, 1.0f, m_noiseMap, groundGrowerDirs[i]);
+            SentientCube* groundGrower = new GroundGrower(startPos, 1.0f, m_noiseMap, groundGrowerDirs[i], initialGroundSize + 1);
             groundGrower->SetTexture(grassTexture);
             m_sentientCubes.push_back(groundGrower);
             m_cubeMap.AddCube(groundGrower);
