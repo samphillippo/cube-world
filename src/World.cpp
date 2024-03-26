@@ -128,46 +128,40 @@ void World::LoadWorld(std::string filename) {
         //creates the floor for our cube world
         m_root = std::make_shared<SceneNode>(nullptr, "", "");
         m_cubeMap.setRoot(m_root);
-        for (int i = -6; i < 7; i++) {
-            for (int j = -6; j < 7; j++) {
-                Cube* cube = new Cube(glm::vec3(i,0.0f,j), 1.0f);
-                cube->SetTexture(grassTexture);
-                m_cubeMap.AddCube(cube);
-            }
-        }
-        //creates a wall
-        // for (int i = -6; i < 7; i++) {
-        //     for (int j = 1; j < 3; j++) {
-        //         Cube* cube = new Cube(glm::vec3(i,j,7), 1.0f);
-        //         cube->SetTexture(brickTexture);
-        //         m_cubeMap.AddCube(cube);
-        //     }
-        // }
         //adds sentient cubes to environment
-        SentientCube* pathPlacer = new PathPlacer(glm::vec3(1,1,1), 1.0f);
+        SentientCube* pathPlacer = new PathPlacer(glm::vec3(1,10,1), 1.0f);
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
         m_cubeMap.AddCube(pathPlacer);
 
-        SentientCube* pathPlacer2 = new PathPlacer(glm::vec3(4,1,1), 1.0f);
+        SentientCube* pathPlacer2 = new PathPlacer(glm::vec3(4,10,1), 1.0f);
         pathPlacer2->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer2);
         m_cubeMap.AddCube(pathPlacer2);
 
-        SentientCube* blockBreaker = new BlockBreaker(glm::vec3(-4,4,-4), 1.0f);
+        SentientCube* blockBreaker = new BlockBreaker(glm::vec3(-4,10,-4), 1.0f);
         blockBreaker->SetTexture(breakerTexture);
         m_sentientCubes.push_back(blockBreaker);
         m_cubeMap.AddCube(blockBreaker);
 
-        SentientCube* brickBuilder = new BrickBuilder(glm::vec3(4,1,4), 1.0f);
+        SentientCube* brickBuilder = new BrickBuilder(glm::vec3(4,10,4), 1.0f);
         brickBuilder->SetTexture(brickTexture);
         m_sentientCubes.push_back(brickBuilder);
         m_cubeMap.AddCube(brickBuilder);
 
-        SentientCube* groundGrower = new GroundGrower(glm::vec3(1,1,-4), 1.0f);
+        SentientCube* groundGrower = new GroundGrower(glm::vec3(1,10,-4), 1.0f, 12, 12);
         groundGrower->SetTexture(grassTexture);
         m_sentientCubes.push_back(groundGrower);
         m_cubeMap.AddCube(groundGrower);
+
+        //creates initial area for player to stand on
+        std::vector<glm::vec3> initialGroundCubes = ((GroundGrower*)groundGrower)->GetInitialGroundCubes();
+        for (int i = 0; i < initialGroundCubes.size(); i++) {
+            Cube* groundCube = new Cube(initialGroundCubes[i], 1.0f);
+            groundCube->SetTexture(grassTexture);
+            m_cubeMap.AddCube(groundCube);
+        }
+
     } else {
         parseWorldFile(filename);
     }
