@@ -17,17 +17,22 @@ public:
     // Destructor
     ~PerlinNoise();
     // Get the noise value at a given x,y
-    inline unsigned int GetNoiseValue(int x, int y) { return m_noiseMapPtr[x][y]; } //TODO: handle out of bounds
+    int GetNoiseValue(int x, int y);
     // Get the width of the noise map
-    inline unsigned int GetWidth() { return m_width; }
+    inline unsigned int GetWidth() { return m_imageWidth; }
     // Get the height of the noise map
-    inline unsigned int GetHeight() { return m_height; }
+    inline unsigned int GetHeight() { return m_imageHeight; }
 private:
     // Load jpg image to sample from
     void LoadImage(std::string filepath);
+    //image information
     unsigned int** m_noiseMapPtr;
-    unsigned int m_width;
-    unsigned int m_height;
+    unsigned int m_imageWidth;
+    unsigned int m_imageHeight;
+    unsigned int m_imageCenterX, m_imageCenterY;
+    //min and max height to return
+    int m_minHeight;
+    int m_maxHeight;
 };
 
 #endif

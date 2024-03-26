@@ -10,6 +10,7 @@
 #define GROUNDGROWER_HPP
 
 #include "AI/SentientCube.hpp"
+#include "Util/PerlinNoise.hpp"
 
 class GroundGrower: public SentientCube {
 public:
@@ -24,6 +25,8 @@ public:
 private:
     // Plans a path for the sentient cube
     void PlanPath(CubeMap& cubeMap) override;
+    // The noise map used to generate the ground
+    PerlinNoise m_noiseMap;
 };
 
 #endif

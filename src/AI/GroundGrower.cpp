@@ -14,6 +14,12 @@ GroundGrower::~GroundGrower() {
 //pick one of 3 directions, number of layers, and a random distance
 void GroundGrower::PlanPath(CubeMap& cubeMap) {
     m_path.clear();
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 20; j++) {
+            std::cout << m_noiseMap.GetNoiseValue(i, j) << " ";
+        }
+        std::cout << std::endl;
+    }
     m_tickCount = m_movementTicks - 1;
 }
 
