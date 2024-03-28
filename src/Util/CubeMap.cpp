@@ -1,4 +1,4 @@
-#include "CubeMap.hpp"
+#include "Util/CubeMap.hpp"
 
 CubeMap::CubeMap() {
 }

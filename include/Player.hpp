@@ -11,7 +11,7 @@
 #define PLAYER_HPP
 
 #include "Camera.hpp"
-#include "CubeMap.hpp"
+#include "Util/CubeMap.hpp"
 #include <memory>
 
 class Player {

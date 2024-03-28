@@ -29,7 +29,7 @@
 #include "Player.hpp"
 #include "Cube.hpp"
 #include "AI/SentientCube.hpp"
-#include "CubeMap.hpp"
+#include "Util/CubeMap.hpp"
 #include "Util/PerlinNoise.hpp"
 
 // Purpose:

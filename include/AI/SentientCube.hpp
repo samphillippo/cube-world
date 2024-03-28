@@ -9,7 +9,7 @@
 #ifndef SENTIENTCUBE_HPP
 #define SENTIENTCUBE_HPP
 
-#include "CubeMap.hpp"
+#include "Util/CubeMap.hpp"
 #include <cstdlib>
 #include <ctime>
 
