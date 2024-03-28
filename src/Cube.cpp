@@ -104,6 +104,10 @@ float Cube::GetSideLength() {
     return m_sideLength;
 }
 
+bool Cube::OnHit() { //default case, cube should break in one hit
+    return true;
+}
+
 // Inside your Cube class
 bool Cube::IntersectRayWithCube(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, int& hitSide, float &distance) const {
     // Perform the ray-cube intersection test

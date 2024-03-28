@@ -67,16 +67,22 @@ void BlockBreaker::PlanPath(CubeMap& cubeMap) {
     m_tickCount = m_movementTicks - 1;
 }
 
-void BlockBreaker::Move(CubeMap& cubeMap) {
+Cube* BlockBreaker::Move(CubeMap& cubeMap) {
     if (m_path.size() == 0) {
         m_isMoving = false;
-        return;
+        return nullptr;
     }
-
+    Cube* deletedCube = nullptr;
     //if the next block is occupied
-    if (cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z) != nullptr) {
-        //remove the block at the next location
-        cubeMap.RemoveCube(cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z));
+    Cube* nextCube = cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
+    if (nextCube != nullptr) {
+        if (nextCube->OnHit()) {
+            cubeMap.RemoveCube(nextCube);
+            deletedCube = nextCube;
+            delete nextCube;
+        } else {
+            return nullptr; //if the cube is not destroyed, stop repeat movement next cycle
+        }
     }
     cubeMap.RemoveCube(this);
     m_center = m_path[0];
@@ -84,14 +90,15 @@ void BlockBreaker::Move(CubeMap& cubeMap) {
     this->Update();
     cubeMap.AddCube(this);
     m_path.erase(m_path.begin());
+    return deletedCube;
 }
 
-void BlockBreaker::OnTick(CubeMap& cubeMap) {
+Cube* BlockBreaker::OnTick(CubeMap& cubeMap) {
     SentientCube::OnTick(cubeMap);
     if (m_isMoving) { //only move on move ticks
         if (m_tickCount % m_movementTicks == 0) {
             m_tickCount = 0;
-            Move(cubeMap);
+            return Move(cubeMap);
         }
     }
     else if (m_tickCount >= m_minActionTicks) {
@@ -101,6 +108,7 @@ void BlockBreaker::OnTick(CubeMap& cubeMap) {
             m_tickCount = 0;
         }
     }
+    return nullptr;
 
 }
 

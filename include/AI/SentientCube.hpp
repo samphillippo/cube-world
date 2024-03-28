@@ -20,14 +20,14 @@ public:
     // Destructor
     virtual ~SentientCube();
     // Updates the sentient cube's state each tick
-    virtual void OnTick(CubeMap& cubeMap);
+    virtual Cube* OnTick(CubeMap& cubeMap);
     // Called upon the sentient cube taking damage
-    virtual bool OnHit();
+    bool OnHit() override;
 protected:
     // Plans a path for the sentient cube
     virtual void PlanPath(CubeMap& cubeMap) = 0;
     // Moves the sentient cube along its path
-    virtual void Move(CubeMap& cubeMap);
+    virtual Cube* Move(CubeMap& cubeMap);
     // Function that takes in a vector and produces a path that follows it
     std::vector<glm::vec3> PathToTarget(glm::vec3 target);
     // Counts number of ticks since last action

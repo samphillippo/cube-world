@@ -51,7 +51,7 @@ void GroundGrower::PlanPath(CubeMap& cubeMap) {
 }
 
 //its somehow getting stuck in the pathing state
-void GroundGrower::OnTick(CubeMap& cubeMap) {
+Cube* GroundGrower::OnTick(CubeMap& cubeMap) {
     SentientCube::OnTick(cubeMap);
     if (m_isMoving) { //only move on move ticks
         if (m_tickCount % m_movementTicks == 0) {
@@ -59,7 +59,7 @@ void GroundGrower::OnTick(CubeMap& cubeMap) {
             if (m_path.size() == 0) {
                 DecrementPathingGrowers();
             }
-            Move(cubeMap);
+            return Move(cubeMap);
         }
     }
     else if (m_tickCount >= m_minActionTicks) {
@@ -72,6 +72,7 @@ void GroundGrower::OnTick(CubeMap& cubeMap) {
     else if (m_numPathingGrowers != 0) { //wait for all groundgrowers to finish pathing
         m_tickCount = 0;
     }
+    return nullptr;
 }
 
 bool GroundGrower::OnHit() {

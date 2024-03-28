@@ -77,12 +77,12 @@ void BrickBuilder::PlanPath(CubeMap& cubeMap) {
     m_tickCount = m_movementTicks - 1;
 }
 
-void BrickBuilder::OnTick(CubeMap& cubeMap) {
+Cube* BrickBuilder::OnTick(CubeMap& cubeMap) {
     SentientCube::OnTick(cubeMap);
     if (m_isMoving) { //only move on move ticks
         if (m_tickCount % m_movementTicks == 0) {
             m_tickCount = 0;
-            Move(cubeMap);
+            return Move(cubeMap);
         }
     }
     else if (m_tickCount >= m_minActionTicks) {
@@ -92,7 +92,7 @@ void BrickBuilder::OnTick(CubeMap& cubeMap) {
             m_tickCount = 0;
         }
     }
-
+    return nullptr;
 }
 
 bool BrickBuilder::OnHit() {

@@ -19,7 +19,7 @@ public:
     // Destructor
     ~GroundGrower() override;
     // Updates the sentient cube's state each tick
-    void OnTick(CubeMap& cubeMap) override;
+    Cube* OnTick(CubeMap& cubeMap) override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
     // Increments the number of pathing ground growers

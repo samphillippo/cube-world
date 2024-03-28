@@ -18,14 +18,14 @@ public:
     // Destructor
     ~BlockBreaker() override;
     // Updates the sentient cube's state each tick
-    void OnTick(CubeMap& cubeMap) override;
+    Cube* OnTick(CubeMap& cubeMap) override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
 private:
     // Plans a path for the sentient cube
     void PlanPath(CubeMap& cubeMap) override;
     // overrides the super function to delete instead of add blocks
-    virtual void Move(CubeMap& cubeMap) override;
+    Cube* Move(CubeMap& cubeMap) override;
 };
 
 #endif

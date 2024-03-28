@@ -145,12 +145,14 @@ void World::LoadWorld(std::string filename) {
         m_sentientCubes.push_back(pathPlacer2);
         m_cubeMap.AddCube(pathPlacer2);
 
-        glm::vec3 blockBreakerPos = glm::vec3(-4,0,-4);
-        blockBreakerPos.y = m_noiseMap->GetNoiseValue(blockBreakerPos.x, blockBreakerPos.z) + 1;
-        SentientCube* blockBreaker = new BlockBreaker(blockBreakerPos, 1.0f);
-        blockBreaker->SetTexture(breakerTexture);
-        m_sentientCubes.push_back(blockBreaker);
-        m_cubeMap.AddCube(blockBreaker);
+        for (int i = 0; i < 10; i++) {
+            glm::vec3 blockBreakerPos = glm::vec3(-3,0,i);
+            blockBreakerPos.y = m_noiseMap->GetNoiseValue(blockBreakerPos.x, blockBreakerPos.z) + 1;
+            SentientCube* blockBreaker = new BlockBreaker(blockBreakerPos, 1.0f);
+            blockBreaker->SetTexture(breakerTexture);
+            m_sentientCubes.push_back(blockBreaker);
+            m_cubeMap.AddCube(blockBreaker);
+        }
 
         //GroundGrower initialization
         int initialGroundSize = 12;
@@ -242,17 +244,21 @@ void World::Loop(){
 
     // While application is running
     while(!quit){
-        //print noise
-        // for (float i = 0.0f; i < 10.0f; i += 1.0f) {
-        //     for (float j = 0.0f; j < 10.0f; j += 1.0f) {
-        //         std::cout << noise.fractal(1, i,j) << " ";
-        //         // std::cout << 10 * noise.fractal(1, i,j) << " ";
-        //     }
-        //     std::cout << std::endl;
-        // }
-        if (!paused) {
+        if (!paused) { //TODO: remove this array in the future...
+            //tick sentient cubes, delete any that are destroyed from the list
             for (int i = 0; i < m_sentientCubes.size(); i++) {
-                m_sentientCubes[i]->OnTick(m_cubeMap);
+                Cube* deletedCube = m_sentientCubes[i]->OnTick(m_cubeMap);
+                if (deletedCube != nullptr) {
+                    for (int j = 0; j < m_sentientCubes.size(); j++) {
+                        if (m_sentientCubes[j] == deletedCube) {
+                            m_sentientCubes.erase(m_sentientCubes.begin() + j);
+                            if (j < i) {
+                                i--;
+                            }
+                            break;
+                        }
+                    }
+                }
             }
         }
 

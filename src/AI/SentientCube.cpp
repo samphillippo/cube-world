@@ -11,10 +11,11 @@ SentientCube::SentientCube(glm::vec3 center, float sideLength) : Cube(center, si
 SentientCube::~SentientCube() {
 }
 
-void SentientCube::OnTick(CubeMap& cubeMap) {
+Cube* SentientCube::OnTick(CubeMap& cubeMap) {
     m_tickCount++;
     m_damageTickCount = std::max(0, m_damageTickCount - 1);
     this->m_colorAdjustment = m_damageColor * (m_damageTickCount / (float)m_damageMaxTicks);
+    return nullptr;
 }
 
 bool SentientCube::OnHit() {
@@ -26,28 +27,36 @@ bool SentientCube::OnHit() {
     return false;
 }
 
-void SentientCube::Move(CubeMap& cubeMap) {
+Cube* SentientCube::Move(CubeMap& cubeMap) {
     //path is complete, stop moving restart cycle
     if (m_path.size() == 0) {
         m_isMoving = false;
-        return;
+        return nullptr;
     }
+    Cube* deletedCube = nullptr;
+    //checks if next cube is destroyed
+    Cube* nextCube = cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
+    if (nextCube != nullptr) {
+        if (nextCube->OnHit()) {
+            cubeMap.RemoveCube(nextCube);
+            deletedCube = nextCube;
+            delete nextCube;
+        } else { //if cube is not destroyed, stop repeat movement next cycle
+            return nullptr;
+        }
+    }
+
     //creates new cube at previous location
     Cube* newCube = new Cube(m_center, m_sideLength);
     newCube->SetTexture(m_textureDiffuse);
     cubeMap.RemoveCube(this);
     cubeMap.AddCube(newCube);
-    //if there is a cube at the next location, remove it
-    Cube* nextCube = cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
-    if (nextCube != nullptr) {
-        cubeMap.RemoveCube(nextCube);
-        delete nextCube;
-    }
     m_center = m_path[0];
     this->Clear();
     this->Update();
     cubeMap.AddCube(this);
     m_path.erase(m_path.begin());
+    return deletedCube;
 }
 
 std::vector<glm::vec3> SentientCube::PathToTarget(glm::vec3 target) {

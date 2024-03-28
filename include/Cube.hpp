@@ -27,6 +27,8 @@ public:
     glm::vec3 GetCenter();
     // Get the side length of the cube
     float GetSideLength();
+    // Handles the cube being hit
+    virtual bool OnHit();
     // Checks a ray for intersection with a cube
     bool IntersectRayWithCube(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, int& hitSide, float &distance) const;
 protected:
