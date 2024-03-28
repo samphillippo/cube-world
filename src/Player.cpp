@@ -72,7 +72,22 @@ void Player::swapPlayerMode() {
     m_verticalVelocity = 0.0f;
 }
 
-//TODO: CubeMap improvements
+std::vector<glm::vec3> Player::GetCollisionPositions() {
+    glm::vec3 playerPositionFloor = glm::vec3(std::floor(m_position.x - m_sideLength / 2), std::floor(m_position.y - m_height), std::floor(m_position.z - m_sideLength / 2));
+    glm::vec3 playerPositionCeil = glm::vec3(std::ceil(m_position.x + m_sideLength / 2), std::ceil(m_position.y), std::ceil(m_position.z + m_sideLength / 2));
+
+    std::vector<glm::vec3> collisionPositions;
+    for (int i = playerPositionFloor.x; i <= playerPositionCeil.x; i++) {
+        for (int j = playerPositionFloor.y; j <= playerPositionCeil.y; j++) {
+            for (int k = playerPositionFloor.z; k <= playerPositionCeil.z; k++) {
+                collisionPositions.push_back(glm::vec3(i, j, k));
+            }
+        }
+    }
+    return collisionPositions;
+}
+
+//TODO: Redo this, we now know any cube found is a collision!
 void Player::handleCollisions(CubeMap& cubeMap, bool jump) {
     float maxX = m_position.x + m_sideLength / 2;
     float minX = m_position.x - m_sideLength / 2;
@@ -81,8 +96,10 @@ void Player::handleCollisions(CubeMap& cubeMap, bool jump) {
     float maxY = m_position.y;
     float minY = m_position.y - m_height;
     bool standingOnGround = false;
-    for (auto it = cubeMap.getMap().begin(); it != cubeMap.getMap().end(); it++) {
-        Cube* cube = it->second;
+    std::vector<glm::vec3> collisionPositions = GetCollisionPositions();
+
+    for (int i = 0; i < collisionPositions.size(); i++) {
+        Cube* cube = cubeMap.GetCube(collisionPositions[i].x, collisionPositions[i].y, collisionPositions[i].z);
         if (cube == nullptr) {
             continue;
         }

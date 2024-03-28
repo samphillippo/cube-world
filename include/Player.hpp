@@ -43,6 +43,8 @@ public:
 private:
     //gets the direction the player is looking in
     glm::vec3 GetRayDirection();
+    //gets a list of all cube positions to check for collisions
+    std::vector<glm::vec3> GetCollisionPositions();
     // adjusts player position based on collisions
     void handleCollisions(CubeMap& cubeMap, bool jump);
     // Position
