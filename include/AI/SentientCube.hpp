@@ -16,18 +16,18 @@
 class SentientCube: public Cube {
 public:
     // Constructor
-    SentientCube(glm::vec3 center, float sideLength);
+    SentientCube(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap);
     // Destructor
     virtual ~SentientCube();
     // Updates the sentient cube's state each tick
-    virtual Cube* OnTick(CubeMap& cubeMap);
+    virtual Cube* OnTick();
     // Called upon the sentient cube taking damage
     bool OnHit() override;
 protected:
     // Plans a path for the sentient cube
-    virtual void PlanPath(CubeMap& cubeMap) = 0;
+    virtual void PlanPath() = 0;
     // Moves the sentient cube along its path
-    virtual Cube* Move(CubeMap& cubeMap);
+    virtual Cube* Move();
     // Function that takes in a vector and produces a path that follows it
     std::vector<glm::vec3> PathToTarget(glm::vec3 target);
     // Counts number of ticks since last action
@@ -50,6 +50,8 @@ protected:
     glm::vec3 m_damageColor;
     // Number of ticks for damage animation
     int m_damageMaxTicks;
+    // Mapping of coordinates to all cubes in the scene
+    std::shared_ptr<CubeMap> m_cubeMap;
 };
 
 #endif

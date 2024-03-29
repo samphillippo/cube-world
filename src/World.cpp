@@ -135,14 +135,14 @@ void World::LoadWorld(std::string filename) {
         //--------------------ADDS SENTIENT CUBES--------------------
         glm::vec3 pathPlacerPos = glm::vec3(4,0,4);
         pathPlacerPos.y = m_noiseMap->GetNoiseValue(pathPlacerPos.x, pathPlacerPos.z) + 1;
-        SentientCube* pathPlacer = new PathPlacer(pathPlacerPos, 1.0f);
+        SentientCube* pathPlacer = new PathPlacer(pathPlacerPos, 1.0f, m_cubeMap);
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
         m_cubeMap->AddCube(pathPlacer);
 
         glm::vec3 pathPlacer2Pos = glm::vec3(4,0,0);
         pathPlacer2Pos.y = m_noiseMap->GetNoiseValue(pathPlacer2Pos.x, pathPlacer2Pos.z) + 1;
-        SentientCube* pathPlacer2 = new PathPlacer(pathPlacer2Pos, 1.0f);
+        SentientCube* pathPlacer2 = new PathPlacer(pathPlacer2Pos, 1.0f, m_cubeMap);
         pathPlacer2->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer2);
         m_cubeMap->AddCube(pathPlacer2);
@@ -150,7 +150,7 @@ void World::LoadWorld(std::string filename) {
         for (int i = 0; i < 10; i++) {
             glm::vec3 blockBreakerPos = glm::vec3(-3,0,i);
             blockBreakerPos.y = m_noiseMap->GetNoiseValue(blockBreakerPos.x, blockBreakerPos.z) + 1;
-            SentientCube* blockBreaker = new BlockBreaker(blockBreakerPos, 1.0f);
+            SentientCube* blockBreaker = new BlockBreaker(blockBreakerPos, 1.0f, m_cubeMap);
             blockBreaker->SetTexture(breakerTexture);
             m_sentientCubes.push_back(blockBreaker);
             m_cubeMap->AddCube(blockBreaker);
@@ -167,7 +167,7 @@ void World::LoadWorld(std::string filename) {
             startPos += expandDir;
             startPos.y = m_noiseMap->GetNoiseValue(startPos.x, startPos.z);
 
-            SentientCube* groundGrower = new GroundGrower(startPos, 1.0f, m_noiseMap, groundGrowerDirs[i], initialGroundSize + 1);
+            SentientCube* groundGrower = new GroundGrower(startPos, 1.0f, m_cubeMap, m_noiseMap, groundGrowerDirs[i], initialGroundSize + 1);
             groundGrower->SetTexture(grassTexture);
             m_sentientCubes.push_back(groundGrower);
             m_cubeMap->AddCube(groundGrower);
@@ -175,7 +175,7 @@ void World::LoadWorld(std::string filename) {
 
         glm::vec3 brickBuilderPos = glm::vec3(-4,0,4);
         brickBuilderPos.y = m_noiseMap->GetNoiseValue(brickBuilderPos.x, brickBuilderPos.z) + 1;
-        SentientCube* brickBuilder = new BrickBuilder(brickBuilderPos, 1.0f, m_noiseMap);
+        SentientCube* brickBuilder = new BrickBuilder(brickBuilderPos, 1.0f, m_cubeMap, m_noiseMap);
         brickBuilder->SetTexture(brickTexture);
         m_sentientCubes.push_back(brickBuilder);
         m_cubeMap->AddCube(brickBuilder);
@@ -249,7 +249,7 @@ void World::Loop(){
         if (!paused) { //TODO: remove this array in the future...
             //tick sentient cubes, delete any that are destroyed from the list
             for (int i = 0; i < m_sentientCubes.size(); i++) {
-                Cube* deletedCube = m_sentientCubes[i]->OnTick(*m_cubeMap);
+                Cube* deletedCube = m_sentientCubes[i]->OnTick();
                 if (deletedCube != nullptr) {
                     for (int j = 0; j < m_sentientCubes.size(); j++) {
                         if (m_sentientCubes[j] == deletedCube) {

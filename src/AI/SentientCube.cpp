@@ -1,6 +1,7 @@
 #include "AI/SentientCube.hpp"
 
-SentientCube::SentientCube(glm::vec3 center, float sideLength) : Cube(center, sideLength) {
+SentientCube::SentientCube(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap) : Cube(center, sideLength) {
+    m_cubeMap = cubeMap;
     m_tickCount = 0;
     m_damageTickCount = 0;
     m_damageMaxTicks = 10;
@@ -11,7 +12,7 @@ SentientCube::SentientCube(glm::vec3 center, float sideLength) : Cube(center, si
 SentientCube::~SentientCube() {
 }
 
-Cube* SentientCube::OnTick(CubeMap& cubeMap) {
+Cube* SentientCube::OnTick() {
     m_tickCount++;
     m_damageTickCount = std::max(0, m_damageTickCount - 1);
     this->m_colorAdjustment = m_damageColor * (m_damageTickCount / (float)m_damageMaxTicks);
@@ -27,7 +28,7 @@ bool SentientCube::OnHit() {
     return false;
 }
 
-Cube* SentientCube::Move(CubeMap& cubeMap) {
+Cube* SentientCube::Move() {
     //path is complete, stop moving restart cycle
     if (m_path.size() == 0) {
         m_isMoving = false;
@@ -35,10 +36,10 @@ Cube* SentientCube::Move(CubeMap& cubeMap) {
     }
     Cube* deletedCube = nullptr;
     //checks if next cube is destroyed
-    Cube* nextCube = cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
+    Cube* nextCube = m_cubeMap->GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
     if (nextCube != nullptr) {
         if (nextCube->OnHit()) {
-            cubeMap.RemoveCube(nextCube);
+            m_cubeMap->RemoveCube(nextCube);
             deletedCube = nextCube;
             delete nextCube;
         } else { //if cube is not destroyed, stop repeat movement next cycle
@@ -49,12 +50,12 @@ Cube* SentientCube::Move(CubeMap& cubeMap) {
     //creates new cube at previous location
     Cube* newCube = new Cube(m_center, m_sideLength);
     newCube->SetTexture(m_textureDiffuse);
-    cubeMap.RemoveCube(this);
-    cubeMap.AddCube(newCube);
+    m_cubeMap->RemoveCube(this);
+    m_cubeMap->AddCube(newCube);
     m_center = m_path[0];
     this->Clear();
     this->Update();
-    cubeMap.AddCube(this);
+    m_cubeMap->AddCube(this);
     m_path.erase(m_path.begin());
     return deletedCube;
 }

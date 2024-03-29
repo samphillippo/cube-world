@@ -14,16 +14,16 @@
 class PathPlacer: public SentientCube {
 public:
     // Constructor
-    PathPlacer(glm::vec3 center, float sideLength);
+    PathPlacer(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap);
     // Destructor
     ~PathPlacer() override;
     // Updates the sentient cube's state each tick
-    Cube* OnTick(CubeMap& cubeMap) override;
+    Cube* OnTick() override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
 private:
     // Plans a path for the sentient cube
-    void PlanPath(CubeMap& cubeMap) override;
+    void PlanPath() override;
     // Gets a random vector in range
     glm::vec3 GetRandomVector();
     //max range of path placement

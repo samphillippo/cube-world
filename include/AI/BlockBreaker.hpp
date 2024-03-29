@@ -14,18 +14,18 @@
 class BlockBreaker: public SentientCube {
 public:
     // Constructor
-    BlockBreaker(glm::vec3 center, float sideLength);
+    BlockBreaker(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap);
     // Destructor
     ~BlockBreaker() override;
     // Updates the sentient cube's state each tick
-    Cube* OnTick(CubeMap& cubeMap) override;
+    Cube* OnTick() override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
 private:
     // Plans a path for the sentient cube
-    void PlanPath(CubeMap& cubeMap) override;
+    void PlanPath() override;
     // overrides the super function to delete instead of add blocks
-    Cube* Move(CubeMap& cubeMap) override;
+    Cube* Move() override;
 };
 
 #endif

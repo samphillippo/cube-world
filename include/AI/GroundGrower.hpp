@@ -15,11 +15,11 @@
 class GroundGrower: public SentientCube {
 public:
     // Constructor
-    GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength);
+    GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength);
     // Destructor
     ~GroundGrower() override;
     // Updates the sentient cube's state each tick
-    Cube* OnTick(CubeMap& cubeMap) override;
+    Cube* OnTick() override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
     // Increments the number of pathing ground growers
@@ -28,7 +28,7 @@ public:
     static void DecrementPathingGrowers() { m_numPathingGrowers--; }
 private:
     // Plans a path for the sentient cube
-    void PlanPath(CubeMap& cubeMap) override;
+    void PlanPath() override;
     // The noise map used to generate the ground
     std::shared_ptr<PerlinNoise> m_noiseMap;
     // The direction to build a strip of ground

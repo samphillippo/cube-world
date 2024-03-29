@@ -177,21 +177,21 @@ Cube* Player::Raycast(int& hitSide) {
     float minIntersectionDistance = FLT_MAX;
     int hitSideTemp;
     // Iterate over cubes and check for intersections
-    // for (auto it = m_cubeMap->getMap().begin(); it != m_cubeMap->getMap().end(); it++) {
-    //     // Perform intersection test
-    //     float intersectionDistance;
-    //     Cube* cube = it->second;
-    //     if (cube == nullptr) {
-    //         continue;
-    //     }
-    //     if (cube->IntersectRayWithCube(m_position, rayDirection, hitSideTemp, intersectionDistance)) {
-    //         if (intersectionDistance < minIntersectionDistance) {
-    //             minIntersectionDistance = intersectionDistance;
-    //             m_selected = cube;
-    //             hitSide = hitSideTemp;
-    //         }
-    //     }
-    // }
+    for (auto it = m_cubeMap->getMap().begin(); it != m_cubeMap->getMap().end(); it++) {
+        // Perform intersection test
+        float intersectionDistance;
+        Cube* cube = it->second;
+        if (cube == nullptr) {
+            continue;
+        }
+        if (cube->IntersectRayWithCube(m_position, rayDirection, hitSideTemp, intersectionDistance)) {
+            if (intersectionDistance < minIntersectionDistance) {
+                minIntersectionDistance = intersectionDistance;
+                m_selected = cube;
+                hitSide = hitSideTemp;
+            }
+        }
+    }
 
     if (m_selected != nullptr) {
         m_selected->SetSelected(true);

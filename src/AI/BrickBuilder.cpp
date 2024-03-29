@@ -1,7 +1,7 @@
 #include "AI/BrickBuilder.hpp"
 #include <iostream>
 
-BrickBuilder::BrickBuilder(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap) : SentientCube(center, sideLength) {
+BrickBuilder::BrickBuilder(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<PerlinNoise> noiseMap) : SentientCube(center, sideLength, cubeMap) {
     m_health = 5;
     m_movementTicks = 10;
     m_minActionTicks = 40;
@@ -18,7 +18,7 @@ BrickBuilder::~BrickBuilder() {
 }
 
 //pick one of 3 directions, number of layers, and a random distance
-void BrickBuilder::PlanPath(CubeMap& cubeMap) {
+void BrickBuilder::PlanPath() {
     m_path.clear();
     std::vector<glm::vec3> directions = { glm::vec3(1, 0, 0), glm::vec3(-1, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, -1) };
     for (int i = 0; i < 4; i++) {
@@ -77,18 +77,18 @@ void BrickBuilder::PlanPath(CubeMap& cubeMap) {
     m_tickCount = m_movementTicks - 1;
 }
 
-Cube* BrickBuilder::OnTick(CubeMap& cubeMap) {
-    SentientCube::OnTick(cubeMap);
+Cube* BrickBuilder::OnTick() {
+    SentientCube::OnTick();
     if (m_isMoving) { //only move on move ticks
         if (m_tickCount % m_movementTicks == 0) {
             m_tickCount = 0;
-            return Move(cubeMap);
+            return Move();
         }
     }
     else if (m_tickCount >= m_minActionTicks) {
         if (rand() % m_avgActionTicks == 0) {
             m_isMoving = true;
-            PlanPath(cubeMap);
+            PlanPath();
             m_tickCount = 0;
         }
     }

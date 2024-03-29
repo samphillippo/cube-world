@@ -4,7 +4,7 @@
 #include <set>
 #include <random>
 
-BlockBreaker::BlockBreaker(glm::vec3 center, float sideLength) : SentientCube(center, sideLength) {
+BlockBreaker::BlockBreaker(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap) : SentientCube(center, sideLength, cubeMap) {
     m_health = 5;
     m_movementTicks = 20;
     m_minActionTicks = 40;
@@ -30,7 +30,7 @@ std::vector<Coordinates> GetNeighbors(Coordinates coords) {
 }
 
 //Pathfinds, BFSing to nearest cube(s)
-void BlockBreaker::PlanPath(CubeMap& cubeMap) {
+void BlockBreaker::PlanPath() {
     m_path.clear();
 
     std::queue<Coordinates> q;
@@ -49,7 +49,7 @@ void BlockBreaker::PlanPath(CubeMap& cubeMap) {
         q.pop();
 
         visited.insert(currentCube);
-        if (cubeMap.GetCube(currentCube.x, currentCube.y, currentCube.z) != nullptr) {
+        if (m_cubeMap->GetCube(currentCube.x, currentCube.y, currentCube.z) != nullptr) {
             m_path = PathToTarget(glm::vec3(currentCube.x - m_center.x, currentCube.y - m_center.y, currentCube.z - m_center.z));
             break;
         }
@@ -67,44 +67,44 @@ void BlockBreaker::PlanPath(CubeMap& cubeMap) {
     m_tickCount = m_movementTicks - 1;
 }
 
-Cube* BlockBreaker::Move(CubeMap& cubeMap) {
+Cube* BlockBreaker::Move() {
     if (m_path.size() == 0) {
         m_isMoving = false;
         return nullptr;
     }
     Cube* deletedCube = nullptr;
     //if the next block is occupied
-    Cube* nextCube = cubeMap.GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
+    Cube* nextCube = m_cubeMap->GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
     if (nextCube != nullptr) {
         if (nextCube->OnHit()) {
-            cubeMap.RemoveCube(nextCube);
+            m_cubeMap->RemoveCube(nextCube);
             deletedCube = nextCube;
             delete nextCube;
         } else {
             return nullptr; //if the cube is not destroyed, stop repeat movement next cycle
         }
     }
-    cubeMap.RemoveCube(this);
+    m_cubeMap->RemoveCube(this);
     m_center = m_path[0];
     this->Clear();
     this->Update();
-    cubeMap.AddCube(this);
+    m_cubeMap->AddCube(this);
     m_path.erase(m_path.begin());
     return deletedCube;
 }
 
-Cube* BlockBreaker::OnTick(CubeMap& cubeMap) {
-    SentientCube::OnTick(cubeMap);
+Cube* BlockBreaker::OnTick() {
+    SentientCube::OnTick();
     if (m_isMoving) { //only move on move ticks
         if (m_tickCount % m_movementTicks == 0) {
             m_tickCount = 0;
-            return Move(cubeMap);
+            return Move();
         }
     }
     else if (m_tickCount >= m_minActionTicks) {
         if (rand() % m_avgActionTicks == 0) {
             m_isMoving = true;
-            PlanPath(cubeMap);
+            PlanPath();
             m_tickCount = 0;
         }
     }

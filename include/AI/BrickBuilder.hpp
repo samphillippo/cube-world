@@ -15,16 +15,16 @@
 class BrickBuilder: public SentientCube {
 public:
     // Constructor
-    BrickBuilder(glm::vec3 center, float sideLength, std::shared_ptr<PerlinNoise> noiseMap);
+    BrickBuilder(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<PerlinNoise> noiseMap);
     // Destructor
     ~BrickBuilder() override;
     // Updates the sentient cube's state each tick
-    Cube* OnTick(CubeMap& cubeMap) override;
+    Cube* OnTick() override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
 private:
     // Plans a path for the sentient cube
-    void PlanPath(CubeMap& cubeMap) override;
+    void PlanPath() override;
     //max range of path placement
     int m_maxPathRange;
     //min range of path placement
