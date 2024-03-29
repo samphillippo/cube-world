@@ -82,8 +82,6 @@ private:
     std::vector<std::shared_ptr<Texture>> m_textures;
     // Mapping of coordinates to all cubes in the scene
     std::shared_ptr<CubeMap> m_cubeMap;
-    // All sentient cubes in the scene
-    std::vector<SentientCube*> m_sentientCubes; //how can we store cubes and sentient cubes in the same list?
     // Our root node
     std::shared_ptr<SceneNode> m_root;
     // Noise map for ground generation

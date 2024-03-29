@@ -51,6 +51,14 @@ public:
     void setRoot(std::shared_ptr<SceneNode> root) { m_root = root; }
     // Returns the map of cubes
     const std::unordered_map<Coordinates, Cube*, CoordinatesHash>& getMap() const { return coordinateMap; }
+    // Returns a vector of all cubes in the map
+    std::vector<Cube*> getCubes() {
+        std::vector<Cube*> cubes;
+        for (auto it = coordinateMap.begin(); it != coordinateMap.end(); it++) {
+            cubes.push_back(it->second);
+        }
+        return cubes;
+    }
 private:
     std::unordered_map<Coordinates, Cube*, CoordinatesHash> coordinateMap;
     std::shared_ptr<SceneNode> m_root;

@@ -27,6 +27,8 @@ public:
     glm::vec3 GetCenter();
     // Get the side length of the cube
     float GetSideLength();
+    // Called on each tick to update the cube
+    virtual Cube* OnTick();
     // Handles the cube being hit
     virtual bool OnHit();
     // Checks a ray for intersection with a cube

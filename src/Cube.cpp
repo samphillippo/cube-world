@@ -104,6 +104,10 @@ float Cube::GetSideLength() {
     return m_sideLength;
 }
 
+Cube* Cube::OnTick() {
+    return nullptr;
+}
+
 bool Cube::OnHit() { //default case, cube should break in one hit
     return true;
 }

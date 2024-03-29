@@ -20,7 +20,7 @@ public:
     // Destructor
     virtual ~SentientCube();
     // Updates the sentient cube's state each tick
-    virtual Cube* OnTick();
+    Cube* OnTick() override;
     // Called upon the sentient cube taking damage
     bool OnHit() override;
 protected:

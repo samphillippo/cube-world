@@ -137,14 +137,12 @@ void World::LoadWorld(std::string filename) {
         pathPlacerPos.y = m_noiseMap->GetNoiseValue(pathPlacerPos.x, pathPlacerPos.z) + 1;
         SentientCube* pathPlacer = new PathPlacer(pathPlacerPos, 1.0f, m_cubeMap);
         pathPlacer->SetTexture(rockTexture);
-        m_sentientCubes.push_back(pathPlacer);
         m_cubeMap->AddCube(pathPlacer);
 
         glm::vec3 pathPlacer2Pos = glm::vec3(4,0,0);
         pathPlacer2Pos.y = m_noiseMap->GetNoiseValue(pathPlacer2Pos.x, pathPlacer2Pos.z) + 1;
         SentientCube* pathPlacer2 = new PathPlacer(pathPlacer2Pos, 1.0f, m_cubeMap);
         pathPlacer2->SetTexture(rockTexture);
-        m_sentientCubes.push_back(pathPlacer2);
         m_cubeMap->AddCube(pathPlacer2);
 
         for (int i = 0; i < 10; i++) {
@@ -152,7 +150,6 @@ void World::LoadWorld(std::string filename) {
             blockBreakerPos.y = m_noiseMap->GetNoiseValue(blockBreakerPos.x, blockBreakerPos.z) + 1;
             SentientCube* blockBreaker = new BlockBreaker(blockBreakerPos, 1.0f, m_cubeMap);
             blockBreaker->SetTexture(breakerTexture);
-            m_sentientCubes.push_back(blockBreaker);
             m_cubeMap->AddCube(blockBreaker);
         }
 
@@ -169,7 +166,6 @@ void World::LoadWorld(std::string filename) {
 
             SentientCube* groundGrower = new GroundGrower(startPos, 1.0f, m_cubeMap, m_noiseMap, groundGrowerDirs[i], initialGroundSize + 1);
             groundGrower->SetTexture(grassTexture);
-            m_sentientCubes.push_back(groundGrower);
             m_cubeMap->AddCube(groundGrower);
         }
 
@@ -177,7 +173,6 @@ void World::LoadWorld(std::string filename) {
         brickBuilderPos.y = m_noiseMap->GetNoiseValue(brickBuilderPos.x, brickBuilderPos.z) + 1;
         SentientCube* brickBuilder = new BrickBuilder(brickBuilderPos, 1.0f, m_cubeMap, m_noiseMap);
         brickBuilder->SetTexture(brickTexture);
-        m_sentientCubes.push_back(brickBuilder);
         m_cubeMap->AddCube(brickBuilder);
         //-------------------------------------------------------------
 
@@ -246,14 +241,19 @@ void World::Loop(){
 
     // While application is running
     while(!quit){
-        if (!paused) { //TODO: remove this array in the future...
-            //tick sentient cubes, delete any that are destroyed from the list
-            for (int i = 0; i < m_sentientCubes.size(); i++) {
-                Cube* deletedCube = m_sentientCubes[i]->OnTick();
+        if (!paused) {
+            //tick all cubes
+            std::vector<Cube*> allCubes = m_cubeMap->getCubes();
+            for (int i = 0; i < allCubes.size(); i++) {
+                Cube* cube = allCubes[i];
+                if (cube == nullptr) {
+                    continue;
+                }
+                Cube* deletedCube = cube->OnTick();
                 if (deletedCube != nullptr) {
-                    for (int j = 0; j < m_sentientCubes.size(); j++) {
-                        if (m_sentientCubes[j] == deletedCube) {
-                            m_sentientCubes.erase(m_sentientCubes.begin() + j);
+                    for (int j = 0; j < allCubes.size(); j++) {
+                        if (allCubes[j] == deletedCube) {
+                            allCubes.erase(allCubes.begin() + j);
                             if (j < i) {
                                 i--;
                             }
@@ -357,20 +357,12 @@ bool World::handleInput(Cube* selected, int hitSide, bool& paused) {
 }
 
 void World::handleLeftClick(Cube* selected) {
-    for (int i = 0; i < m_sentientCubes.size(); i++) {
-        if (m_sentientCubes[i] == selected) {
-            if (m_sentientCubes[i]->OnHit()) {
-                m_sentientCubes.erase(m_sentientCubes.begin() + i);
-                m_cubeMap->RemoveCube(selected);
-                delete selected;
-            }
-            return;
-        }
-    }
     //if the cube is not a sentient cube, delete it
     if (selected != nullptr) {
-        m_cubeMap->RemoveCube(selected);
-        delete selected;
+        if (selected->OnHit()) {
+            m_cubeMap->RemoveCube(selected);
+            delete selected;
+        }
     }
 }
 
