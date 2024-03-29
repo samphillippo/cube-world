@@ -11,19 +11,25 @@
 
 #include "Cube.hpp"
 #include "Rendering/SceneNode.hpp"
-#include <map>
+#include <unordered_map>
 
 struct Coordinates {
     int x, y, z;
 
-    // Comparison operator for sorting
+    bool operator==(const Coordinates& other) const {
+        return x == other.x && y == other.y && z == other.z;
+    }
     bool operator<(const Coordinates& other) const {
         if (x != other.x) return x < other.x;
         if (y != other.y) return y < other.y;
         return z < other.z;
     }
-    bool operator==(const Coordinates& other) const {
-        return x == other.x && y == other.y && z == other.z;
+};
+
+struct CoordinatesHash {
+    std::size_t operator()(const Coordinates& coord) const {
+        // Simple hash combining the hashes of individual coordinates
+        return std::hash<int>()(coord.x) ^ std::hash<int>()(coord.y) ^ std::hash<int>()(coord.z);
     }
 };
 
@@ -42,9 +48,9 @@ public:
     // Sets the root value for this CubeMap
     void setRoot(std::shared_ptr<SceneNode> root) { m_root = root; }
     // Returns the map of cubes
-    const std::map<Coordinates, Cube*>& getMap() const { return coordinateMap; }
+    const std::unordered_map<Coordinates, Cube*, CoordinatesHash>& getMap() const { return coordinateMap; }
 private:
-    std::map<Coordinates, Cube*> coordinateMap;
+    std::unordered_map<Coordinates, Cube*, CoordinatesHash> coordinateMap;
     std::shared_ptr<SceneNode> m_root;
 };
 
