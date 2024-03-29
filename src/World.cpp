@@ -120,14 +120,16 @@ void World::LoadWorld(std::string filename) {
         breakerTexture->LoadTexture("./common/textures/terrain.ppm");
         m_textures.push_back(breakerTexture);
 
+        //creates our cube map
+        m_cubeMap = std::make_shared<CubeMap>();
+
         //creates our player
         m_player = std::make_shared<Player>();
-        m_player->initialize(0.0f,3.0f,0.0f,1.8f,0.8f);
+        m_player->initialize(0.0f,3.0f,0.0f,1.8f,0.8f, m_cubeMap);
         m_player->SetHeldObjectTexture(m_textures[1]);
 
-        //creates the floor for our cube world
         m_root = std::make_shared<SceneNode>(nullptr, "", "");
-        m_cubeMap.setRoot(m_root);
+        m_cubeMap->setRoot(m_root);
         m_noiseMap = std::make_shared<PerlinNoise>();
 
         //--------------------ADDS SENTIENT CUBES--------------------
@@ -136,14 +138,14 @@ void World::LoadWorld(std::string filename) {
         SentientCube* pathPlacer = new PathPlacer(pathPlacerPos, 1.0f);
         pathPlacer->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer);
-        m_cubeMap.AddCube(pathPlacer);
+        m_cubeMap->AddCube(pathPlacer);
 
         glm::vec3 pathPlacer2Pos = glm::vec3(4,0,0);
         pathPlacer2Pos.y = m_noiseMap->GetNoiseValue(pathPlacer2Pos.x, pathPlacer2Pos.z) + 1;
         SentientCube* pathPlacer2 = new PathPlacer(pathPlacer2Pos, 1.0f);
         pathPlacer2->SetTexture(rockTexture);
         m_sentientCubes.push_back(pathPlacer2);
-        m_cubeMap.AddCube(pathPlacer2);
+        m_cubeMap->AddCube(pathPlacer2);
 
         for (int i = 0; i < 10; i++) {
             glm::vec3 blockBreakerPos = glm::vec3(-3,0,i);
@@ -151,7 +153,7 @@ void World::LoadWorld(std::string filename) {
             SentientCube* blockBreaker = new BlockBreaker(blockBreakerPos, 1.0f);
             blockBreaker->SetTexture(breakerTexture);
             m_sentientCubes.push_back(blockBreaker);
-            m_cubeMap.AddCube(blockBreaker);
+            m_cubeMap->AddCube(blockBreaker);
         }
 
         //GroundGrower initialization
@@ -168,7 +170,7 @@ void World::LoadWorld(std::string filename) {
             SentientCube* groundGrower = new GroundGrower(startPos, 1.0f, m_noiseMap, groundGrowerDirs[i], initialGroundSize + 1);
             groundGrower->SetTexture(grassTexture);
             m_sentientCubes.push_back(groundGrower);
-            m_cubeMap.AddCube(groundGrower);
+            m_cubeMap->AddCube(groundGrower);
         }
 
         glm::vec3 brickBuilderPos = glm::vec3(-4,0,4);
@@ -176,7 +178,7 @@ void World::LoadWorld(std::string filename) {
         SentientCube* brickBuilder = new BrickBuilder(brickBuilderPos, 1.0f, m_noiseMap);
         brickBuilder->SetTexture(brickTexture);
         m_sentientCubes.push_back(brickBuilder);
-        m_cubeMap.AddCube(brickBuilder);
+        m_cubeMap->AddCube(brickBuilder);
         //-------------------------------------------------------------
 
         //creates initial area for player to stand on
@@ -184,7 +186,7 @@ void World::LoadWorld(std::string filename) {
         for (int i = 0; i < initialGroundCubes.size(); i++) {
             Cube* groundCube = new Cube(initialGroundCubes[i], 1.0f);
             groundCube->SetTexture(grassTexture);
-            m_cubeMap.AddCube(groundCube);
+            m_cubeMap->AddCube(groundCube);
         }
 
     } else {
@@ -247,7 +249,7 @@ void World::Loop(){
         if (!paused) { //TODO: remove this array in the future...
             //tick sentient cubes, delete any that are destroyed from the list
             for (int i = 0; i < m_sentientCubes.size(); i++) {
-                Cube* deletedCube = m_sentientCubes[i]->OnTick(m_cubeMap);
+                Cube* deletedCube = m_sentientCubes[i]->OnTick(*m_cubeMap);
                 if (deletedCube != nullptr) {
                     for (int j = 0; j < m_sentientCubes.size(); j++) {
                         if (m_sentientCubes[j] == deletedCube) {
@@ -264,7 +266,7 @@ void World::Loop(){
 
         //detects if a cube is being looked at
         int hitSide;
-        Cube* selected = m_player->Raycast(m_cubeMap, hitSide);
+        Cube* selected = m_player->Raycast(hitSide);
 
         // handle player input
         quit = handleInput(selected, hitSide, paused);
@@ -349,7 +351,7 @@ bool World::handleInput(Cube* selected, int hitSide, bool& paused) {
 
     m_player->movePlayer(keyboardState[SDL_SCANCODE_A], keyboardState[SDL_SCANCODE_D],
                             keyboardState[SDL_SCANCODE_W], keyboardState[SDL_SCANCODE_S],
-                            keyboardState[SDL_SCANCODE_SPACE], m_cubeMap);
+                            keyboardState[SDL_SCANCODE_SPACE]);
 
     return false;
 }
@@ -359,7 +361,7 @@ void World::handleLeftClick(Cube* selected) {
         if (m_sentientCubes[i] == selected) {
             if (m_sentientCubes[i]->OnHit()) {
                 m_sentientCubes.erase(m_sentientCubes.begin() + i);
-                m_cubeMap.RemoveCube(selected);
+                m_cubeMap->RemoveCube(selected);
                 delete selected;
             }
             return;
@@ -367,7 +369,7 @@ void World::handleLeftClick(Cube* selected) {
     }
     //if the cube is not a sentient cube, delete it
     if (selected != nullptr) {
-        m_cubeMap.RemoveCube(selected);
+        m_cubeMap->RemoveCube(selected);
         delete selected;
     }
 }
@@ -398,5 +400,5 @@ void World::handleRightClick(Cube* selected, int hitSide) {
     Cube* newCube = new Cube(pos, sideLength);
     std::shared_ptr<Texture> heldTexture = m_player->GetHeldObjectTexture();
     newCube->SetTexture(heldTexture);
-    m_cubeMap.AddCube(newCube);
+    m_cubeMap->AddCube(newCube);
 }

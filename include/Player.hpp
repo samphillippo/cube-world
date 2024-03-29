@@ -22,15 +22,15 @@ public:
     ~Player();
     Camera* GetCamera() { return m_camera; }
     // Sets player initial state
-    void initialize(float x, float y, float z, float height, float sideLength);
+    void initialize(float x, float y, float z, float height, float sideLength, std::shared_ptr<CubeMap> cubeMap);
     // handles a player mouse movement
     void Look(float x, float y);
     // handles a player movement
-    void movePlayer(bool left, bool right, bool forward, bool backward, bool jump, CubeMap& cubeMap);
+    void movePlayer(bool left, bool right, bool forward, bool backward, bool jump);
     // swaps between flying and walking mode
     void swapPlayerMode();
     // get whatever object the player is looking at
-    Cube* Raycast(CubeMap& cubeMap, int& hitSide);
+    Cube* Raycast(int& hitSide);
     // get the player's held texture
     std::shared_ptr<Texture> GetHeldObjectTexture() { return m_heldObjectTexture; }
     // set the player's selected texture
@@ -46,7 +46,7 @@ private:
     //gets a list of all cube positions to check for collisions
     std::vector<glm::vec3> GetCollisionPositions();
     // adjusts player position based on collisions
-    void handleCollisions(CubeMap& cubeMap, bool jump);
+    void handleCollisions(bool jump);
     // Position
     glm::vec3 m_position;
     // Size
@@ -61,6 +61,8 @@ private:
     bool m_flyingMode;
     // Camera
     Camera* m_camera;
+    // Mapping of coordinates to all cubes in the scene
+    std::shared_ptr<CubeMap> m_cubeMap;
     // The object the player is looking at
     Cube* m_selected;
     // player selected cube texture

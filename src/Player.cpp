@@ -15,7 +15,7 @@ Player::~Player() {
     }
 }
 
-void Player::initialize(float x, float y, float z, float height, float sideLength) {
+void Player::initialize(float x, float y, float z, float height, float sideLength, std::shared_ptr<CubeMap> cubeMap) {
     // Set the position
     m_position = glm::vec3(x, y, z);
     // Set the size
@@ -28,6 +28,8 @@ void Player::initialize(float x, float y, float z, float height, float sideLengt
     // Create the camera
     m_camera = new Camera(x, y, z);
 
+    m_cubeMap = cubeMap;
+
     //creates the model for the object the player holds
     m_heldObject = new Cube(glm::vec3(0.0f), 1.0f);
     std::string vertexShader = m_heldShader.LoadShader("./shaders/cube_vert.glsl");
@@ -38,7 +40,7 @@ void Player::initialize(float x, float y, float z, float height, float sideLengt
     m_heldTransform.Scale(0.2f,0.2f,0.2f);
 }
 
-void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool jump, CubeMap& cubeMap) {
+void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool jump) {
     glm::vec3 direction = GetRayDirection();
     if (!m_flyingMode) {
         direction.y = 0.0f;
@@ -58,7 +60,7 @@ void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool
         m_position -= direction * m_movementSpeed;
     }
     if (!m_flyingMode) {
-        handleCollisions(cubeMap, jump);
+        handleCollisions(jump);
     }
     m_camera->SetCameraEyePosition(m_position.x, m_position.y, m_position.z);
 }
@@ -88,7 +90,7 @@ std::vector<glm::vec3> Player::GetCollisionPositions() {
 }
 
 //TODO: Redo this, we now know any cube found is a collision!
-void Player::handleCollisions(CubeMap& cubeMap, bool jump) {
+void Player::handleCollisions(bool jump) {
     float maxX = m_position.x + m_sideLength / 2;
     float minX = m_position.x - m_sideLength / 2;
     float maxZ = m_position.z + m_sideLength / 2;
@@ -99,7 +101,7 @@ void Player::handleCollisions(CubeMap& cubeMap, bool jump) {
     std::vector<glm::vec3> collisionPositions = GetCollisionPositions();
 
     for (int i = 0; i < collisionPositions.size(); i++) {
-        Cube* cube = cubeMap.GetCube(collisionPositions[i].x, collisionPositions[i].y, collisionPositions[i].z);
+        Cube* cube = m_cubeMap->GetCube(collisionPositions[i].x, collisionPositions[i].y, collisionPositions[i].z);
         if (cube == nullptr) {
             continue;
         }
@@ -163,7 +165,7 @@ void Player::handleCollisions(CubeMap& cubeMap, bool jump) {
 ////////////////////////////////////////////////
 
 //TODO: CubeMap improvements
-Cube* Player::Raycast(CubeMap& cubeMap, int& hitSide) {
+Cube* Player::Raycast(int& hitSide) {
     if (m_selected != nullptr) {
         m_selected->SetSelected(false);
     }
@@ -175,21 +177,21 @@ Cube* Player::Raycast(CubeMap& cubeMap, int& hitSide) {
     float minIntersectionDistance = FLT_MAX;
     int hitSideTemp;
     // Iterate over cubes and check for intersections
-    for (auto it = cubeMap.getMap().begin(); it != cubeMap.getMap().end(); it++) {
-        // Perform intersection test
-        float intersectionDistance;
-        Cube* cube = it->second;
-        if (cube == nullptr) {
-            continue;
-        }
-        if (cube->IntersectRayWithCube(m_position, rayDirection, hitSideTemp, intersectionDistance)) {
-            if (intersectionDistance < minIntersectionDistance) {
-                minIntersectionDistance = intersectionDistance;
-                m_selected = cube;
-                hitSide = hitSideTemp;
-            }
-        }
-    }
+    // for (auto it = m_cubeMap->getMap().begin(); it != m_cubeMap->getMap().end(); it++) {
+    //     // Perform intersection test
+    //     float intersectionDistance;
+    //     Cube* cube = it->second;
+    //     if (cube == nullptr) {
+    //         continue;
+    //     }
+    //     if (cube->IntersectRayWithCube(m_position, rayDirection, hitSideTemp, intersectionDistance)) {
+    //         if (intersectionDistance < minIntersectionDistance) {
+    //             minIntersectionDistance = intersectionDistance;
+    //             m_selected = cube;
+    //             hitSide = hitSideTemp;
+    //         }
+    //     }
+    // }
 
     if (m_selected != nullptr) {
         m_selected->SetSelected(true);

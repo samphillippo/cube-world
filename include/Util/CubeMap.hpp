@@ -28,8 +28,10 @@ struct Coordinates {
 
 struct CoordinatesHash {
     std::size_t operator()(const Coordinates& coord) const {
-        // Simple hash combining the hashes of individual coordinates
-        return std::hash<int>()(coord.x) ^ std::hash<int>()(coord.y) ^ std::hash<int>()(coord.z);
+        size_t h1 = std::hash<int>()(coord.x);
+        size_t h2 = std::hash<int>()(coord.y);
+        size_t h3 = std::hash<int>()(coord.z);
+        return (h1 ^ (h2 << 1)) ^ h3;
     }
 };
 
