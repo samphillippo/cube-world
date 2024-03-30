@@ -1,7 +1,8 @@
 #include "AI/PathPlacer.hpp"
 #include <iostream>
 
-PathPlacer::PathPlacer(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap) : SentientCube(center, sideLength, cubeMap) {
+PathPlacer::PathPlacer(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap,
+                        std::shared_ptr<Player> player) : SentientCube(center, sideLength, cubeMap, player) {
     m_health = 5;
     m_movementTicks = 30;
     m_minActionTicks = 40;

@@ -14,7 +14,7 @@
 class PathPlacer: public SentientCube {
 public:
     // Constructor
-    PathPlacer(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap);
+    PathPlacer(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMa, std::shared_ptr<Player> player);
     // Destructor
     ~PathPlacer() override;
     // Updates the sentient cube's state each tick

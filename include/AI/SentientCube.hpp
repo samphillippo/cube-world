@@ -10,13 +10,14 @@
 #define SENTIENTCUBE_HPP
 
 #include "Util/CubeMap.hpp"
+#include "Player.hpp"
 #include <cstdlib>
 #include <ctime>
 
 class SentientCube: public Cube {
 public:
     // Constructor
-    SentientCube(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap);
+    SentientCube(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player);
     // Destructor
     virtual ~SentientCube();
     // Updates the sentient cube's state each tick
@@ -44,14 +45,20 @@ protected:
     bool m_isMoving;
     // Current planned path
     std::vector<glm::vec3> m_path;
+    // Mapping of coordinates to all cubes in the scene
+    std::shared_ptr<CubeMap> m_cubeMap;
+    // A reference to the player
+    std::shared_ptr<Player> m_player;
+
+    //DAMAGE INFO
     // How many ticks of damage animation are left
     int m_damageTickCount;
     // Color adjustment for damage animation
     glm::vec3 m_damageColor;
     // Number of ticks for damage animation
     int m_damageMaxTicks;
-    // Mapping of coordinates to all cubes in the scene
-    std::shared_ptr<CubeMap> m_cubeMap;
+    // Distance from player needed to return to default state
+    float m_escapeDistance;
 };
 
 #endif

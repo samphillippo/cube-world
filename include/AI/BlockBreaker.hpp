@@ -14,7 +14,7 @@
 class BlockBreaker: public SentientCube {
 public:
     // Constructor
-    BlockBreaker(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap);
+    BlockBreaker(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player);
     // Destructor
     ~BlockBreaker() override;
     // Updates the sentient cube's state each tick

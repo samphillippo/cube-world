@@ -3,7 +3,10 @@
 
 int GroundGrower::m_numPathingGrowers = 0;
 
-GroundGrower::GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength) : SentientCube(center, sideLength, cubeMap) {
+GroundGrower::GroundGrower(glm::vec3 center, float sideLength,
+                            std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player,
+                            std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength) :
+                            SentientCube(center, sideLength, cubeMap, player) {
     m_health = 5;
     m_movementTicks = 5;
     m_minActionTicks = 40;

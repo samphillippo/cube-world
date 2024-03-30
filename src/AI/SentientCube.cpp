@@ -1,7 +1,8 @@
 #include "AI/SentientCube.hpp"
 
-SentientCube::SentientCube(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap) : Cube(center, sideLength) {
+SentientCube::SentientCube(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player) : Cube(center, sideLength) {
     m_cubeMap = cubeMap;
+    m_player = player;
     m_tickCount = 0;
     m_damageTickCount = 0;
     m_damageMaxTicks = 10;

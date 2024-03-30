@@ -4,7 +4,7 @@
 #include <set>
 #include <random>
 
-BlockBreaker::BlockBreaker(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap) : SentientCube(center, sideLength, cubeMap) {
+BlockBreaker::BlockBreaker(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player) : SentientCube(center, sideLength, cubeMap, player) {
     m_health = 5;
     m_movementTicks = 20;
     m_minActionTicks = 40;
