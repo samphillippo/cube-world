@@ -44,11 +44,3 @@ Cube* PathPlacer::OnTick() {
     }
     return nullptr;
 }
-
-bool PathPlacer::OnHit() {
-    if (SentientCube::OnHit()) {
-        return true;
-    }
-    //some behavior
-    return false;
-}

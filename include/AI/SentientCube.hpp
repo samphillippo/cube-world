@@ -23,7 +23,7 @@ public:
     // Updates the sentient cube's state each tick
     Cube* OnTick() override;
     // Called upon the sentient cube taking damage
-    bool OnHit() override;
+    bool OnHit(bool playerHit) override;
 protected:
     // Plans a path for the sentient cube
     virtual void PlanPath() = 0;
@@ -43,6 +43,8 @@ protected:
     int m_avgActionTicks;
     // Whether the sentient cube is moving
     bool m_isMoving;
+    // Whether the sentient cube is in its "combat" state
+    bool m_isInCombat;
     // Current planned path
     std::vector<glm::vec3> m_path;
     // Mapping of coordinates to all cubes in the scene

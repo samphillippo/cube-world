@@ -20,11 +20,14 @@ Cube* SentientCube::OnTick() {
     return nullptr;
 }
 
-bool SentientCube::OnHit() {
+bool SentientCube::OnHit(bool playerHit) {
     m_health--;
     m_damageTickCount = 10;
     if (m_health <= 0) {
         return true;
+    }
+    if (playerHit) {
+        m_isInCombat = true;
     }
     return false;
 }
@@ -39,7 +42,7 @@ Cube* SentientCube::Move() {
     //checks if next cube is destroyed
     Cube* nextCube = m_cubeMap->GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
     if (nextCube != nullptr) {
-        if (nextCube->OnHit()) {
+        if (nextCube->OnHit(false)) {
             m_cubeMap->RemoveCube(nextCube);
             deletedCube = nextCube;
             delete nextCube;

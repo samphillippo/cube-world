@@ -108,7 +108,7 @@ Cube* Cube::OnTick() {
     return nullptr;
 }
 
-bool Cube::OnHit() { //default case, cube should break in one hit
+bool Cube::OnHit(bool playerHit) { //default case, cube should break in one hit
     return true;
 }
 

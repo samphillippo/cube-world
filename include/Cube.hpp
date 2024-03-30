@@ -30,7 +30,7 @@ public:
     // Called on each tick to update the cube
     virtual Cube* OnTick();
     // Handles the cube being hit
-    virtual bool OnHit();
+    virtual bool OnHit(bool playerHit);
     // Checks a ray for intersection with a cube
     bool IntersectRayWithCube(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, int& hitSide, float &distance) const;
 protected:

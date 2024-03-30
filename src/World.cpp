@@ -359,7 +359,7 @@ bool World::handleInput(Cube* selected, int hitSide, bool& paused) {
 void World::handleLeftClick(Cube* selected) {
     //if the cube is not a sentient cube, delete it
     if (selected != nullptr) {
-        if (selected->OnHit()) {
+        if (selected->OnHit(true)) {
             m_cubeMap->RemoveCube(selected);
             delete selected;
         }

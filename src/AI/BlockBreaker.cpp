@@ -76,7 +76,7 @@ Cube* BlockBreaker::Move() {
     //if the next block is occupied
     Cube* nextCube = m_cubeMap->GetCube(m_path[0].x, m_path[0].y, m_path[0].z);
     if (nextCube != nullptr) {
-        if (nextCube->OnHit()) {
+        if (nextCube->OnHit(false)) {
             m_cubeMap->RemoveCube(nextCube);
             deletedCube = nextCube;
             delete nextCube;
@@ -110,12 +110,4 @@ Cube* BlockBreaker::OnTick() {
     }
     return nullptr;
 
-}
-
-bool BlockBreaker::OnHit() {
-    if (SentientCube::OnHit()) {
-        return true;
-    }
-    //some behavior
-    return false;
 }

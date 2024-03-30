@@ -20,8 +20,6 @@ public:
     ~BrickBuilder() override;
     // Updates the sentient cube's state each tick
     Cube* OnTick() override;
-    // Called upon the sentient cube taking damage
-    bool OnHit() override;
 private:
     // Plans a path for the sentient cube
     void PlanPath() override;

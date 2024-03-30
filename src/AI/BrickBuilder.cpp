@@ -94,11 +94,3 @@ Cube* BrickBuilder::OnTick() {
     }
     return nullptr;
 }
-
-bool BrickBuilder::OnHit() {
-    if (SentientCube::OnHit()) {
-        return true;
-    }
-    //some behavior
-    return false;
-}

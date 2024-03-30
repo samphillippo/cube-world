@@ -7,7 +7,7 @@ GroundGrower::GroundGrower(glm::vec3 center, float sideLength,
                             std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player,
                             std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength) :
                             SentientCube(center, sideLength, cubeMap, player) {
-    m_health = 5;
+    m_health = 15;
     m_movementTicks = 5;
     m_minActionTicks = 40;
     m_avgActionTicks = 1;
@@ -78,13 +78,14 @@ Cube* GroundGrower::OnTick() {
     return nullptr;
 }
 
-bool GroundGrower::OnHit() {
-    if (SentientCube::OnHit()) {
+bool GroundGrower::OnHit(bool playerHit) {
+    if (SentientCube::OnHit(playerHit)) {
         if (m_path.size() != 0) {
+            //handles case where cube is destroyed while pathing
             DecrementPathingGrowers();
         }
         return true;
     }
-    //some behavior
+    //NOTE: GroundGrowers currently ignore player attacks
     return false;
 }

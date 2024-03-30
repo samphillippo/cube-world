@@ -21,7 +21,7 @@ public:
     // Updates the sentient cube's state each tick
     Cube* OnTick() override;
     // Called upon the sentient cube taking damage
-    bool OnHit() override;
+    bool OnHit(bool playerHit) override;
     // Increments the number of pathing ground growers
     static void IncrementPathingGrowers() { m_numPathingGrowers++; }
     // Decrements the number of pathing ground growers
