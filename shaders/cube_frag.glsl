@@ -69,7 +69,7 @@ void main()
         FragColor = vec4(diffuseColor * Lighting,1.0);
     }else{
         // Additionally color the back side the same color
-         FragColor = vec4(diffuseColor * Lighting,1.0);
+        FragColor = vec4(diffuseColor * Lighting,1.0);
     }
 }
 // ==================================================================
