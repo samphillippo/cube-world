@@ -5,8 +5,7 @@ SentientCube::SentientCube(glm::vec3 center, float sideLength, std::shared_ptr<C
     m_player = player;
     m_tickCount = 0;
     m_damageTickCount = 0;
-    m_damageMaxTicks = 10;
-    m_damageColor = glm::vec3(0.8f, 0.0f, 0.0f);
+    m_escapeDistance = 20.0f; //how many blocks away is escape
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 }
 
@@ -17,6 +16,13 @@ Cube* SentientCube::OnTick() {
     m_tickCount++;
     m_damageTickCount = std::max(0, m_damageTickCount - 1);
     this->m_colorAdjustment = m_damageColor * (m_damageTickCount / (float)m_damageMaxTicks);
+
+    if (m_isInCombat) {
+        if (glm::distance(m_center, m_player->GetPosition()) >= m_escapeDistance) {
+            m_isInCombat = false;
+        }
+    }
+
     return nullptr;
 }
 

@@ -7,6 +7,7 @@ PathPlacer::PathPlacer(glm::vec3 center, float sideLength, std::shared_ptr<CubeM
     m_movementTicks = 30;
     m_minActionTicks = 40;
     m_avgActionTicks = 40;
+    m_combatMovementTicks = 10; //Triple speed while in combat
     m_maxPathRange = 8;
     m_minPathRange = 0;
 }

@@ -21,6 +21,8 @@ public:
     // Destructor
     ~Player();
     Camera* GetCamera() { return m_camera; }
+    // Gets the player's position
+    glm::vec3 GetPosition() { return m_position; }
     // Sets player initial state
     void initialize(float x, float y, float z, float height, float sideLength, std::shared_ptr<CubeMap> cubeMap);
     // handles a player mouse movement

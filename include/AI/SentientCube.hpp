@@ -56,11 +56,13 @@ protected:
     // How many ticks of damage animation are left
     int m_damageTickCount;
     // Color adjustment for damage animation
-    glm::vec3 m_damageColor;
+    const glm::vec3 m_damageColor = glm::vec3(0.8f, 0.0f, 0.0f);
     // Number of ticks for damage animation
-    int m_damageMaxTicks;
+    const int m_damageMaxTicks = 10;
     // Distance from player needed to return to default state
     float m_escapeDistance;
+    // How many ticks between movements while in combat
+    int m_combatMovementTicks;
 };
 
 #endif
