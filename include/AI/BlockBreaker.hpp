@@ -22,6 +22,8 @@ private:
     void PlanPath() override;
     // overrides the super function to delete instead of add blocks
     Cube* Move() override;
+    // Makes a move while in combat
+    Cube* CombatMove() override;
 };
 
 #endif

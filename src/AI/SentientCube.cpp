@@ -21,6 +21,12 @@ Cube* SentientCube::OnTick() {
         if (glm::distance(m_center, m_player->GetPosition()) >= m_escapeDistance) {
             m_isInCombat = false;
         }
+        else {
+            if (m_tickCount % m_combatMovementTicks == 0) {
+                m_tickCount = 0;
+                return CombatMove();
+            }
+        }
     }
     if (m_isMoving) { //only move on move ticks
         if (m_tickCount % m_movementTicks == 0) {

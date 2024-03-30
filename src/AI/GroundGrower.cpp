@@ -49,3 +49,7 @@ void GroundGrower::PlanPath() {
     m_pathLength += 2;
     m_tickCount = m_movementTicks - 1;
 }
+
+Cube* GroundGrower::CombatMove() {
+    return Move();
+}

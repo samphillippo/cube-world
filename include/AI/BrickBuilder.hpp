@@ -21,6 +21,8 @@ public:
 private:
     // Plans a path for the sentient cube
     void PlanPath() override;
+    // Makes a move while in combat
+    Cube* CombatMove() override;
     //max range of path placement
     int m_maxPathRange;
     //min range of path placement

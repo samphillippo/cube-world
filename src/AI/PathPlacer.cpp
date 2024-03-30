@@ -27,3 +27,7 @@ void PathPlacer::PlanPath() {
     m_path = PathToTarget(GetRandomVector());
     m_tickCount = m_movementTicks - 1;
 }
+
+Cube* PathPlacer::CombatMove() {
+    return Move();
+}

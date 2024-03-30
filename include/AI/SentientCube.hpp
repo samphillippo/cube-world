@@ -29,6 +29,8 @@ protected:
     virtual void PlanPath() = 0;
     // Moves the sentient cube along its path
     virtual Cube* Move();
+    // Makes a move while in combat
+    virtual Cube* CombatMove() = 0;
     // Function that takes in a vector and produces a path that follows it
     std::vector<glm::vec3> PathToTarget(glm::vec3 target);
     // Counts number of ticks since last action

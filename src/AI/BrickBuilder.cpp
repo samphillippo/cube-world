@@ -76,3 +76,7 @@ void BrickBuilder::PlanPath() {
     m_buildUpwards = !m_buildUpwards;
     m_tickCount = m_movementTicks - 1;
 }
+
+Cube* BrickBuilder::CombatMove() {
+    return Move();
+}

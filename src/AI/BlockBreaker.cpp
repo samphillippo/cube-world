@@ -92,3 +92,7 @@ Cube* BlockBreaker::Move() {
     m_path.erase(m_path.begin());
     return deletedCube;
 }
+
+Cube* BlockBreaker::CombatMove() {
+    return Move();
+}

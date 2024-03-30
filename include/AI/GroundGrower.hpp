@@ -21,6 +21,8 @@ public:
 private:
     // Plans a path for the sentient cube
     void PlanPath() override;
+    // Makes a move while in combat
+    Cube* CombatMove() override;
     // The noise map used to generate the ground
     std::shared_ptr<PerlinNoise> m_noiseMap;
     // The direction to build a strip of ground

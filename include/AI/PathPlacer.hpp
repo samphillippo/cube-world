@@ -20,6 +20,8 @@ public:
 private:
     // Plans a path for the sentient cube
     void PlanPath() override;
+    // Makes a move while in combat
+    Cube* CombatMove() override;
     // Gets a random vector in range
     glm::vec3 GetRandomVector();
     //max range of path placement
