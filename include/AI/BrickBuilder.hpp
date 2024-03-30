@@ -18,8 +18,6 @@ public:
     BrickBuilder(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player, std::shared_ptr<PerlinNoise> noiseMap);
     // Destructor
     ~BrickBuilder() override;
-    // Updates the sentient cube's state each tick
-    Cube* OnTick() override;
 private:
     // Plans a path for the sentient cube
     void PlanPath() override;

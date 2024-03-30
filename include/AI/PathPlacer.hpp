@@ -17,8 +17,6 @@ public:
     PathPlacer(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMa, std::shared_ptr<Player> player);
     // Destructor
     ~PathPlacer() override;
-    // Updates the sentient cube's state each tick
-    Cube* OnTick() override;
 private:
     // Plans a path for the sentient cube
     void PlanPath() override;

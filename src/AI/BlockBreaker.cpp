@@ -92,22 +92,3 @@ Cube* BlockBreaker::Move() {
     m_path.erase(m_path.begin());
     return deletedCube;
 }
-
-Cube* BlockBreaker::OnTick() {
-    SentientCube::OnTick();
-    if (m_isMoving) { //only move on move ticks
-        if (m_tickCount % m_movementTicks == 0) {
-            m_tickCount = 0;
-            return Move();
-        }
-    }
-    else if (m_tickCount >= m_minActionTicks) {
-        if (rand() % m_avgActionTicks == 0) {
-            m_isMoving = true;
-            PlanPath();
-            m_tickCount = 0;
-        }
-    }
-    return nullptr;
-
-}
