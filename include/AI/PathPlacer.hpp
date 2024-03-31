@@ -28,6 +28,8 @@ private:
     int m_maxPathRange;
     //min range of path placement
     int m_minPathRange;
+    //number of movements made on combat path
+    int m_combatMovements;
 };
 
 #endif

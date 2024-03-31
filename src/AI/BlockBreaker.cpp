@@ -9,6 +9,7 @@ BlockBreaker::BlockBreaker(glm::vec3 center, float sideLength, std::shared_ptr<C
     m_movementTicks = 20;
     m_minActionTicks = 40;
     m_avgActionTicks = 1;
+    m_combatMovementTicks = 10;
 }
 
 BlockBreaker::~BlockBreaker() {
@@ -93,6 +94,30 @@ Cube* BlockBreaker::Move() {
     return deletedCube;
 }
 
+//pathfinds to the block below the player, then moves out the way
 Cube* BlockBreaker::CombatMove() {
+    m_path.clear();
+    glm::vec3 pathVector = m_player->GetPosition() - m_center;
+    pathVector.y -= m_player->GetHeight();
+    //should always get to the players y-level first
+    if (pathVector.y < 0.5) {
+        glm::vec3 nextPosition = m_center;
+        nextPosition.y -= 1;
+        m_path.push_back(nextPosition);
+    } else if (pathVector.y > 1.5) {
+        glm::vec3 nextPosition = m_center;
+        nextPosition.y += 1;
+        m_path.push_back(nextPosition);
+
+    } else {
+        m_path = PathToTarget(pathVector);
+    }
+
+    if (m_path.size() == 0) {// if sitting directly below player, move out the way
+        std::vector<glm::vec3> directions = { glm::vec3(1, 0, 0), glm::vec3(-1, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, -1) };
+        glm::vec3 direction = directions[rand() % 4];
+        m_path.push_back(m_center + direction);
+    }
+
     return Move();
 }

@@ -6,6 +6,7 @@ BrickBuilder::BrickBuilder(glm::vec3 center, float sideLength, std::shared_ptr<C
     m_movementTicks = 10;
     m_minActionTicks = 40;
     m_avgActionTicks = 40;
+    m_combatMovementTicks = 10;
     m_maxPathRange = 8;
     m_minPathRange = 1;
     m_prevOppositeDirection = glm::vec3(0, 0, 0);
@@ -78,5 +79,9 @@ void BrickBuilder::PlanPath() {
 }
 
 Cube* BrickBuilder::CombatMove() {
+    m_path.clear();
+    glm::vec3 pathVector = m_center - m_player->GetPosition();
+    pathVector.y = 0;
+    m_path = PathToTarget(pathVector);
     return Move();
 }

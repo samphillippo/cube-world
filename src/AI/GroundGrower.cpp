@@ -51,5 +51,11 @@ void GroundGrower::PlanPath() {
 }
 
 Cube* GroundGrower::CombatMove() {
-    return Move();
+    return Move(); //default, this should never be called
+}
+
+bool GroundGrower::OnHit(bool playerHit) {
+    bool hitStatus = SentientCube::OnHit(playerHit);
+    m_isInCombat = false; //overrides: GroundGrower should never be in combat
+    return hitStatus;
 }

@@ -10,6 +10,7 @@ PathPlacer::PathPlacer(glm::vec3 center, float sideLength, std::shared_ptr<CubeM
     m_combatMovementTicks = 10; //Triple speed while in combat
     m_maxPathRange = 8;
     m_minPathRange = 0;
+    m_combatMovements = 0;
 }
 
 PathPlacer::~PathPlacer() {
@@ -29,5 +30,14 @@ void PathPlacer::PlanPath() {
 }
 
 Cube* PathPlacer::CombatMove() {
+    if (m_combatMovements < 3) { //Move 3 times per planned path
+        m_combatMovements++;
+    } else {
+        m_combatMovements = 0;
+        m_path.clear();
+        glm::vec3 pathVector = m_center - m_player->GetPosition();
+        pathVector *= 10;
+        m_path = PathToTarget(pathVector);
+    }
     return Move();
 }

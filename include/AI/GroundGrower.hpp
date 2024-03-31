@@ -18,6 +18,8 @@ public:
     GroundGrower(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player, std::shared_ptr<PerlinNoise> noiseMap, glm::vec3 buildDir, int initialPathLength);
     // Destructor
     ~GroundGrower() override;
+    // overrides default onHit
+    bool OnHit(bool playerHit) override;
 private:
     // Plans a path for the sentient cube
     void PlanPath() override;

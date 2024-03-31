@@ -1,4 +1,5 @@
 #include "AI/SentientCube.hpp"
+#include <iostream>
 
 SentientCube::SentientCube(glm::vec3 center, float sideLength, std::shared_ptr<CubeMap> cubeMap, std::shared_ptr<Player> player) : Cube(center, sideLength) {
     m_cubeMap = cubeMap;
@@ -18,6 +19,7 @@ Cube* SentientCube::OnTick() {
     this->m_colorAdjustment = m_damageColor * (m_damageTickCount / (float)m_damageMaxTicks);
 
     if (m_isInCombat) {
+        m_isMoving = false;
         if (glm::distance(m_center, m_player->GetPosition()) >= m_escapeDistance) {
             m_isInCombat = false;
         }

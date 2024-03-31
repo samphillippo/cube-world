@@ -23,6 +23,8 @@ public:
     Camera* GetCamera() { return m_camera; }
     // Gets the player's position
     glm::vec3 GetPosition() { return m_position; }
+    // Gets the player's height
+    float GetHeight() { return m_height; }
     // Sets player initial state
     void initialize(float x, float y, float z, float height, float sideLength, std::shared_ptr<CubeMap> cubeMap);
     // handles a player mouse movement
