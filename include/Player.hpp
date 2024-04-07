@@ -59,8 +59,8 @@ private:
     //Speed
     float m_movementSpeed{0.25f};
     float m_verticalVelocity;
-    float m_jumpSpeed{0.15f};
-    float m_gravity{0.01f};
+    float m_jumpSpeed{0.26f};
+    float m_gravity{0.027f};
     // Mode
     bool m_flyingMode;
     // Camera

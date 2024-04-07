@@ -155,7 +155,7 @@ void Player::handleCollisions(bool jump) {
         }
     } else {
         m_verticalVelocity -= m_gravity;
-        m_verticalVelocity = std::max(m_verticalVelocity, -1.5f * m_jumpSpeed);
+        m_verticalVelocity = std::max(m_verticalVelocity, -1.0f * m_jumpSpeed);
         m_position.y += m_verticalVelocity;
     }
 }
