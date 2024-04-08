@@ -2,7 +2,7 @@
 
 This is an OpenGL learning project in which I have created an interactive voxel-based environment in the vein of Minecraft. The program utilizes the Phong lighting model for an immersive day-night cycle, and allows for player interaction with the world through keyboard and mouse.
 
-CubeWorld introduces the concept of "sentient cubes," which appear similar to the building blocks of the environment, but each have unique behaviors based on their texture:
+CubeWorld introduces the concept of "sentient cubes," which appear similar to the building blocks of the environment, but each have unique behaviors based on their texture. These blocks currently always spawn in a default 'test' state, but I have plans for interactive/automated spawning.
 
 ```
 Path Placer (stone)   - Randomly builds paths in a roaming pattern. Will path away from the player if attacked.
@@ -15,10 +15,10 @@ BlockBreaker (void)   - Will remove the block nearest to it, or path to a block.
 
 ```
 
-## Setup:
+## Setup
 
 
-### Install SDL2:
+### Install SDL2
 
 I used the following tutorial: https://www.youtube.com/watch?v=V6ACATpl2LQ&list=PLvv0ScY6vfd-p1gSnbQhY7vMe2rng0IL0&index=5&ab_channel=MikeShah
 
@@ -55,7 +55,26 @@ https://www.youtube.com/watch?v=jmFsiIWcYa8
 
 ## Screenshots
 
-![Daytime](./common/screenshots/daytime.png)
+![Sentient Cubes](./common/screenshots/sentient-example.png)
 ![Smileyface](./common/screenshots/smileyface.png)
 ![Nighttime](./common/screenshots/nighttime.png)
 ![Sunset](./common/screenshots/sunset.png)
+
+
+## Future work
+
+- Chunking
+
+- Saving/loading
+
+- Render distance
+
+- Procedural generation
+
+- Cleaner and more responsive player controls
+
+- Various performance improvements (raycasting, frustum culling)
+
+- Various graphical improvements (Mipmapping, Texture overhaul)
+
+- Smarter/more interesting sentient cubes
