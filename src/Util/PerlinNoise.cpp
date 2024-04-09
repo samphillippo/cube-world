@@ -32,12 +32,16 @@ void PerlinNoise::LoadImage(std::string filepath) {
             m_noiseMapPtr[i][j] = image.GetPixelR(i, j);
         }
     }
+
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    m_xOffset = (std::rand() % 200) - 100;
+    m_yOffset = (std::rand() % 200) - 100;
 }
 
 int PerlinNoise::GetNoiseValue(int x, int y) {
     //TODO: will get sharp edges at bounds of image
-    x = (x + m_imageCenterX) % m_imageWidth;
-    y = (y + m_imageCenterY) % m_imageHeight;
+    x = (x + m_imageCenterX + m_xOffset) % m_imageWidth;
+    y = (y + m_imageCenterY + m_yOffset) % m_imageHeight;
     unsigned int rawNoiseValue = m_noiseMapPtr[x][y];
     return (int)(rawNoiseValue / 256.0f * (m_maxHeight - m_minHeight) + m_minHeight);
 }

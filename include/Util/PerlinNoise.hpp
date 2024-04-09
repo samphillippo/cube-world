@@ -36,6 +36,9 @@ private:
     //min and max height to return
     int m_minHeight;
     int m_maxHeight;
+    //initial random offsets
+    int m_xOffset;
+    int m_yOffset;
 };
 
 #endif

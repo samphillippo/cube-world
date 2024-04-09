@@ -122,15 +122,15 @@ void World::LoadWorld(std::string filename) {
 
         //creates our cube map
         m_cubeMap = std::make_shared<CubeMap>();
-
-        //creates our player
-        m_player = std::make_shared<Player>();
-        m_player->initialize(0.0f,3.0f,0.0f,1.8f,0.8f, m_cubeMap);
-        m_player->SetHeldObjectTexture(m_textures[1]);
-
         m_root = std::make_shared<SceneNode>(nullptr, "", "");
         m_cubeMap->setRoot(m_root);
         m_noiseMap = std::make_shared<PerlinNoise>();
+
+        //creates our player
+        m_player = std::make_shared<Player>();
+        float playerY = m_noiseMap->GetNoiseValue(0, 0) + 4;
+        m_player->initialize(0.0f,playerY,0.0f,1.8f,0.8f, m_cubeMap);
+        m_player->SetHeldObjectTexture(m_textures[1]);
 
         //--------------------ADDS SENTIENT CUBES--------------------
         glm::vec3 pathPlacerPos = glm::vec3(4,0,4);
