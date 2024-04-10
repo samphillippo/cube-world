@@ -49,9 +49,9 @@ ESC         - quit game
 ```
 
 
-## Alpha Demo (outdated)
+## Demo Playlist:
 
-https://www.youtube.com/watch?v=jmFsiIWcYa8
+https://youtube.com/playlist?list=PLhvTmFRRI_Ii24fXja2YjZkw4432t0bN8&si=t63feZk9nXDOjhjI
 
 ## Screenshots
 
