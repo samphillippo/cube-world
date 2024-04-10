@@ -10,7 +10,7 @@
 #define SKYBOX_HPP
 
 #include <vector>
-#include "Shader.hpp"
+#include "Rendering/Shader.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Camera.hpp"
 

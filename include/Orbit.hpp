@@ -11,7 +11,7 @@
 
 #include "Object.hpp"
 #include "Transform.hpp"
-#include "Shader.hpp"
+#include "Rendering/Shader.hpp"
 #include "Camera.hpp"
 
 class Orbit {
@@ -21,7 +21,7 @@ public:
     // Destructor
     ~Orbit();
     // Update the sun and moon
-    void Update(glm::mat4 projectionMatrix, Camera* camera);
+    void Update(glm::mat4 projectionMatrix, Camera* camera, bool paused);
     // Render the sun or moon
     void Render();
     // get current tick value

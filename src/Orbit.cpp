@@ -1,5 +1,6 @@
 #include "Orbit.hpp"
 #include "Sphere.hpp"
+#include <iostream>
 
 Orbit::Orbit() {
     m_sunObject = new Sphere();
@@ -26,7 +27,7 @@ Orbit::~Orbit() {
     }
 }
 
-void Orbit::Update(glm::mat4 projectionMatrix, Camera* camera) {
+void Orbit::Update(glm::mat4 projectionMatrix, Camera* camera, bool paused) {
     glm::mat4 view = glm::mat4(glm::mat3(camera->GetWorldToViewmatrix()));
     if (m_ticks < M_PI / 2 || m_ticks > M_PI * 3 / 2) { //day
         m_sunTransform.LoadIdentity();
@@ -41,7 +42,9 @@ void Orbit::Update(glm::mat4 projectionMatrix, Camera* camera) {
 
         glm::vec3 skyColor = GetSkyColor();
         m_sunShader.SetUniform3f("orbitColor", skyColor.x, skyColor.y, skyColor.z);
-        m_ticks += m_orbitSpeed;
+        if (!paused) {
+            m_ticks += m_orbitSpeed;
+        }
     } else { //night
         //updates the position of the moon
         m_moonTransform.LoadIdentity();
@@ -55,7 +58,9 @@ void Orbit::Update(glm::mat4 projectionMatrix, Camera* camera) {
         m_moonShader.SetUniformMatrix4fv("projection", &projectionMatrix[0][0]);
 
         m_moonShader.SetUniform3f("orbitColor", 0.0f, 0.0f, 0.0f);
-        m_ticks += m_orbitSpeed * 2; //night moves twice as fast
+        if (!paused) {
+            m_ticks += m_orbitSpeed * 2; //night moves twice as fast
+        }
     }
     if (m_ticks > 2.0f * M_PI) {
         m_ticks = 0.0f;
@@ -82,20 +87,22 @@ float Orbit::GetOrbitPosition() {
 }
 
 glm::vec3 Orbit::GetSkyColor() {
-    float transition = 0.3f;
+    float transition = 0.25f;
+    glm::vec3 nightBaseColor = glm::vec3(0.4f, 0.4f, 0.4f);
+    glm::vec3 dayBaseColor = glm::vec3(1.0f, 0.4f, 0.2f);
+    glm::vec3 transitionDiff = dayBaseColor - nightBaseColor;
     float pos = GetOrbitPosition();
     if (m_ticks > M_PI / 2 && m_ticks < M_PI * 3 / 2) {
+        //transition period
         if (m_ticks < M_PI / 2 + transition || m_ticks > M_PI * 3 /  - transition) {
-            float r = 0.2f + 0.8f * (1.0f - abs(pos) / transition);
-            float g = 0.2f + 0.2f * (1.0f - abs(pos) / transition);
-            float b = 0.25f - 0.05f * (1.0f - abs(pos) / transition);
-            return glm::vec3(r, g, b);
-        } else {
-            return glm::vec3(0.2f, 0.2f, 0.25f);
+            nightBaseColor.r += transitionDiff.r * (1.0f - abs(pos) / transition);
+            nightBaseColor.g += transitionDiff.g * (1.0f - abs(pos) / transition);
+            nightBaseColor.b += transitionDiff.b * (1.0f - abs(pos) / transition);
         }
+        return nightBaseColor;
     }
-    float r = 1.0f;
-    float g = std::min(1.0f, 0.4f + 1.6f * pos);
-    float b = std::min(1.0f, 0.2f + 2.0f * pos);
-    return glm::vec3(r, g, b);
+    //day
+    dayBaseColor.g = std::min(1.0f, 0.4f + 1.6f * pos);
+    dayBaseColor.b = std::min(1.0f, 0.2f + 2.0f * pos);
+    return dayBaseColor;
 }

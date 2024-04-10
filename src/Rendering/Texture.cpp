@@ -5,7 +5,7 @@
 #endif
 
 
-#include "Texture.hpp"
+#include "Rendering/Texture.hpp"
 
 #include <stdio.h>
 #include <string.h>

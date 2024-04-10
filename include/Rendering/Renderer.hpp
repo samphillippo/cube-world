@@ -20,9 +20,9 @@
 
 #include <vector>
 
-#include "SceneNode.hpp"
+#include "Rendering/SceneNode.hpp"
 #include "Camera.hpp"
-#include "SkyBox.hpp"
+#include "Rendering/SkyBox.hpp"
 #include "Orbit.hpp"
 #include "Player.hpp"
 
@@ -34,18 +34,18 @@ public:
     // Destructor
     ~Renderer();
     // Update the scene
-    void Update(Object* selected);
+    void Update(bool paused);
     // Render the scene
     void Render();
     // Sets the root of our renderer to some node to
     // draw an entire scene graph
-    void setRoot(SceneNode* startingNode);
+    void setRoot(std::shared_ptr<SceneNode> startingNode) { m_root = startingNode; }
     // resets orbit to 0 ticks
     void resetOrbit() { m_orbit.Reset(); }
 
 protected:
     // Root scene node
-    SceneNode* m_root;
+    std::shared_ptr<SceneNode> m_root;
     // Store the projection matrix for our camera.
     glm::mat4 m_projectionMatrix;
     // The Player

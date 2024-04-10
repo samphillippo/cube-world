@@ -9,8 +9,8 @@
 #ifndef CUBE_HPP
 #define CUBE_HPP
 
-#include "Geometry.hpp"
-#include "VertexBufferLayout.hpp"
+#include "Rendering/Geometry.hpp"
+#include "Rendering/VertexBufferLayout.hpp"
 #include "Object.hpp"
 
 class Cube: public Object {
@@ -19,19 +19,26 @@ public:
     Cube(glm::vec3 center, float sideLength);
     // Destructor
     ~Cube();
-    // Initializes position and size of cube
-    void Init();
+    // Clears the cube data
+    void Clear();
+    // Updates position and size of cube
+    void Update();
     // Get the center of the cube
     glm::vec3 GetCenter();
     // Get the side length of the cube
     float GetSideLength();
+    // Called on each tick to update the cube
+    virtual Cube* OnTick();
+    // Handles the cube being hit
+    virtual bool OnHit(bool playerHit);
     // Checks a ray for intersection with a cube
     bool IntersectRayWithCube(const glm::vec3& rayOrigin, const glm::vec3& rayDirection, int& hitSide, float &distance) const;
-private:
+protected:
     // Store the objects position
     glm::vec3 m_center;
     // Store the objects side length
     float m_sideLength;
+private:
 };
 
 #endif

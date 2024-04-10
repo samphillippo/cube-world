@@ -1,9 +1,11 @@
 #include "Object.hpp"
 #include "Camera.hpp"
-#include "Error.hpp"
+#include "Util/Error.hpp"
 
 
 Object::Object(){
+        m_selected = false;
+        m_colorAdjustment = glm::vec3(0.0f,0.0f,0.0f);
 }
 
 Object::~Object(){

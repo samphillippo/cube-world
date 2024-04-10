@@ -4,8 +4,9 @@ import platform
 
 # (1)==================== COMMON CONFIGURATION OPTIONS ======================= #
 COMPILER="g++ -std=c++17"   # The compiler we want to use
+#NOTE: use -g flag if you want to debug
                                 #(You may try g++ if you have trouble)
-SOURCE="./src/*.cpp"    # Where the source code lives
+SOURCE="./src/**/*.cpp ./src/*.cpp"    # Where the source code lives
 EXECUTABLE="project"        # Name of the final executable
 # ======================= COMMON CONFIGURATION OPTIONS ======================= #
 

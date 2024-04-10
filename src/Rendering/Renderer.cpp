@@ -1,4 +1,4 @@
-#include "Renderer.hpp"
+#include "Rendering/Renderer.hpp"
 #include <iostream>
 
 // Sets the height and width of our renderer
@@ -22,14 +22,14 @@ Renderer::~Renderer(){
 }
 
 //update sun color and skybox color based on position in the sky
-void Renderer::Update(Object* selected){
+void Renderer::Update(bool paused){
     m_projectionMatrix = glm::perspective(glm::radians(45.0f),((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
 
     Camera* camera = m_player->GetCamera();
 
     glm::vec3 skyColor = m_orbit.GetSkyColor();
     m_skybox.Update(m_projectionMatrix, camera, skyColor);
-    m_orbit.Update(m_projectionMatrix, camera);
+    m_orbit.Update(m_projectionMatrix, camera, paused);
 
     //determines the position of the current lighting object
     float orbitTicks = m_orbit.GetTicks();
@@ -42,7 +42,7 @@ void Renderer::Update(Object* selected){
 
     // Perform the update
     if(m_root!=nullptr){
-        m_root->Update(m_projectionMatrix, camera, skyColor, orbitPos, selected);
+        m_root->Update(m_projectionMatrix, camera, skyColor, orbitPos);
     }
 }
 
@@ -69,10 +69,4 @@ void Renderer::Render(){
        m_root->Draw();
     }
     m_skybox.Render();
-}
-
-// Determines what the root is of the renderer, so the
-// scene can be drawn.
-void Renderer::setRoot(SceneNode* startingNode){
-    m_root = startingNode;
 }

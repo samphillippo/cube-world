@@ -15,7 +15,7 @@ Player::~Player() {
     }
 }
 
-void Player::initialize(float x, float y, float z, float height, float sideLength) {
+void Player::initialize(float x, float y, float z, float height, float sideLength, std::shared_ptr<CubeMap> cubeMap) {
     // Set the position
     m_position = glm::vec3(x, y, z);
     // Set the size
@@ -28,6 +28,8 @@ void Player::initialize(float x, float y, float z, float height, float sideLengt
     // Create the camera
     m_camera = new Camera(x, y, z);
 
+    m_cubeMap = cubeMap;
+
     //creates the model for the object the player holds
     m_heldObject = new Cube(glm::vec3(0.0f), 1.0f);
     std::string vertexShader = m_heldShader.LoadShader("./shaders/cube_vert.glsl");
@@ -38,7 +40,7 @@ void Player::initialize(float x, float y, float z, float height, float sideLengt
     m_heldTransform.Scale(0.2f,0.2f,0.2f);
 }
 
-void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool jump, std::vector<Cube*> cubes) {
+void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool jump) {
     glm::vec3 direction = GetRayDirection();
     if (!m_flyingMode) {
         direction.y = 0.0f;
@@ -58,7 +60,7 @@ void Player::movePlayer(bool left, bool right, bool forward, bool backward, bool
         m_position -= direction * m_movementSpeed;
     }
     if (!m_flyingMode) {
-        handleCollisions(cubes, jump);
+        handleCollisions(jump);
     }
     m_camera->SetCameraEyePosition(m_position.x, m_position.y, m_position.z);
 }
@@ -72,7 +74,23 @@ void Player::swapPlayerMode() {
     m_verticalVelocity = 0.0f;
 }
 
-void Player::handleCollisions(std::vector<Cube*> cubes, bool jump) {
+std::vector<glm::vec3> Player::GetCollisionPositions() {
+    glm::vec3 playerPositionFloor = glm::vec3(std::floor(m_position.x - m_sideLength / 2), std::floor(m_position.y - m_height), std::floor(m_position.z - m_sideLength / 2));
+    glm::vec3 playerPositionCeil = glm::vec3(std::ceil(m_position.x + m_sideLength / 2), std::ceil(m_position.y), std::ceil(m_position.z + m_sideLength / 2));
+
+    std::vector<glm::vec3> collisionPositions;
+    for (int i = playerPositionFloor.x; i <= playerPositionCeil.x; i++) {
+        for (int j = playerPositionFloor.y; j <= playerPositionCeil.y; j++) {
+            for (int k = playerPositionFloor.z; k <= playerPositionCeil.z; k++) {
+                collisionPositions.push_back(glm::vec3(i, j, k));
+            }
+        }
+    }
+    return collisionPositions;
+}
+
+//TODO: Redo this, we now know any cube found is a collision!
+void Player::handleCollisions(bool jump) {
     float maxX = m_position.x + m_sideLength / 2;
     float minX = m_position.x - m_sideLength / 2;
     float maxZ = m_position.z + m_sideLength / 2;
@@ -80,9 +98,15 @@ void Player::handleCollisions(std::vector<Cube*> cubes, bool jump) {
     float maxY = m_position.y;
     float minY = m_position.y - m_height;
     bool standingOnGround = false;
-    for (int i = 0; i < cubes.size(); i++) {
-        glm::vec3 cubeCenter = cubes[i]->GetCenter();
-        float cubeSideLength = cubes[i]->GetSideLength();
+    std::vector<glm::vec3> collisionPositions = GetCollisionPositions();
+
+    for (int i = 0; i < collisionPositions.size(); i++) {
+        Cube* cube = m_cubeMap->GetCube(collisionPositions[i].x, collisionPositions[i].y, collisionPositions[i].z);
+        if (cube == nullptr) {
+            continue;
+        }
+        glm::vec3 cubeCenter = cube->GetCenter();
+        float cubeSideLength = cube->GetSideLength();
         float cubeMaxX = cubeCenter.x + cubeSideLength / 2;
         float cubeMinX = cubeCenter.x - cubeSideLength / 2;
         float cubeMaxZ = cubeCenter.z + cubeSideLength / 2;
@@ -131,7 +155,7 @@ void Player::handleCollisions(std::vector<Cube*> cubes, bool jump) {
         }
     } else {
         m_verticalVelocity -= m_gravity;
-        m_verticalVelocity = std::max(m_verticalVelocity, -1.5f * m_jumpSpeed);
+        m_verticalVelocity = std::max(m_verticalVelocity, -1.0f * m_jumpSpeed);
         m_position.y += m_verticalVelocity;
     }
 }
@@ -139,28 +163,40 @@ void Player::handleCollisions(std::vector<Cube*> cubes, bool jump) {
 ////////////////////////////////////////////////
 // RAYCASTING
 ////////////////////////////////////////////////
-Cube* Player::Raycast(const std::vector<Cube*>& cubes, int& hitSide) {
+
+//TODO: CubeMap improvements
+Cube* Player::Raycast(int& hitSide) {
+    if (m_selected != nullptr) {
+        m_selected->SetSelected(false);
+    }
+    m_selected = nullptr;
+
     // Get the ray direction from the center of the screen
     glm::vec3 rayDirection = GetRayDirection();
 
     float minIntersectionDistance = FLT_MAX;
-    Cube* selected = nullptr;
     int hitSideTemp;
     // Iterate over cubes and check for intersections
-    for (int i = 0; i < cubes.size(); i++) {
+    for (auto it = m_cubeMap->getMap().begin(); it != m_cubeMap->getMap().end(); it++) {
         // Perform intersection test
         float intersectionDistance;
-        Cube* cube = cubes[i];
+        Cube* cube = it->second;
+        if (cube == nullptr) {
+            continue;
+        }
         if (cube->IntersectRayWithCube(m_position, rayDirection, hitSideTemp, intersectionDistance)) {
             if (intersectionDistance < minIntersectionDistance) {
                 minIntersectionDistance = intersectionDistance;
-                selected = cube;
+                m_selected = cube;
                 hitSide = hitSideTemp;
             }
         }
     }
 
-    return selected;
+    if (m_selected != nullptr) {
+        m_selected->SetSelected(true);
+    }
+    return m_selected;
 }
 
 glm::vec3 Player::GetRayDirection() {
@@ -171,8 +207,8 @@ glm::vec3 Player::GetRayDirection() {
 ////////////////////////////////////////////////
 // HELD OBJECT
 ////////////////////////////////////////////////
-void Player::SetSelectedCubeTexture(std::shared_ptr<Texture> texture) {
-    m_selectedCubeTexture = texture;
+void Player::SetHeldObjectTexture(std::shared_ptr<Texture> texture) {
+    m_heldObjectTexture = texture;
     m_heldObject->SetTexture(texture);
 }
 
@@ -180,6 +216,8 @@ void Player::UpdateHeldObject(glm::mat4 projectionMatrix) {
     m_heldShader.Bind();
     m_heldShader.SetUniform1i("selected", 0);
     m_heldShader.SetUniform1i("u_DiffuseMap",0);
+
+    m_heldShader.SetUniform3f("colorAdjustment", 0.0f, 0.0f, 0.0f);
 
     //Sets MVP matrices
     glm::mat4 view;

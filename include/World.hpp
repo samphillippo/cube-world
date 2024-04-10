@@ -25,9 +25,12 @@
 
 // Include the 'Renderer.hpp' which deteremines what
 // the graphics API is going to be for OpenGL
-#include "Renderer.hpp"
+#include "Rendering/Renderer.hpp"
 #include "Player.hpp"
 #include "Cube.hpp"
+#include "AI/SentientCube.hpp"
+#include "Util/CubeMap.hpp"
+#include "Util/PerlinNoise.hpp"
 
 // Purpose:
 // This class sets up a full graphics program using SDL
@@ -56,13 +59,13 @@ public:
 
 private:
     // Helper function to handle input events
-    bool handleInput(Cube* selected, int hitSide);
+    bool handleInput(Cube* selected, int hitSide, bool& paused);
+    // Helper function to handle mouse left click (destroy/attack)
+    void handleLeftClick(Cube* selected);
+    // Helper function to handle mouse right click (place)
+    void handleRightClick(Cube* selected, int hitSide);
     // Helper function to parse a world file
     void parseWorldFile(std::string filename);
-    // add a new cube to the world based on the given information
-    void addCube(Cube* cube, int face);
-    // delete the given cube from the world
-    void deleteCube(Cube* cube);
 	// The Renderer responsible for drawing objects
 	// in OpenGL (Or whatever Renderer you choose!)
 	Renderer* m_renderer;
@@ -77,10 +80,12 @@ private:
     std::shared_ptr<Player> m_player;
     // Our textures
     std::vector<std::shared_ptr<Texture>> m_textures;
-    // All cubes in the scene
-    std::vector<Cube*> m_cubes;
+    // Mapping of coordinates to all cubes in the scene
+    std::shared_ptr<CubeMap> m_cubeMap;
     // Our root node
-    SceneNode* m_root;
+    std::shared_ptr<SceneNode> m_root;
+    // Noise map for ground generation
+    std::shared_ptr<PerlinNoise> m_noiseMap;
 };
 
 #endif

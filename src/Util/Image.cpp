@@ -1,9 +1,11 @@
-#include "Image.hpp"
+#include "Util/Image.hpp"
 #include <fstream>
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
 #include <memory>
+#define STB_IMAGE_IMPLEMENTATION
+#include "Util/stb_image.h"
 
 // Constructor
 Image::Image(std::string filepath) : m_filepath(filepath){
@@ -95,6 +97,23 @@ void Image::LoadPPM(bool flip){
         }
         delete[] copyData;
     }
+}
+
+void Image::LoadJPG() {
+    int nrComponents;
+    unsigned char *data = stbi_load(m_filepath.c_str(), &m_width , &m_height, &nrComponents, 0);
+    if (data)
+    {
+        m_pixelData = new uint8_t[m_width * m_height * nrComponents];
+
+        // Copy image data into m_pixelData
+        std::memcpy(m_pixelData, data, m_width * m_height * nrComponents * sizeof(uint8_t));
+    }
+    else
+    {
+        std::cerr << "Cubemap texture failed to load at path: " << m_filepath << std::endl;
+    }
+    stbi_image_free(data);
 }
 
 /*  ===============================================

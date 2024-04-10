@@ -1,4 +1,4 @@
-#include "SceneNode.hpp"
+#include "Rendering/SceneNode.hpp"
 
 #include <string>
 #include <iostream>
@@ -71,8 +71,8 @@ void SceneNode::Draw(){
 // Update simply updates the current nodes
 // object. This is done by calling directly
 // the objects update method.
-// TODO: Consider not passting projection and camera here
-void SceneNode::Update(glm::mat4 projectionMatrix, Camera* camera, glm::vec3 skyColor, glm::vec3 orbitPos, Object* selected){
+// TODO: Consider not passing projection and camera here
+void SceneNode::Update(glm::mat4 projectionMatrix, Camera* camera, glm::vec3 skyColor, glm::vec3 orbitPos){
     if(m_object!=nullptr){
 		if (m_parent != nullptr) {
 			m_worldTransform = m_parent->m_worldTransform * m_localTransform;
@@ -83,11 +83,13 @@ void SceneNode::Update(glm::mat4 projectionMatrix, Camera* camera, glm::vec3 sky
     	// Now apply our shader
 		m_shader.Bind();
     	// Set the uniforms in our current shader
-		if (m_object == selected) {
+		if (m_object->GetSelected()) {
 			m_shader.SetUniform1i("selected", 1);
 		} else {
 			m_shader.SetUniform1i("selected", 0);
 		}
+		glm::vec3 colorAdjustment = m_object->GetColorAdjustment();
+		m_shader.SetUniform3f("colorAdjustment", colorAdjustment.x, colorAdjustment.y, colorAdjustment.z);
 
         // For our object, we apply the texture in the following way
         // Note that we set the value to 0, because we have bound
@@ -107,7 +109,7 @@ void SceneNode::Update(glm::mat4 projectionMatrix, Camera* camera, glm::vec3 sky
 	}
 	// Iterate through all of the children
 	for(int i =0; i < m_children.size(); ++i){
-		m_children[i]->Update(projectionMatrix, camera, skyColor, orbitPos, selected);
+		m_children[i]->Update(projectionMatrix, camera, skyColor, orbitPos);
 	}
 }
 

@@ -1,8 +1,7 @@
-#include "SkyBox.hpp"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "Rendering/SkyBox.hpp"
 #include <glad/glad.h>
 #include <iostream>
+#include "Util/Image.hpp"
 
 SkyBox::SkyBox() {
     // Constructor
@@ -14,26 +13,17 @@ SkyBox::~SkyBox() {
 }
 
 void SkyBox::LoadSkyBox(std::vector<std::string> faces) {
-    //std::cout << "Loading skybox..." << std::endl;
     generateSkyBoxGeometry();
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureID);
 
     //Load in the textures
-    int width, height, nrComponents;
     for (unsigned int i = 0; i < faces.size(); i++)
     {
-        unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrComponents, 0);
-        if (data)
-        {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-            stbi_image_free(data);
-        }
-        else
-        {
-            std::cerr << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
-            stbi_image_free(data);
-        }
+        Image image(faces[i]);
+        image.LoadJPG();
+        unsigned char *data = image.GetPixelDataPtr();
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, image.GetWidth(), image.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     }
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -44,7 +34,6 @@ void SkyBox::LoadSkyBox(std::vector<std::string> faces) {
     std::string vertexShader = m_shader.LoadShader("./shaders/sky_vert.glsl");
 	std::string fragmentShader = m_shader.LoadShader("./shaders/sky_frag.glsl");
 	m_shader.CreateShader(vertexShader,fragmentShader);
-    //std::cout << "Skybox loaded." << std::endl;
 }
 
 void SkyBox::generateSkyBoxGeometry() {
